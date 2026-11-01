@@ -1,29 +1,16 @@
-# TRAIL CHAOS — SIDE TRAIL V3.7
+# TRAIL CHAOS — SIDE TRAIL V3.8
 
-Jeu de trail en vue latérale, jouable sur iPhone et navigateur. La version principale est `index.html`.
-
-## Nouveautés V3.7
-- Foulée mieux articulée et mouvements des bras plus naturels.
-- Chaussures de trail affinées, avec détails de semelle selon les améliorations achetées.
-- Tête et casquette mieux dessinées, silhouette plus athlétique.
-- Les trois tenues sélectionnables et la boutique sont conservées.
+## Corrections V3.8
+- Chaussures redessinées : profil plus fin, semelle plus discrète et crampons selon l'équipement.
+- Bras corrigés : coudes pliés, mains remontées près du buste et opposition avec les jambes.
+- Cache iPhone : réseau prioritaire pour les pages HTML (avec fonctionnement hors-ligne conservé).
+- Saut, accroupissement, sprint, tenues, boutique, courses et sauvegarde locale `trail-chaos-runner-v2` conservés.
 
 ## Commandes
-- Glisser vers le haut sur l'écran : sauter.
-- Glisser vers le bas : se baisser.
-- Maintenir le bouton ⚡ pour sprinter.
-- Clavier : Espace ou ↑ (sauter), ↓ (se baisser), Maj (sprinter), P (pause).
+Glisser vers le haut : sauter ; vers le bas : se baisser. Maintenir ⚡ : sprint.
+Clavier : ↑ ou Espace (saut), ↓ (se baisser), Maj (sprint), P (pause).
 
-## Parcours et sauvegarde
-Les parcours, les obstacles, les ambiances évolutives et les améliorations sont conservés. La progression utilise la même clé locale `trail-chaos-runner-v2` ; aucune remise à zéro n'est effectuée.
+## Archives
+`side-v37.html`, `side-v36.html`, `side-v35.html`, `side-v34.html`, `side-v33.html`, `side-v31.html` ainsi que `explorer-v3.html`, `runner-v28.html` et `classic.html`.
 
-## Anciennes versions conservées
-- `side-v36.html` : version latérale V3.6.
-- `side-v35.html` : version latérale V3.5.
-- `side-v34.html` et `side-v33.html` : versions latérales précédentes.
-- `side-v31.html` : premier prototype latéral.
-- `explorer-v3.html` : vue 3/4.
-- `runner-v28.html` : ancien runner à trois voies.
-- `classic.html` : version stratégie.
-
-Jeu en ligne : https://albbris.github.io/Jeu-trail/
+https://albbris.github.io/Jeu-trail/
