@@ -1,34 +1,24 @@
-# TRAIL CHAOS — SIDE TRAIL V3.3
+# TRAIL CHAOS — SIDE TRAIL V3.5
 
-Jeu de trail en **vue latérale**, jouable sur téléphone et ordinateur.
+Jeu de trail en vue latérale, jouable sur iPhone et navigateur.
+
+## Nouveautés V3.5
+- Coureur redessiné en profil : foulée articulée, appui et phase de retour du pied, bras en opposition et posture plus athlétique.
+- Maillot technique, short, chaussures de trail, casquette à visière, dossard 42, petit gilet avec flasque.
+- Gilet, semelles et frontale modifiés visuellement selon les équipements achetés.
+- Trois tenues gratuites au choix dans la boutique : **Corail**, **Alpage** et **Nocturne**.
+- Tenue enregistrée dans la sauvegarde existante `trail-chaos-runner-v2`. Les pièces et la progression sont conservées.
 
 ## Commandes
+- Glisser vers le haut ou toucher l'écran : sauter.
+- Glisser vers le bas : se baisser.
+- Maintenir ⚡ : sprinter.
+- PC : Espace/↑, ↓, Maj et P.
 
-- Glisser vers le haut sur le jeu : **sauter**.
-- Glisser vers le bas : **se baisser**.
-- Maintenir **⚡** pour sprinter ; les boutons tactiles du bas fonctionnent aussi.
-- Sur ordinateur : flèches haut/bas, Espace, Maj pour sprinter, P pour la pause.
-
-## V3.3 — Décors et sensations
-
-- Décors en plusieurs plans qui défilent à des vitesses différentes, avec couleurs et éléments de sol liés à la position dans le monde.
-- Sous-bois brumeux, clairière ensoleillée, ruisseau humide, pierrier poussiéreux, passages nocturnes avec lucioles.
-- Branches, boue et eau subtilement animées.
-- Particules au saut et à l'atterrissage, quand on ramasse une pièce ou un ravito, et lors des chocs.
-- Obstacles et relief déjà améliorés en V3.2.
-
-## Progression
-
-La boutique, les objets, les courses débloquées et les pièces reposent sur la même sauvegarde locale : `trail-chaos-runner-v2`.
-
-## Versions précédentes
-
-- `side-v31.html` : prototype latéral V3.1.
-- `explorer-v3.html` : prototype en vue trois-quarts.
-- `runner-v28.html` : ancien runner à trois couloirs.
-- `classic.html` : premier jeu stratégique.
-
-## Déploiement
-
-GitHub Pages depuis `main` / `(root)` :
-https://albbris.github.io/Jeu-trail/
+## Archives
+- `side-v34.html` : étape intermédiaire du coureur.
+- `side-v33.html` : version latérale précédente.
+- `side-v31.html` : première version latérale.
+- `explorer-v3.html` : vue 3/4.
+- `runner-v28.html` : trois voies.
+- `classic.html` : jeu de stratégie.
