@@ -24,7 +24,7 @@
 <div id="app">
 <canvas id="game" aria-label="Jeu d'arcade : courir et éviter les obstacles"></canvas>
 <div id="shade"></div>
-<header id="top"><div class="brand">TRAIL CHAOS <b>RUNNER <span style="font-size:11px;color:#fff">V2.4</span></b></div><div class="pills"><span class="pill"><span class="coin-icon">●</span> <span id="bank">0</span></span><button class="small-btn" id="audioBtn" title="Activer ou désactiver le son" aria-label="Activer ou désactiver le son">🔇</button></div></header>
+<header id="top"><div class="brand">TRAIL CHAOS <b>RUNNER <span style="font-size:11px;color:#fff">V2.5</span></b></div><div class="pills"><span class="pill"><span class="coin-icon">●</span> <span id="bank">0</span></span><button class="small-btn" id="audioBtn" title="Activer ou désactiver le son" aria-label="Activer ou désactiver le son">🔇</button></div></header>
 <div id="hud"><div class="hudhead"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="hudstats"><span id="lives">❤️❤️❤️</span><span style="display:flex;align-items:center;gap:6px;flex:1;justify-content:center">⚡<span class="stamina"><b id="stamina"></b></span></span><span id="runCoins">🟡 0</span><button class="small-btn hud-btn" id="pauseBtn" aria-label="Pause" style="width:35px;min-height:35px">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="control-group"><button id="left" class="ctl move" aria-label="Aller à gauche">←<span>GAUCHE</span></button><button id="right" class="ctl move" aria-label="Aller à droite">→<span>DROITE</span></button></div><div class="control-group"><button id="slide" class="ctl" aria-label="Se baisser">↓<span>GLISSER</span></button><button id="jump" class="ctl" aria-label="Sauter">↑<span>SAUTER</span></button></div></div>
@@ -51,7 +51,7 @@ function home(){const c=COURSES[selected];screenHTML(`<span class="eyebrow">🏁
 function courses(){screenHTML(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Les sentiers</h2><p>Trois ambiances, des obstacles de plus en plus corsés. Termine un parcours pour débloquer le suivant.</p><div class="courses">${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:${i>profile.unlocked?.52:1}"><span class="emoji">${i>profile.unlocked?'🔒':c.emoji}</span><div style="flex:1"><strong>${c.name}</strong><small>${c.distance} km · ${c.desc}</small></div><span class="right">${i>profile.unlocked?'BLOQUÉ':i===selected?'✓ CHOISI':'CHOISIR'}${profile.best[c.id]?' · 🏁':''}</span></div>`).join('')}</div><div class="actions"><button class="button secondary" id="back">← Retour</button><button class="button" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>{let i=+b.dataset.course;if(i>profile.unlocked){toast('Termine d’abord le parcours précédent 🔒');return}selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=()=>start()}
 function shop(){screenHTML(`<span class="eyebrow">🛒 Achats indispensables (ou presque)</span><div class="leader"><h2>La boutique</h2><span class="pill">🟡 ${fmt(profile.coins)}</span></div><p>Tes pièces servent vraiment : davantage de cœurs, moins de fatigue, meilleurs ravitos et meilleure visibilité nocturne.</p><div class="shoplist">${SHOP.map(g=>{let l=profile.levels[g.id],max=l>=3,cost=g.prices[l+1];return `<div class="gear"><span class="emoji">${g.emoji}</span><div><strong>${g.name} <span class="accent">Niv. ${l+1}/4</span></strong><small>${g.desc[l]}</small><div class="muted">${g.buff}</div></div><button data-buy="${g.id}" ${max||profile.coins<cost?'disabled':''}>${max?'MAX':`🟡 ${cost}`}</button></div>`}).join('')}</div><button class="button secondary full" id="back">← Retour au camp de base</button>`);document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const id=b.dataset.buy,g=SHOP.find(x=>x.id===id),l=profile.levels[id],cost=g.prices[l+1];if(l>=3||profile.coins<cost)return;profile.coins-=cost;profile.levels[id]++;persist();chirp(760,.17);toast('Équipement amélioré !');shop()});$('#back').onclick=()=>nav('home')}
 function help(){screenHTML(`<span class="eyebrow">🎮 Guide de survie</span><h2>Apprends à esquiver</h2><div class="tip"><b>📱 Sur téléphone</b><br>Glisse ← ou → pour changer de couloir.<br>Glisse ↑ pour sauter et ↓ pour te baisser.<br>Tu peux aussi utiliser les boutons à l'écran.<br><br><b>⌨️ Sur ordinateur</b><br>Flèches gauche/droite · ↑ ou Espace · ↓ · P pour pause.</div><div class="statsbox"><span class="stat">🪵 Tronc → SAUTE</span><span class="stat">🌿 Branche → GLISSE</span><span class="stat">🪨 Rocher → ESQUIVE</span><span class="stat">🟡 Pièces → COLLECTE</span></div><p>Plus tu prends d'obstacles, plus tu perds des cœurs. L’énergie baisse en courant : attrape les ravitos 🧃 ou augmente le niveau de ton gilet.</p><button class="button full" id="back">C'est parti !</button>`);$('#back').onclick=()=>nav('home')}
-function start(){const c=COURSES[selected];screen='running';run={course:c,elapsed:0,dist:0,lane:1,visualLane:1,objects:[],spawn:1,hearts:3+profile.levels.shoes,energy:100,coins:0,jump:0,slide:0,invul:0,stumble:0,paused:false,finished:false,checkpoint:0,score:0,trackOffset:0,flashes:[],steps:0,stageIndex:0};$('#panel').classList.add('hidden');$('#hud').classList.add('show');$('#controls').classList.add('show');const firstStage=COURSE_STAGES[c.id]?.[0]?.label||c.name;$('#courseName').textContent=`${c.name.toUpperCase()} · ${firstStage.toUpperCase()}`;updateHUD();toast(c.emoji+' '+c.name+' — GO !');chirp(630,.18)}
+function start(){const c=COURSES[selected];screen='running';run={course:c,elapsed:0,dist:0,lane:1,visualLane:1,objects:[],spawn:1,hearts:3+profile.levels.shoes,energy:100,coins:0,jump:0,slide:0,invul:0,stumble:0,paused:false,finished:false,checkpoint:0,score:0,trackOffset:0,flashes:[],steps:0,stageIndex:0,gaitPhase:.12};$('#panel').classList.add('hidden');$('#hud').classList.add('show');$('#controls').classList.add('show');const firstStage=COURSE_STAGES[c.id]?.[0]?.label||c.name;$('#courseName').textContent=`${c.name.toUpperCase()} · ${firstStage.toUpperCase()}`;updateHUD();toast(c.emoji+' '+c.name+' — GO !');chirp(630,.18)}
 function updateHUD(){if(!run)return;$('#distance').textContent=`${(run.dist/run.course.units*run.course.distance).toFixed(1)} / ${run.course.distance} km`;$('#progress').style.width=`${clamp(run.dist/run.course.units*100,0,100)}%`;$('#lives').textContent='❤️'.repeat(clamp(run.hearts,0,7));$('#stamina').style.width=`${clamp(run.energy,0,100)}%`;$('#stamina').style.background=run.energy<25?'#ff807b':'#67e6d6';$('#runCoins').textContent=`🟡 ${run.coins}`}
 function move(d){if(screen!=='running'||!run||run.paused)return;const next=clamp(run.lane+d,0,2);if(next!==run.lane){run.lane=next;chirp(320,.055,'triangle',.024)}}
 function jump(){if(screen!=='running'||!run||run.paused)return;if(run.jump<=0&&run.slide<=0){run.jump=.83;chirp(480,.11,'triangle',.04)}}
@@ -79,7 +79,7 @@ if(Math.random()<.24){let foodLane=lanes[Math.floor(Math.random()*3)];newObj('dr
 if(Math.random()<.18){let bonusLane=Math.max(0,Math.min(2,safe+(Math.random()<.5?-1:1)));newObj('coin',bonusLane,z+84,{lift:6,dx:0,wobble:.18})}}
 function strike(obj){if(run.invul>0)return;run.hearts--;run.invul=1.45;run.stumble=.43;run.energy=clamp(run.energy-7,0,100);run.flashes.push({t:.5,type:'hit'});chirp(150,.3,'sawtooth',.12);const messages={rock:'🪨 Caillou 1 — Tibia 0',log:'🪵 Le tronc a gagné',branch:'🌿 La branche ne s’est pas baissée'};toast(messages[obj.type]||'Aïe !');if(run.hearts<=0)end(false)}
 function collect(obj){obj.resolved=true;if(obj.type==='coin'){run.coins+=1;run.score+=10;chirp(910,.055,'sine',.035);if(run.coins%10===0)toast('🟡 +10 pièces !')}if(obj.type==='drink'){run.energy=clamp(run.energy+24+profile.levels.gel*16,0,100);run.score+=25;chirp(650,.16,'triangle');toast('🧃 Ravito ! Énergie rechargée')}}
-function update(dt){sceneTime+=dt;if(screen!=='running'||!run||run.paused||run.finished)return;run.elapsed+=dt;run.visualLane=lerp(run.visualLane,run.lane,Math.min(1,dt*11));run.jump=Math.max(0,run.jump-dt);run.slide=Math.max(0,run.slide-dt);run.invul=Math.max(0,run.invul-dt);run.stumble=Math.max(0,run.stumble-dt);run.flashes=run.flashes.filter(f=>(f.t-=dt)>0);
+function update(dt){sceneTime+=dt;if(screen!=='running'||!run||run.paused||run.finished)return;run.elapsed+=dt;const cadence=(run.stumble>0?1.0:run.energy<18?1.33:1.87);run.gaitPhase=((run.gaitPhase||0)+dt*cadence)%1;run.visualLane=lerp(run.visualLane,run.lane,Math.min(1,dt*11));run.jump=Math.max(0,run.jump-dt);run.slide=Math.max(0,run.slide-dt);run.invul=Math.max(0,run.invul-dt);run.stumble=Math.max(0,run.stumble-dt);run.flashes=run.flashes.filter(f=>(f.t-=dt)>0);
 const pace=22+run.course.difficulty*1.8;const speed=pace*(run.stumble>0?.48:1)*(run.energy<=0?.74:1);const moved=speed*dt;run.dist+=moved;run.trackOffset+=moved;run.energy=Math.max(0,run.energy-moved*(.10-run.course.difficulty*.002)*(1-profile.levels.vest*.19));
 const st=stageState();if(st.index!==run.stageIndex){run.stageIndex=st.index;$('#courseName').textContent=`${run.course.name.toUpperCase()} · ${st.label.toUpperCase()}`;if(run.elapsed>1.2)toast('🌄 '+st.label)}
 run.spawn-=dt;if(run.spawn<=0){spawnWave();run.spawn=rand(1.12,1.55)*(1-(run.course.difficulty-1)*.1)*(1-Math.min(.13,run.dist/run.course.units*.12))}
@@ -145,15 +145,95 @@ function drawItem(o){const t=1-o.z/140;if(t<0||t>1.11)return;const p=proj(t,o.la
 ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(x,y+2*s,25*s,6*s,0,0,7);ctx.fill();if(o.type==='rock'){ctx.fillStyle='#566a71';ctx.beginPath();ctx.moveTo(x-27*s,y);ctx.lineTo(x-22*s,y-22*s);ctx.lineTo(x-7*s,y-35*s);ctx.lineTo(x+15*s,y-31*s);ctx.lineTo(x+29*s,y-9*s);ctx.lineTo(x+24*s,y+1*s);ctx.closePath();ctx.fill();ctx.fillStyle='#819196';ctx.beginPath();ctx.moveTo(x-20*s,y-20*s);ctx.lineTo(x-7*s,y-35*s);ctx.lineTo(x+5*s,y-30*s);ctx.lineTo(x-6*s,y-10*s);ctx.closePath();ctx.fill()}else if(o.type==='log'){ctx.save();ctx.translate(x,y-12*s);ctx.rotate(.05);rounded(-35*s,-11*s,70*s,22*s,9*s,'#70513a');rounded(-33*s,-8*s,65*s,5*s,3*s,'#aa7b4e');ctx.fillStyle='#d8aa74';ctx.beginPath();ctx.ellipse(31*s,0,8*s,11*s,0,0,7);ctx.fill();ctx.strokeStyle='#80593a';ctx.lineWidth=1.6*s;ctx.beginPath();ctx.ellipse(31*s,0,4*s,6*s,0,0,7);ctx.stroke();ctx.restore()}else if(o.type==='branch'){const hh=87*s;ctx.strokeStyle='#523f2a';ctx.lineWidth=10*s;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x-29*s,y+2*s);ctx.lineTo(x-24*s,y-hh);ctx.quadraticCurveTo(x,y-hh-17*s,x+33*s,y-hh+9*s);ctx.stroke();ctx.strokeStyle='#77a35c';ctx.lineWidth=4*s;ctx.beginPath();ctx.moveTo(x-24*s,y-hh);ctx.lineTo(x-40*s,y-hh-17*s);ctx.moveTo(x+13*s,y-hh-9*s);ctx.lineTo(x+28*s,y-hh-23*s);ctx.stroke();ctx.fillStyle='#5c9953';for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(x+(-27+i*17)*s,y-hh+(-11+(i%2)*14)*s,10*s,5*s,(i%2?-.6:.6),0,7);ctx.fill()}} }
 function limb(x1,y1,len1,a1,len2,a2,w,c){const x2=x1+Math.cos(a1)*len1,y2=y1+Math.sin(a1)*len1;const x3=x2+Math.cos(a2)*len2,y3=y2+Math.sin(a2)*len2;ctx.strokeStyle=c;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);ctx.stroke();return{x2,y2,x3,y3}}
 function shoe(x,y,a,s,color='#dce6e7'){ctx.save();ctx.translate(x,y);ctx.rotate(a);rounded(-8*s,-4*s,16*s,8*s,3*s,color);rounded(-4*s,-2*s,11*s,4*s,2*s,'#324b50');ctx.restore()}
-function character(lane=1,anim=true){const pos=proj(.79,lane),x=pos.x,y=pos.y;const lev=(run&&screen==='running'&&!run.paused)?jumpHeight():0;const sliding=run&&run.slide>0;const walk=(run?.elapsed||sceneTime)*12;const phase=anim?Math.sin(walk):0;const phase2=anim?Math.cos(walk):0;const bob=(anim&&!sliding?Math.sin(walk*2)*2.6:0);const lean=((run?.lane??1)-lane)*4+phase2*1.5;ctx.save();ctx.globalAlpha=run?.invul>0&&Math.sin(sceneTime*25)>0?.44:1;ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(x,y+7,33+lev*.05,10+lev*.02,0,0,7);ctx.fill();ctx.translate(x,y-lev+bob);
-if(sliding){ctx.translate(0,4);ctx.rotate(-.03+lean*.01);ctx.fillStyle='#1a3341';ctx.beginPath();ctx.roundRect(-28,-20,56,24,10);ctx.fill();ctx.fillStyle='#3f6b78';ctx.beginPath();ctx.roundRect(-10,-18,20,20,8);ctx.fill();ctx.fillStyle='#9fd866';ctx.fillRect(-24,-18,5,20);ctx.fillRect(19,-18,5,20);ctx.fillStyle='#e8b78f';ctx.beginPath();ctx.arc(0,-24,12,0,7);ctx.fill();ctx.fillStyle='#7ab454';ctx.beginPath();ctx.roundRect(-16,-34,32,9,5);ctx.fill();ctx.strokeStyle='#203540';ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-16,-2);ctx.lineTo(-30,8);ctx.moveTo(16,-2);ctx.lineTo(30,8);ctx.moveTo(-10,1);ctx.lineTo(-26,14);ctx.moveTo(10,1);ctx.lineTo(26,14);ctx.stroke();shoe(-26,14,-.12,1.02,'#eef4f4');shoe(26,14,.12,1.02,'#dce7e8');ctx.restore();return}
-ctx.rotate(lean*.012);const hipY=-26,shoulderY=-58;const leftStep=-phase,rightStep=phase;function backLeg(side,step,color,shoeColor){const sx=side*10;const kneeX=sx+side*5+step*2.4;const kneeY=hipY+24-Math.max(0,step)*4;const footX=sx+side*8-step*6.5;const footY=hipY+49+Math.abs(step)*2.5;ctx.strokeStyle=color;ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sx,hipY);ctx.lineTo(kneeX,kneeY);ctx.lineTo(footX,footY);ctx.stroke();shoe(footX,footY,side*.06-step*.05,1.05,shoeColor)}
-function backArm(side,step,color){const sx=side*17, ex=sx+side*4-step*4.8, ey=shoulderY+22+Math.abs(step)*2; ctx.strokeStyle=color; ctx.lineWidth=6.5; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(sx,shoulderY); ctx.lineTo(ex,ey); ctx.lineTo(ex+side*5-step*2.5,ey+16); ctx.stroke();}
-backLeg(-1,leftStep,'#203844','#dce7e8'); backLeg(1,rightStep,'#17303a','#eef4f4');
-backArm(-1,rightStep,'#e8b48d'); backArm(1,leftStep,'#efbe95');
-ctx.fillStyle='#153240';ctx.beginPath();ctx.roundRect(-24,-62,48,38,12);ctx.fill();ctx.fillStyle='#3f6d79';ctx.beginPath();ctx.roundRect(-13,-60,26,30,9);ctx.fill();ctx.strokeStyle='#7dc060';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-16,-58);ctx.lineTo(-16,-29);ctx.moveTo(16,-58);ctx.lineTo(16,-29);ctx.stroke();ctx.fillStyle='#e98651';ctx.beginPath();ctx.roundRect(-20,-64,40,16,8);ctx.fill();ctx.fillStyle='#1f4551';ctx.fillRect(-4,-61,8,31);
-ctx.fillStyle='#e8b78f';ctx.beginPath();ctx.arc(0,-77,13,0,7);ctx.fill();ctx.fillStyle='#7ab454';ctx.beginPath();ctx.roundRect(-16,-87,32,9,5);ctx.fill();ctx.fillStyle='#6ba449';ctx.fillRect(-6,-87,12,3);ctx.fillStyle='#9ad07a';ctx.beginPath();ctx.arc(0,-77,4.2,0,7);ctx.fill();
-if(run&&run.energy<28){ctx.fillStyle='rgba(255,255,255,.18)';ctx.beginPath();ctx.ellipse(0,-110,8,12,0,0,7);ctx.fill()}ctx.restore()}
+// Animation arrière : un cycle = deux foulées. 60 % d'appui, 40 % de retour aérien.
+function runnerLimb(points,width,color,outline='#102b32'){
+  ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.strokeStyle=outline;ctx.lineWidth=width+2.2;ctx.beginPath();
+  points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
+  ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();
+  points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
+}
+function runnerStep(phase,side,isJump){
+  const contact=.60,stance=phase<contact,u=stance?phase/contact:(phase-contact)/(1-contact);
+  // L'appui reste en bas, alors que le pied opposé se relève en passant le genou.
+  const flight=Math.sin(Math.PI*u);
+  const footY=isJump?-2-2*Math.cos(2*Math.PI*phase):stance?14+4*u:11-15*flight;
+  const footX=side*(14+(stance?2+4*u:2+3*(1-u)))+(stance?-3+u*6:4-u*6);
+  const kneeY=isJump?-16:stance?-8-1.5*Math.sin(Math.PI*u):-12-12*flight;
+  const kneeX=side*13+(stance?-1+3*u:3-3*u);
+  return {hip:[side*9,-30],knee:[kneeX,kneeY],foot:[footX,footY],stance,flight,angle:stance?(.06+u*.08):(-.28+u*.20),phase};
+}
+function drawRunnerFoot(p,side,level){
+  ctx.save();ctx.translate(p.foot[0],p.foot[1]);ctx.rotate(p.angle);
+  // Chaussure vue de dos : talon large, semelle foncée et crampons visibles.
+  rounded(-8,-3,16,11,4,side===-1?'#e6f1ea':'#dbe9ed');
+  rounded(-9,5,18,4,2,'#153e43');
+  rounded(-6,0,12,3,1,level>0?'#b8ee64':'#95b5bb');
+  ctx.restore();
+}
+function drawRunnerArm(side,forward){
+  const shoulder=[side*19,-61];
+  const elbow=[side*(25+forward*1.4),-42+forward*4];
+  const hand=[side*(19-forward*4),-32+forward*11];
+  runnerLimb([shoulder,elbow,hand],6.3,side===-1?'#e2ac87':'#f1bd92','#865e52');
+  ctx.fillStyle='#f0c199';ctx.beginPath();ctx.arc(hand[0],hand[1],4,0,Math.PI*2);ctx.fill();
+}
+function character(lane=1,anim=true){
+  const p=proj(.79,lane),x=p.x,y=p.y;
+  const lev=run&&screen==='running'&&!run.paused?jumpHeight():0;
+  const sliding=Boolean(run&&run.slide>0);
+  const phase=anim?(run&&screen==='running'?(run.gaitPhase||0):(sceneTime*1.50)%1):0;
+  const wave=Math.sin(2*Math.PI*phase);
+  const bounce=anim&&!sliding?1.65*Math.cos(4*Math.PI*phase):0;
+  const bodyLean=(run?(run.lane-run.visualLane)*.045:0)+.024*wave;
+  const airborne=lev>15;
+  ctx.save();
+  ctx.globalAlpha=run?.invul>0&&Math.sin(sceneTime*25)>0?.44:1;
+  ctx.fillStyle='rgba(0,0,0,.37)';ctx.beginPath();ctx.ellipse(x,y+18,30+lev*.05,8+lev*.01,0,0,7);ctx.fill();
+  ctx.translate(x,y-lev+bounce);
+  if(sliding){
+    // Glissade vue de dos : buste bas, bras écartés, pieds devant.
+    ctx.translate(0,6);runnerLimb([[-12,-12],[-24,2],[-30,13]],8,'#1b343f');runnerLimb([[12,-12],[24,2],[30,13]],8,'#1b343f');
+    rounded(-34,10,18,9,4,'#e5efe8');rounded(16,10,18,9,4,'#e5efe8');
+    runnerLimb([[-18,-31],[-32,-20],[-37,-6]],6,'#e9b68e');runnerLimb([[18,-31],[32,-20],[37,-6]],6,'#e9b68e');
+    rounded(-23,-47,46,39,13,'#e9854e');rounded(-19,-41,38,28,11,'#244c58');
+    rounded(-12,-37,24,19,7,'#4f8991');
+    ctx.fillStyle='#dbaa82';ctx.beginPath();ctx.arc(0,-54,12,0,Math.PI*2);ctx.fill();
+    rounded(-15,-68,30,9,5,'#bde969');ctx.restore();return;
+  }
+  ctx.rotate(bodyLean);
+  const left=runnerStep(phase,-1,airborne),right=runnerStep((phase+.5)%1,1,airborne);
+  // Pied arrière d'abord, pied en phase aérienne ensuite. Chaque jambe a son propre genou.
+  const legs=[left,right].sort((a,b)=>a.foot[1]-b.foot[1]);
+  for(const leg of legs){
+    runnerLimb([leg.hip,leg.knee,leg.foot],8.5,leg===left?'#27424d':'#1c343e');
+    drawRunnerFoot(leg,leg===left?-1:1,profile.levels.shoes);
+  }
+  // Petits mouvements d'épaule et de bras synchronisés à l'opposé des jambes.
+  const sway=wave*.8;ctx.translate(sway,0);
+  drawRunnerArm(-1,-wave);drawRunnerArm(1,wave);
+  // Short, maillot et véritable gilet d'hydratation vus depuis l'arrière.
+  rounded(-18,-39,36,16,6,'#1d3039');
+  rounded(-20,-69,40,37,11,'#ed9258');
+  rounded(-16,-65,32,34,9,'#193d49');
+  rounded(-13,-61,26,29,8,'#386b77');
+  rounded(-9,-57,18,21,6,'#5c9ba0');
+  ctx.strokeStyle='#c8f16c';ctx.lineWidth=4.5;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(-16,-66);ctx.lineTo(-17,-35);ctx.moveTo(16,-66);ctx.lineTo(17,-35);ctx.stroke();
+  rounded(-5,-42,10,5,2,'#d9e0a5');
+  // Flasques du gilet et bandes réfléchissantes.
+  rounded(-22,-53,6,15,2,'#7cc7c8');rounded(16,-53,6,15,2,'#7cc7c8');
+  rounded(-13,-51,26,3,1,'#b9ebc1');
+  // Nuque et casquette sans visage : personnage entièrement vu de dos.
+  rounded(-7,-78,14,11,4,'#dfa57f');
+  ctx.fillStyle='#e9b78f';ctx.beginPath();ctx.arc(0,-84,13,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#283b3d';ctx.beginPath();ctx.ellipse(0,-87,12,8,0,Math.PI,2*Math.PI);ctx.fill();
+  rounded(-16,-96,32,11,6,'#a9db61');
+  rounded(-6,-93,12,5,2,'#d2fa92');
+  rounded(-10,-88,20,5,3,'#4d8a4f');
+  if(run&&run.energy<28){ctx.fillStyle='rgba(215,247,255,.35)';ctx.beginPath();ctx.arc(18,-95,3.5,0,Math.PI*2);ctx.fill()}
+  ctx.restore();
+}
 function gameDraw(){ctx.clearRect(0,0,W,H);background();path();if(run?.objects?.length){run.objects.slice().sort((a,b)=>b.z-a.z).forEach(o=>{if(!o.resolved||o.z>25&&o.type!=='coin')drawItem(o)})}character(run?run.visualLane:1);if(run?.flashes?.length){ctx.fillStyle='rgba(255,63,66,.2)';ctx.fillRect(0,0,W,H)}if(scene().night){let level=profile.levels.lamp;let max=.78-level*.14;const x=run?proj(.79,run.visualLane).x:W*.5,y=H*.78;let grd=ctx.createRadialGradient(x,y,70+level*45,x,y,Math.max(W,H)*.78);grd.addColorStop(0,'#010c1300');grd.addColorStop(1,`rgba(2,7,18,${max})`);ctx.fillStyle=grd;ctx.fillRect(0,0,W,H)}}
 function resize(){let rect=canvas.getBoundingClientRect();W=rect.width||400;H=rect.height||700;DPR=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0)}
 function tick(now){if(!lastTime)lastTime=now;let dt=Math.min(.045,(now-lastTime)/1000);lastTime=now;if(!document.hidden){update(dt);gameDraw()}requestAnimationFrame(tick)}
