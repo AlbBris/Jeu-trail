@@ -1,29 +1,24 @@
-# 🏔 Trail Chaos Runner V2
+# TRAIL CHAOS EXPLORER — V3.0
 
-Jeu de trail **arcade / endless runner à 3 voies**, jouable sur smartphone et ordinateur, sans dépendance externe.
+Prototype jouable en vue 3/4, remplaçant le runner à trois couloirs comme jeu principal.
 
-- **3 parcours :** Forêt des Racines (8 km), Crêtes du Vent (21 km) et Ultra Nocturne (45 km), avec durée volontairement accélérée pour des parties courtes.
-- **Obstacles :** rochers à esquiver, troncs à sauter, branches basses sous lesquelles glisser.
-- **Progression :** pièces sur le sentier, courses à débloquer, boutique (chaussures, gilet, gels, frontale).
-- **Contrôles :** balayage gauche / droite / haut / bas ou boutons tactiles. Clavier : flèches, espace et P pour pause.
-- **Sauvegarde :** navigateur localStorage, hors connexion après première ouverture grâce au service worker.
+## Comment jouer
 
-## Jouer
+- **Mobile** : maintenir ◀ / ▶ ou glisser horizontalement directement sur le sentier. Direction libre, sans couloirs fixes.
+- **↑** : sauter au-dessus des racines, troncs et passages d'eau.
+- **⚡** : sprinter en dépensant davantage d'énergie.
+- **Ordinateur** : flèches gauche/droite ou A/D ; espace pour sauter ; Maj pour sprinter ; P pour pause.
 
-GitHub Pages : https://albbris.github.io/Jeu-trail/
+## Nouveautés V3
 
-Sur iPhone, ouvrir l'adresse dans Safari puis **Partager → Sur l'écran d'accueil**.
+- Sentiers sinueux en perspective trois-quarts, relief et caméra qui suit le coureur.
+- Deux embranchements par parcours : **voie technique à gauche** (davantage de pièces, d'obstacles, un peu plus rapide), ou **voie roulante à droite**.
+- Gestion des sorties de sentier, collisions, énergie, ravitaillements, sauts, sprint.
+- Trois courses : forêt, montagne, nuit. Sauvegarde préservée via la clé `trail-chaos-runner-v2`.
 
-## Ancienne version
+## Autres modes
 
-Le jeu d'origine fondé sur les choix stratégiques reste disponible dans [`classic.html`](./classic.html).
+- `runner-v28.html` : version arcade à trois couloirs V2.8.
+- `classic.html` : version stratégie historique.
 
-## Structure
-
-- `index.html` : jeu d'arcade complet (canvas et interface)
-- `classic.html` : ancienne version de stratégie
-- `manifest.webmanifest` : installation mobile
-- `sw.js` : cache hors ligne
-- `icons/` : icônes
-
-Projet personnel et prototype expérimental.
+Les fichiers `manifest.webmanifest` et `icons/` sont conservés.
