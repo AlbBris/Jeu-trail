@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V3.5, courez sur des sentiers vallonnés en vue de côté. Sautez, glissez et améliorez votre équipement.">
+<meta name="description" content="Trail Chaos V3.7, courez sur des sentiers vallonnés en vue de côté. Sautez, glissez et améliorez votre équipement.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V3.5</title>
+<title>Trail Chaos — Side Trail V3.7</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -25,7 +25,7 @@
 <div id="app">
 <canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V3.5</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V3.7</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -62,7 +62,7 @@ const keys={boost:false,duck:false},swipe={active:false,x:0,y:0,id:null};
 function showToast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),1350)}
 function display(html){$('#panel').innerHTML=`<section class="sheet">${html}</section>`;$('#panel').classList.remove('hide');$('#hud').classList.remove('on');$('#controls').classList.remove('on');$('#modal').classList.remove('on');$('#bank').textContent=fmt(profile.coins)}
 function nav(target){screen=target;switch(target){case'home':home();break;case'courses':courses();break;case'shop':shop();break;default:help()}}
-function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V3.5</span><h1>COURS.<br><span class="accent">EXPLORE.</span><br>FRANCHIS.</h1><p>Un traileur redessiné, plus athlétique : foulée articulée, vrai petit gilet de course, dossard et trois tenues personnalisables. Les décors et les parcours restent au rendez-vous.</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=begin;$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
+function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V3.7</span><h1>COURS.<br><span class="accent">EXPLORE.</span><br>FRANCHIS.</h1><p>Un traileur encore plus travaillé : foulée plus fluide, tenue plus course, tête et casquette plus propres, chaussures de trail plus premium et toujours trois tenues personnalisables.</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=begin;$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
 function courses(){display(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Les sentiers</h2><p>Chaque circuit traverse maintenant plusieurs ambiances visuelles avec un arrière-plan qui se transforme au fil de la progression. Termine une course pour débloquer la suivante.</p>${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:${i>profile.unlocked?.54:1}"><span class="pic">${i>profile.unlocked?'🔒':c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">${i>profile.unlocked?'BLOQUÉ':i===selected?'✓ CHOISI':'CHOISIR'}</span></div>`).join('')}<div class="actions"><button class="btn alt" id="back">← Retour</button><button class="btn" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(el=>el.onclick=()=>{const i=+el.dataset.course;if(i>profile.unlocked)return showToast('Termine le parcours précédent 🔒');selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=begin}
 function shop(){const skin=SKINS.find(x=>x.id===profile.skin)||SKINS[0];display(`<span class="eyebrow">🎒 Ton équipement</span><h2>Boutique <span class="accent">🟡 ${fmt(profile.coins)}</span></h2><p>Améliore ton matériel et choisis la tenue de ton coureur. Les tenues sont cosmétiques et gratuites.</p><div class="eyebrow">🏃 Tenue du traileur</div><div class="skin-picker">${SKINS.map(s=>`<button class="skin-card ${profile.skin===s.id?'selected':''}" data-skin="${s.id}"><span class="skin-dot" style="background:linear-gradient(130deg,${s.top} 0 55%,${s.short} 55% 100%)"></span>${s.name}<small>${profile.skin===s.id?'✓ Équipée':s.tag}</small></button>`).join('')}</div><div class="skin-note">La casquette, le maillot, le short, les chaussures et le gilet changent avec ta tenue et tes équipements achetés.</div><div class="eyebrow">⚙️ Améliorations</div>${SHOP.map(g=>{const lvl=clamp(profile.levels[g.id]||0,0,3),cost=g.prices[lvl+1],max=lvl===3;return `<div class="gear"><span class="pic">${g.emoji}</span><div><strong>${g.name} <span class="accent">${lvl+1}/4</span></strong><small>${g.sub[lvl]} · ${g.effect}</small></div><button data-buy="${g.id}" ${max||profile.coins<cost?'disabled':''}>${max?'MAX':`🟡 ${cost}`}</button></div>`}).join('')}<button class="btn alt full" id="back">← Retour</button>`);document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const g=SHOP.find(i=>i.id===b.dataset.buy),lvl=profile.levels[g.id],cost=g.prices[lvl+1];if(lvl>=3||profile.coins<cost)return;profile.coins-=cost;profile.levels[g.id]++;save();shop();showToast('Équipement amélioré !')});document.querySelectorAll('[data-skin]').forEach(b=>b.onclick=()=>{profile.skin=b.dataset.skin;save();shop();showToast('🎽 Tenue '+SKINS.find(x=>x.id===profile.skin).name+' équipée !')});$('#back').onclick=()=>nav('home')}
 function help(){display(`<span class="eyebrow">🎮 Comment jouer</span><h2>Maîtrise le terrain</h2><div class="tip"><b>Sur iPhone / téléphone</b><br>Glisse ton doigt <b>vers le haut</b> sur l’écran pour sauter.<br>Glisse <b>vers le bas</b> pour te baisser sous les branches.<br>Un appui rapide sur le terrain déclenche aussi un saut.<br>Maintiens ⚡ pour sprinter (cela consomme de l’énergie).<br>Les boutons du bas fonctionnent aussi.<br><br><b>Sur ordinateur</b><br>↑ / Espace : saut · ↓ : se baisser · Maj : sprint · P : pause</div><div class="stats"><span class="stat">🪵 Tronc → saute</span><span class="stat">🌿 Branche → baisse-toi</span><span class="stat">🟫 Boue → saute ou ralentis</span><span class="stat">🪨 Roche → saute</span><span class="stat">🟡 Pièces → collecte</span></div><button class="btn full" id="back">C'est parti !</button>`);$('#back').onclick=()=>nav('home')}
@@ -179,72 +179,70 @@ function drawObstacle(o){const st=worldPalette(o.x),x=o.x-camX,y=groundY(o.x),wi
 // Traileur de profil, genoux articulés. Le bassin suit le relief et le saut est physique.
 function runnerStroke(points,width,color){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(points[0],points[1]);for(let i=2;i<points.length;i+=2)ctx.lineTo(points[i],points[i+1]);ctx.stroke()}
 function runnerRound(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
-function runnerShoe(x,y,angle,palette,back=false){ctx.save();ctx.translate(x,y);ctx.rotate(angle);const sole=back?'#b9cbd1':palette.sole;runnerRound(-5,-5,19,8,3,sole);runnerRound(-4,-3,15,4,2,back?'#4a6671':palette.stripe);ctx.fillStyle='#152e36';ctx.fillRect(0,3,15,1.4);if(profile.levels.shoes>0){ctx.fillStyle='#f6d068';for(let i=0;i<3;i++)ctx.fillRect(i*4.5,4,2.4,2)}ctx.restore()}
+function runnerShoe(x,y,angle,palette,back=false){ctx.save();ctx.translate(x,y);ctx.rotate(angle);const upper=back?'#d6e1e4':palette.sole;runnerRound(-4.2,-3.8,12.8,5.6,2.3,upper);runnerRound(-1.7,-2.4,7.2,2.2,1.1,back?'#6e828b':palette.stripe);ctx.fillStyle=back?'#8da2ab':'#16343e';ctx.fillRect(-3.1,1.4,12.1,1.05);ctx.fillStyle=back?'#b5c5cc':palette.shadow;ctx.beginPath();ctx.moveTo(7.7,-3.5);ctx.lineTo(10.9,-2.5);ctx.lineTo(11.6,-.2);ctx.lineTo(8.5,.5);ctx.lineTo(6.2,.2);ctx.closePath();ctx.fill();ctx.fillStyle=back?'#eef5f7':palette.stripe;ctx.fillRect(-2.3,-.3,4.1,1.1);if(profile.levels.shoes>0){ctx.fillStyle='#f2c853';for(let i=0;i<3;i++)ctx.fillRect(-2.2+i*3.3,2.85,1.45,1.2)}ctx.restore()}
 function runnerLeg(hip,cycle,back,air,palette){
- const forward=Math.sin(cycle), lift=Math.max(0,Math.cos(cycle));
- const kneeX=hip+forward*8+(back?-3:2), kneeY=-16-lift*4;
- const footX=hip+forward*20+(back?-4:4),footY=air?-19-lift*5:-1-lift*9;
- runnerStroke([hip,-30,kneeX,kneeY,footX-1,footY-2],back?7.2:8.3,back?'#244453':palette.short);
- ctx.fillStyle=back?'#203844':'#314952';ctx.beginPath();ctx.arc(kneeX,kneeY,back?3:3.5,0,Math.PI*2);ctx.fill();
- // chaussettes montantes techniques, bien distinctes du short
- runnerStroke([footX-2,footY-10,footX-1,footY-4],3,back?'#93acbd':palette.stripe);
- runnerShoe(footX,footY,-forward*.12,palette,back)
+ const forward=Math.sin(cycle), lift=Math.max(0,Math.cos(cycle)), recovery=Math.max(0,-Math.sin(cycle));
+ const kneeX=hip+forward*7.6+(back?-2.3:2.3), kneeY=-17-lift*4.5+recovery*1.2;
+ const footX=hip+forward*17.2+(back?-3.2:3.5),footY=air?-16-lift*6.8:-1.2-lift*8.2+recovery*1.8;
+ runnerStroke([hip,-30,kneeX,kneeY,footX-0.8,footY-1.2],back?6.8:7.8,back?'#284856':palette.short);
+ ctx.fillStyle=back?'#23404a':'#314952';ctx.beginPath();ctx.arc(kneeX,kneeY,back?2.7:3.1,0,Math.PI*2);ctx.fill();
+ runnerStroke([footX-1.6,footY-9.2,footX-1.2,footY-3.5],2.6,back?'#9bb1bf':palette.stripe);
+ runnerShoe(footX,footY,-forward*.12+(air?0.08:0),palette,back)
 }
 function drawRunner(){
  const r=run, palette=SKINS.find(s=>s.id===profile.skin)||SKINS[0],x=(r?.x||0)-camX, ground=groundY(r?.x||0), y=ground-(r?.jumpY||0);
  const crouch=(r?.duck||0)>0,air=!!r&&!r.grounded;
- const runSpeed=keys.boost?15.2:11.2,phase=(r?.elapsed||sceneTime)*runSpeed;
- const step=Math.sin(phase),bounce=r&&r.grounded&&!crouch?Math.cos(phase*2)*1.8:0;
+ const runSpeed=keys.boost?15.8:11.6,phase=(r?.elapsed||sceneTime)*runSpeed;
+ const step=Math.sin(phase),bounce=r&&r.grounded&&!crouch?Math.cos(phase*2)*1.95:0;
  ctx.save();ctx.globalAlpha=r?.inv>0&&Math.sin(sceneTime*24)>0?.45:1;
- ctx.fillStyle='#051c2061';ctx.beginPath();ctx.ellipse(x,ground+4,air?20:27,air?3.5:5.5,0,0,Math.PI*2);ctx.fill();
- ctx.translate(x,y+bounce);if(crouch){
-   runnerStroke([-11,-12,-24,-2,-29,0],8,palette.short);runnerShoe(-30,1,.05,palette,true);
-   runnerStroke([4,-14,12,-5,25,-1],8,palette.short);runnerShoe(25,-1,-.12,palette);
-   runnerRound(-18,-42,36,26,10,palette.top);runnerRound(-15,-37,13,17,5,palette.vest);
-   runnerRound(-8,-22,25,10,4,palette.short);
-   runnerStroke([-7,-38,-15,-29,-20,-20],5.5,'#ddad89');runnerStroke([12,-35,18,-27,23,-18],5.8,'#e9b991');
-   ctx.fillStyle='#e7b68f';ctx.beginPath();ctx.arc(18,-46,10,0,Math.PI*2);ctx.fill();
-   runnerRound(12,-56,19,7,4,palette.cap);runnerRound(26,-53,11,3,2,palette.stripe);
-   if(profile.levels.lamp>0||r?.course?.mode==='night'){runnerRound(16,-55,9,4,2,'#ffda7e')}
+ ctx.fillStyle='#051c2061';ctx.beginPath();ctx.ellipse(x,ground+4,air?18:24,air?3.2:5,0,0,Math.PI*2);ctx.fill();
+ ctx.translate(x,y+bounce);
+ if(crouch){
+   runnerStroke([-10,-12,-21,-2,-24,0],7,palette.short);runnerShoe(-25,1,.02,palette,true);
+   runnerStroke([4,-13,11,-5,18,-1],7,palette.short);runnerShoe(19,-1,-.08,palette);
+   runnerRound(-17,-42,33,25,10,palette.top);runnerRound(-13,-37,11,16,5,palette.vest);runnerRound(-7,-22,24,9,4,palette.short);
+   runnerStroke([-6,-38,-13,-31,-17,-23],5,'#ddad89');runnerStroke([9,-35,15,-28,18,-21],5,'#e9b991');
+   ctx.fillStyle='#e7b68f';ctx.beginPath();ctx.arc(15,-46,9.2,0,Math.PI*2);ctx.fill();
+   runnerRound(9,-56,18,7,4,palette.cap);runnerRound(22,-54,8,2.4,2,palette.stripe);
+   if(profile.levels.lamp>0||r?.course?.mode==='night'){runnerRound(13,-55,8,4,2,'#ffda7e')}
    ctx.restore();return;
  }
- // course de profil : un pied en appui, l'autre en retour, bras opposés
  const jumping=air&&r.jumpY>2;
+ // jambe arrière
  runnerLeg(-6,phase+Math.PI,true,jumping,palette);
- // bras arrière et main qui accompagne la foulée
- const armSwing=-step*8;
- runnerStroke([-7,-59,-17+armSwing*.38,-45,-12+armSwing,-33],5.5,'#ddaa83');
- runnerRound(-18,-66,12,30,5,palette.vest); // sac d'hydratation minimaliste (pas un gros sac rando)
- if(profile.levels.vest>1){runnerRound(-20,-58,3,10,2,palette.stripe);}
+ // bras arrière : coude plus naturel et plus compact
+ const backElbowX=-14+step*4.8, backWristX=-9+step*7.4;
+ runnerStroke([-6,-58,backElbowX,-47,backWristX,-37],5.2,'#ddaa83');
+ // petit gilet arrière discret
+ runnerRound(-18,-66,10,29,5,palette.vest);
+ if(profile.levels.vest>1){runnerRound(-19.5,-58,2.8,10,2,palette.stripe)}
+ // jambe avant
  runnerLeg(6,phase,false,jumping,palette);
- ctx.save(); ctx.rotate(-.065 + Math.cos(phase)*.018);
- // short de course ouvert sur les cuisses
- ctx.fillStyle=palette.short;ctx.beginPath();ctx.moveTo(-12,-36);ctx.lineTo(13,-37);ctx.lineTo(16,-27);ctx.lineTo(2,-25);ctx.lineTo(-13,-28);ctx.closePath();ctx.fill();
- ctx.strokeStyle=palette.stripe;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(7,-29);ctx.lineTo(13,-29);ctx.stroke();
- // maillot technique cintré
- ctx.fillStyle=palette.top;ctx.beginPath();ctx.moveTo(-14,-65);ctx.quadraticCurveTo(-1,-71,11,-63);ctx.lineTo(13,-37);ctx.lineTo(-10,-36);ctx.closePath();ctx.fill();
+ ctx.save();ctx.rotate(-.07+Math.cos(phase)*.02);
+ // short de course
+ ctx.fillStyle=palette.short;ctx.beginPath();ctx.moveTo(-12,-36);ctx.lineTo(13,-37);ctx.lineTo(15,-27);ctx.lineTo(1,-25);ctx.lineTo(-13,-28);ctx.closePath();ctx.fill();
+ ctx.strokeStyle=palette.stripe;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(7,-29);ctx.lineTo(12,-29);ctx.stroke();
+ // maillot cintré avec taille plus sportive
+ ctx.fillStyle=palette.top;ctx.beginPath();ctx.moveTo(-14,-65);ctx.quadraticCurveTo(-1,-71,11,-63);ctx.lineTo(13,-38);ctx.lineTo(-10,-36);ctx.closePath();ctx.fill();
  ctx.fillStyle=palette.shadow;ctx.beginPath();ctx.moveTo(-12,-62);ctx.lineTo(-7,-59);ctx.lineTo(-9,-39);ctx.lineTo(-13,-39);ctx.closePath();ctx.fill();
- // gilet de trail avec sangles fines / flasque visible en profil
- runnerStroke([-9,-63,-8,-39],3,palette.vest);
- runnerStroke([10,-60,10,-43],2.8,palette.stripe);
- runnerRound(8,-57,5,15,2,palette.vest);
- runnerRound(9,-55,4,10,2,palette.flask);
- runnerRound(9,-58,4,4,2,'#ecf7ed');
- runnerRound(-3,-44,10,11,2,'#f0f2ed'); // dossard
- ctx.font='bold 7px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#16465b';ctx.fillText('42',2,-38);
- // bras opposé à la jambe avant, coude fléchi 90 degrés
- const elbowX=16-step*6, wristX=9-step*9;
- runnerStroke([9,-61,elbowX,-46,wristX,-35],6,'#efbc95');
- ctx.fillStyle='#e9b58f';ctx.beginPath();ctx.arc(wristX,-35,3.6,0,Math.PI*2);ctx.fill();
- // cou + tête en profil (nez et oeil vers la droite)
- runnerRound(8,-74,7,11,3,'#dca985');
- ctx.fillStyle='#e6b68f';ctx.beginPath();ctx.arc(15,-82,11,0,Math.PI*2);ctx.fill();
- ctx.beginPath();ctx.moveTo(23,-82);ctx.lineTo(28,-78);ctx.lineTo(22,-76);ctx.closePath();ctx.fill();
- ctx.fillStyle='#2c3f41';ctx.beginPath();ctx.arc(21,-83,1.5,0,Math.PI*2);ctx.fill();
- // casquette sportive et visière
- runnerRound(5,-94,25,8,4,palette.cap);runnerRound(27,-91,11,3.2,2,palette.stripe);
- ctx.fillStyle=palette.shadow;ctx.beginPath();ctx.moveTo(7,-95);ctx.lineTo(12,-99);ctx.lineTo(18,-95);ctx.closePath();ctx.fill();
- if(profile.levels.lamp>0||r?.course?.mode==='night'){runnerRound(21,-95,7,4,2,'#ffe29c');ctx.fillStyle='#fdf4bf44';ctx.beginPath();ctx.moveTo(28,-91);ctx.lineTo(51,-94);ctx.lineTo(51,-86);ctx.closePath();ctx.fill()}
+ // gilet frontal et flasque
+ runnerStroke([-9,-63,-8,-39],2.8,palette.vest); runnerStroke([10,-60,10,-43],2.5,palette.stripe);
+ runnerRound(8,-57,4.8,14,2,palette.vest); runnerRound(8.6,-55.2,3.8,9.4,1.7,palette.flask); runnerRound(8.8,-58.2,3.7,3.5,1.5,'#ecf7ed');
+ // dossard
+ runnerRound(-3,-44,10,11,2,'#f0f2ed'); ctx.font='bold 7px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#16465b';ctx.fillText('42',2,-38);
+ // bras avant
+ const frontElbowX=15-step*5.4, frontWristX=9-step*8.4;
+ runnerStroke([9,-61,frontElbowX,-46,frontWristX,-35],5.7,'#efbc95');
+ ctx.fillStyle='#e9b58f';ctx.beginPath();ctx.arc(frontWristX,-35,3.1,0,Math.PI*2);ctx.fill();
+ // cou + tête un peu plus propre
+ runnerRound(8,-74,7,10,3,'#dca985');
+ ctx.fillStyle='#e6b68f';ctx.beginPath();ctx.arc(15,-82,10.5,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.moveTo(22.5,-81.8);ctx.lineTo(26.8,-78.4);ctx.lineTo(22.2,-76.5);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#2c3f41';ctx.beginPath();ctx.arc(20.5,-83,1.35,0,Math.PI*2);ctx.fill();
+ // casquette plus nette
+ runnerRound(5,-93.5,24,7.5,4,palette.cap); runnerRound(26.2,-90.8,10.5,2.8,2,palette.stripe);
+ ctx.fillStyle=palette.shadow;ctx.beginPath();ctx.moveTo(7,-94.5);ctx.lineTo(12,-98.2);ctx.lineTo(18,-94.5);ctx.closePath();ctx.fill();
+ if(profile.levels.lamp>0||r?.course?.mode==='night'){runnerRound(20.5,-95,6.7,4,2,'#ffe29c');ctx.fillStyle='#fdf4bf44';ctx.beginPath();ctx.moveTo(27.5,-91.3);ctx.lineTo(49,-94);ctx.lineTo(49,-87);ctx.closePath();ctx.fill()}
  ctx.restore();
  if(keys.boost&&r?.grounded){runnerStroke([-28,-51,-45,-51],1.8,'#ffffff3c');runnerStroke([-28,-41,-42,-41],1.5,'#ffffff29')}
  ctx.restore()
