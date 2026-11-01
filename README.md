@@ -1,24 +1,27 @@
-# TRAIL CHAOS EXPLORER — V3.0
+# TRAIL CHAOS — SIDE TRAIL V3.1
 
-Prototype jouable en vue 3/4, remplaçant le runner à trois couloirs comme jeu principal.
+Jeu d'arcade de trail en **vue de côté**, jouable dans un navigateur et installable en PWA sur iPhone/Android.
 
-## Comment jouer
+## Jouer
 
-- **Mobile** : maintenir ◀ / ▶ ou glisser horizontalement directement sur le sentier. Direction libre, sans couloirs fixes.
-- **↑** : sauter au-dessus des racines, troncs et passages d'eau.
-- **⚡** : sprinter en dépensant davantage d'énergie.
-- **Ordinateur** : flèches gauche/droite ou A/D ; espace pour sauter ; Maj pour sprinter ; P pour pause.
+- Sur téléphone : **glisser vers le haut = sauter**, **glisser vers le bas = se baisser**. Un tap rapide sur le décor permet également de sauter.
+- Boutons tactiles en bas : **↓ se baisser**, **↑ sauter**, **⚡ sprint** (maintenir).
+- Sur PC : `↑` / `Espace` pour sauter, `↓` pour se baisser, `Maj` pour sprinter, `P` pour la pause.
 
-## Nouveautés V3
+La course avance automatiquement. La vitesse s'adapte à la pente, au sprint et à l'énergie. Les obstacles se rencontrent sur des terrains vallonnés aux biomes changeants (forêt, ruisseau, sapinière ; alpage, pierrier, sommet ; crépuscule, forêt nocturne, crête lunaire).
 
-- Sentiers sinueux en perspective trois-quarts, relief et caméra qui suit le coureur.
-- Deux embranchements par parcours : **voie technique à gauche** (davantage de pièces, d'obstacles, un peu plus rapide), ou **voie roulante à droite**.
-- Gestion des sorties de sentier, collisions, énergie, ravitaillements, sauts, sprint.
-- Trois courses : forêt, montagne, nuit. Sauvegarde préservée via la clé `trail-chaos-runner-v2`.
+## Sauvegarde et équipements
 
-## Autres modes
+La sauvegarde existante reste compatible : `localStorage['trail-chaos-runner-v2']` conserve les pièces, les équipements, les courses débloquées et les meilleurs chronos.
 
-- `runner-v28.html` : version arcade à trois couloirs V2.8.
-- `classic.html` : version stratégie historique.
+## Archives jouables
 
-Les fichiers `manifest.webmanifest` et `icons/` sont conservés.
+- `explorer-v3.html` : prototype précédent en vue trois-quarts.
+- `runner-v28.html` : ancien mode runner à trois voies.
+- `classic.html` : ancien jeu stratégique.
+
+## Publication
+
+GitHub Pages : `main` / `(root)` → https://albbris.github.io/Jeu-trail/
+
+Fichiers de la V3.1 : `index.html`, `sw.js`, `README.md`. Le `manifest.webmanifest` et les icônes PWA du dépôt sont conservés.
