@@ -1,5 +1,5 @@
-const CACHE='trail-chaos-v40-20261102';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./explorer-v3.html','./runner-v28.html','./side-v31.html','./side-v35.html','./side-v36.html','./side-v37.html','./side-v38.html','./side-v39.html'];
+const CACHE='trail-chaos-v42-20261102';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./explorer-v3.html','./runner-v28.html','./side-v31.html','./side-v35.html','./side-v36.html','./side-v37.html','./side-v38.html','./side-v39.html','./side-v40.html','./side-v41.html'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

@@ -1,34 +1,33 @@
-# TRAIL CHAOS — V4.0
+# TRAIL CHAOS — V4.2 · Les courses prennent vie
 
-Version principale : `index.html`
+## Nouveautés
+- Profils de dénivelé longs et continus. Pour Millau, les kilomètres et altitudes de référence proviennent du profil et du descriptif officiels 2026 ; courbe lissée pour la jouabilité.
+- Les autres profils (SaintéLyon, UTMB, Diagonale des Fous, Marathon des Sables et Western States) restent **des approximations de gameplay**, sauf les distances et points de ravitaillement explicitement vérifiés.
+- Sections nommées au fur et à mesure de la progression, avec affichage du km, d'une altitude indicative et d'un mini-profil qui suit le coureur.
+- Tous les circuits restent accessibles en découverte dès le début, les performances et récompenses restent enregistrées.
+- Sol différencié selon les sections : asphalte gris sur le viaduc et les routes, sable dans le Sahara, roches et pistes pierreuses ailleurs.
+- Obstacles et types de terrain propres aux sections : bitume et barrières, piste pierreuse, passerelle/viaduc, boue, rivière, chaleur et dunes.
+- Ravitaillements placés à des points clés : Millau (km 8,3, 12,8 eau, 17) et SaintéLyon (km 17, 32, 46, 60, 67), autres ultras avec emplacements stylisés.
+- Millau : vue du viaduc grandissant à l'horizon, montée sous les piles, traversée aller-retour, vue derrière le coureur sur la descente vers Millau.
 
-## Nouveautés V4.0
-- Ajout de nouveaux circuits inspirés de courses réelles mythiques : Course Eiffage du Viaduc de Millau, SaintéLyon, UTMB, Diagonale des Fous, Marathon des Sables Legendary et Western States 100.
-- Chaque circuit possède désormais un univers visuel dédié en trois grandes ambiances de parcours.
-- Profils de terrain plus différenciés selon la course (désert plus roulant, ultra montagne plus accidentée, etc.).
-- Nouvelles variantes d’obstacles pour certains univers : barrière et dune.
-- Déblocage des parcours étendu à l’ensemble du nouveau catalogue.
+## Sources de référence
+- https://www.course-eiffage-viaducdemillau.fr/la-course
+- https://www.saintelyon.com/races/80km-saintelyon
+- https://montblanc.utmb.world/fr/races/utmb
+- https://www.grandraid-reunion.com/fr/les-courses/la-diagonale-des-fous
+- https://marathondessables.com/fr/format/mds-legendary
 
-## Catalogue
-1. Forêt des Racines
-2. Crêtes du Vent
-3. Ultra Nocturne
-4. Viaduc de Millau
-5. SaintéLyon
-6. UTMB
-7. Diagonale des Fous
-8. Marathon des Sables
-9. Western States 100
+**Note :** il s'agit d'une adaptation arcade, pas d'un outil cartographique ou d'une reproduction GPX exacte. Les kilomètres sont compressés à l'écran et le temps de course est accéléré.
 
 ## Commandes
-- Glisser vers le haut : sauter
-- Glisser vers le bas : se baisser
-- Maintenir ⚡ : sprinter
-- Clavier : ↑ ou Espace (saut), ↓ (se baisser), Maj (sprint), P (pause)
+- Glisser vers le haut : saut
+- Glisser vers le bas : accroupissement
+- Maintenir ⚡ : sprint (consomme de l'énergie)
 
-## Archives
-- `side-v39.html` : version principale précédente V3.9
-- `side-v38.html`, `side-v37.html`, `side-v36.html`, `side-v35.html` : archives latérales
-- `explorer-v3.html`, `runner-v28.html`, `classic.html` : anciens modes
+## Progression
+Sauvegarde locale existante conservée : `trail-chaos-runner-v2`.
 
-Site : https://albbris.github.io/Jeu-trail/
+## Versions précédentes
+- `side-v41.html` : V4.1 (non publiée auparavant sur GitHub, archivée ici)
+- `side-v40.html` : V4.0
+- `side-v39.html`, `side-v38.html`, etc. : anciennes versions.
