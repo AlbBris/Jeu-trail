@@ -1,28 +1,34 @@
-# TRAIL CHAOS — SIDE TRAIL V3.9
+# TRAIL CHAOS — V4.0
 
-Jeu de trail en vue latérale sur iPhone et navigateur. La version principale est `index.html`.
+Version principale : `index.html`
 
-## Nouveautés V3.9
-- Les deux bras pivotent à l'épaule ; le coude reste plié à angle fixe et l'avant-bras suit le bras sans articulation indépendante.
-- Le gilet d'hydratation est nettement réduit, à l'arrière comme à l'avant, pour une silhouette plus proche d'un traileur que d'un randonneur.
-- Les chaussures de trail plus fines et les trois tenues de la V3.8 sont conservées.
-- Service worker mis à jour avec une stratégie réseau prioritaire pour les pages, afin de mieux récupérer les nouvelles versions sur iPhone.
+## Nouveautés V4.0
+- Ajout de nouveaux circuits inspirés de courses réelles mythiques : Course Eiffage du Viaduc de Millau, SaintéLyon, UTMB, Diagonale des Fous, Marathon des Sables Legendary et Western States 100.
+- Chaque circuit possède désormais un univers visuel dédié en trois grandes ambiances de parcours.
+- Profils de terrain plus différenciés selon la course (désert plus roulant, ultra montagne plus accidentée, etc.).
+- Nouvelles variantes d’obstacles pour certains univers : barrière et dune.
+- Déblocage des parcours étendu à l’ensemble du nouveau catalogue.
+
+## Catalogue
+1. Forêt des Racines
+2. Crêtes du Vent
+3. Ultra Nocturne
+4. Viaduc de Millau
+5. SaintéLyon
+6. UTMB
+7. Diagonale des Fous
+8. Marathon des Sables
+9. Western States 100
 
 ## Commandes
-- Glisser vers le haut : sauter.
-- Glisser vers le bas : se baisser.
-- Maintenir ⚡ : sprinter.
-- Ordinateur : ↑ ou Espace (saut), ↓ (se baisser), Maj (sprint), P (pause).
-
-## Progression
-Courses, boutique, équipements et sauvegardes inchangés. Clé locale : `trail-chaos-runner-v2`.
+- Glisser vers le haut : sauter
+- Glisser vers le bas : se baisser
+- Maintenir ⚡ : sprinter
+- Clavier : ↑ ou Espace (saut), ↓ (se baisser), Maj (sprint), P (pause)
 
 ## Archives
-- `side-v38.html` : ancienne version principale V3.8.
-- `side-v37.html`, `side-v36.html`, `side-v35.html` : versions intermédiaires.
-- `side-v34.html`, `side-v33.html`, `side-v31.html` : anciennes versions latérales.
-- `explorer-v3.html` : vue 3/4.
-- `runner-v28.html` : runner à trois voies.
-- `classic.html` : version stratégique.
+- `side-v39.html` : version principale précédente V3.9
+- `side-v38.html`, `side-v37.html`, `side-v36.html`, `side-v35.html` : archives latérales
+- `explorer-v3.html`, `runner-v28.html`, `classic.html` : anciens modes
 
 Site : https://albbris.github.io/Jeu-trail/
