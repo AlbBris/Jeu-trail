@@ -1,16 +1,28 @@
-# TRAIL CHAOS — SIDE TRAIL V3.8
+# TRAIL CHAOS — SIDE TRAIL V3.9
 
-## Corrections V3.8
-- Chaussures redessinées : profil plus fin, semelle plus discrète et crampons selon l'équipement.
-- Bras corrigés : coudes pliés, mains remontées près du buste et opposition avec les jambes.
-- Cache iPhone : réseau prioritaire pour les pages HTML (avec fonctionnement hors-ligne conservé).
-- Saut, accroupissement, sprint, tenues, boutique, courses et sauvegarde locale `trail-chaos-runner-v2` conservés.
+Jeu de trail en vue latérale sur iPhone et navigateur. La version principale est `index.html`.
+
+## Nouveautés V3.9
+- Les deux bras pivotent à l'épaule ; le coude reste plié à angle fixe et l'avant-bras suit le bras sans articulation indépendante.
+- Le gilet d'hydratation est nettement réduit, à l'arrière comme à l'avant, pour une silhouette plus proche d'un traileur que d'un randonneur.
+- Les chaussures de trail plus fines et les trois tenues de la V3.8 sont conservées.
+- Service worker mis à jour avec une stratégie réseau prioritaire pour les pages, afin de mieux récupérer les nouvelles versions sur iPhone.
 
 ## Commandes
-Glisser vers le haut : sauter ; vers le bas : se baisser. Maintenir ⚡ : sprint.
-Clavier : ↑ ou Espace (saut), ↓ (se baisser), Maj (sprint), P (pause).
+- Glisser vers le haut : sauter.
+- Glisser vers le bas : se baisser.
+- Maintenir ⚡ : sprinter.
+- Ordinateur : ↑ ou Espace (saut), ↓ (se baisser), Maj (sprint), P (pause).
+
+## Progression
+Courses, boutique, équipements et sauvegardes inchangés. Clé locale : `trail-chaos-runner-v2`.
 
 ## Archives
-`side-v37.html`, `side-v36.html`, `side-v35.html`, `side-v34.html`, `side-v33.html`, `side-v31.html` ainsi que `explorer-v3.html`, `runner-v28.html` et `classic.html`.
+- `side-v38.html` : ancienne version principale V3.8.
+- `side-v37.html`, `side-v36.html`, `side-v35.html` : versions intermédiaires.
+- `side-v34.html`, `side-v33.html`, `side-v31.html` : anciennes versions latérales.
+- `explorer-v3.html` : vue 3/4.
+- `runner-v28.html` : runner à trois voies.
+- `classic.html` : version stratégique.
 
-https://albbris.github.io/Jeu-trail/
+Site : https://albbris.github.io/Jeu-trail/
