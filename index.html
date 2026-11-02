@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V4.4, courez sur des sentiers vallonnés en vue de côté. Sautez, glissez et améliorez votre équipement.">
+<meta name="description" content="Trail Chaos V4.5, courez sur des sentiers vallonnés en vue de côté. Sautez, glissez et améliorez votre équipement.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V4.4</title>
+<title>Trail Chaos — Side Trail V4.5</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -20,13 +20,16 @@
 #controls{position:absolute;z-index:5;bottom:max(18px,env(safe-area-inset-bottom));left:15px;right:15px;display:none;justify-content:space-between;gap:12px;pointer-events:none;align-items:flex-end}#controls.on{display:flex}.buttons{display:flex;gap:9px}.control{min-height:66px;min-width:69px;pointer-events:auto;border-radius:18px;border:1px solid #ffffff82;background:#0b2b30cb;color:#fff;font-size:27px;font-weight:950;backdrop-filter:blur(7px);box-shadow:0 9px 25px #0006;user-select:none;touch-action:none}.control small{display:block;font-size:9px;letter-spacing:.6px}.control.active,.control:active{background:#c6f46c;color:#13251b}.control.boost{background:#af6637e0}#toast{position:absolute;z-index:8;top:24%;left:50%;transform:translateX(-50%) translateY(-7px);padding:11px 16px;background:#0c3030e8;border:1px solid #def8a28c;border-radius:13px;font-weight:950;font-size:13px;text-align:center;opacity:0;pointer-events:none;white-space:nowrap;max-width:92%;transition:opacity .18s,transform .18s}#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}#modal{position:absolute;z-index:10;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:#05181dbb;backdrop-filter:blur(8px)}#modal.on{display:flex}.dialog{width:100%;max-width:440px;padding:23px;border-radius:24px;background:#113537;border:1px solid #ffffff4b;box-shadow:0 20px 75px #000a;text-align:center}.dialog h2{font-size:28px;letter-spacing:-.8px;margin:7px 0}.dialog p{font-size:13px;color:#d8e6de;line-height:1.5}.result{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:15px 0}.result div{padding:10px 4px;background:#ffffff12;border:1px solid #ffffff27;border-radius:11px}.result b{display:block;color:var(--lime);font-size:21px}.result small{font-size:10px;color:#c8dbd3}
 .skin-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 15px}.skin-card{border:1px solid #ffffff3a;background:#143536;border-radius:13px;padding:11px 5px;color:#edf7ee;min-height:84px;font-size:11px;font-weight:850;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px}.skin-card.selected{border:2px solid var(--lime);background:#c6ef751a}.skin-dot{display:block;width:30px;height:30px;border-radius:50%;border:3px solid #ffffff61;box-shadow:0 3px 8px #0006}.skin-card small{font-size:9px;opacity:.83}.skin-note{font-size:11px;color:#cde3d9;line-height:1.5;margin:2px 0 8px} @media(max-height:720px){.sheet{padding:15px;max-height:77dvh}.sheet h1{font-size:32px}.control{min-height:54px;min-width:58px;font-size:22px}.hudrow{font-size:12px}}@media(min-width:850px){body::after{content:'TRAIL CHAOS / SIDE TRAIL';position:fixed;color:#d4f673;font-size:20px;font-weight:950;right:calc(50% + 370px);top:40%}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 #routeProfile{height:36px;width:100%;display:block;background:#081d2280;border:1px solid #ffffff27;border-radius:9px;margin-bottom:7px;pointer-events:none}.routeinfo{display:flex;justify-content:space-between;gap:7px;font-size:10px;font-weight:850;color:#edf7e2;text-shadow:0 1px 5px #07191d;white-space:nowrap;overflow:hidden;margin-top:-4px;margin-bottom:4px}.routeinfo span{overflow:hidden;text-overflow:ellipsis}#sectionLabel{max-width:70%}
+
+.shop-summary{display:flex;gap:8px;margin:10px 0 17px;flex-wrap:wrap}.shop-summary span{border:1px solid #a1dbbb54;background:#a2dcbc16;padding:8px 10px;border-radius:10px;color:#d1f6df;font-size:11px;font-weight:800}
+.collector{display:grid;grid-template-columns:46px minmax(0,1fr) 84px;align-items:center;gap:9px;background:#ffffff0d;border:1px solid #ffffff30;padding:11px 8px;border-radius:15px;margin:9px 0}.collector.equipped{border-color:#c7f97b;background:#cbf56719}.collector-preview{width:45px;height:48px;border:1px solid #e4f3e244;border-radius:11px;background:#264644;display:flex;align-items:center;justify-content:center;font-size:25px}.collector-description{min-width:0}.collector-description strong{display:block;font-size:12px;line-height:1.25}.collector-description small{display:block;color:#bcd1ca;line-height:1.35;font-size:10px;margin-top:4px}.collector-bonus{display:block;color:#dafa82;font-weight:800;font-size:11px;margin-top:5px}.collector-action{border:0;border-radius:9px;min-height:40px;padding:6px 7px;background:var(--lime);color:#11271f;font-size:10px;font-weight:950;overflow-wrap:anywhere}.collector-action.owned{background:#67d7c2}.collector-action.active{background:#42545a;color:#e9f2ef;border:1px solid #ffffff3f}.minishirt{width:31px;height:33px;background:#7447be;border:2px solid #ae8edf;border-radius:6px 6px 5px 5px;display:flex;align-items:center;justify-content:center;font-size:8px;line-height:.89;color:#f5eaff;text-align:center;font-weight:950;letter-spacing:.3px;box-shadow:inset 0 0 8px #35146555}
 </style>
 </head>
 <body>
 <div id="app">
 <canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V4.4</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V4.5</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -47,20 +50,34 @@ const COURSES=[
  {id:'western',name:'Western States 100',emoji:'🤠',km:161,length:29600,mode:'western',difficulty:5,desc:'High country, canyons brûlants et rivière américaine'}
 ];
 const SHOP=[
- {id:'shoes',emoji:'👟',name:'Chaussures de trail',sub:['Semelles du dimanche','Crampons sérieux','Accroche de bouquetin','Adhérence de légende'],prices:[0,35,90,170],effect:'Un cœur supplémentaire par niveau'},
- {id:'vest',emoji:'🎒',name:'Gilet de trail',sub:['Poches imaginaires','Deux flasques','Ravito premium','Autonomie d’ultra'],prices:[0,30,75,145],effect:'Moins de fatigue'},
- {id:'gel',emoji:'🍯',name:'Gels énergétiques',sub:['Goût dentifrice','Banane douteuse','Carburant de champion','Turbo ravito'],prices:[0,25,65,125],effect:'Ravitos plus efficaces'},
- {id:'lamp',emoji:'🔦',name:'Frontale',sub:['Lampe de poche','Éclairage correct','Pleine puissance','Phare de stade'],prices:[0,25,60,115],effect:'Meilleure visibilité la nuit'}
+ {id:'shoes',emoji:'👟',name:'Chaussures de trail',sub:['Semelles du dimanche','Crampons solides','Accroche de bouquetin','Carbone tout terrain','Tenue de roc','Semelles légendaires'],prices:[0,260,850,2250,5600,11500],effect:'Jusqu’à +3 cœurs, crampons améliorés'},
+ {id:'vest',emoji:'🎒',name:'Gilet d’hydratation',sub:['Mini poche','Deux flasques','Gilet léger','Réserve longue distance','Autonomie d’ultra','Moteur infatigable'],prices:[0,260,850,2250,5600,11500],effect:'Réduit la consommation d’énergie'},
+ {id:'gel',emoji:'🍯',name:'Nutrition sportive',sub:['Petit goûter','Gel classique','Gel caféine','Ravito sérieux','Stratégie pro','Cuisine d’ultra'],prices:[0,260,850,2250,5600,11500],effect:'Récupération d’énergie aux ravitos'},
+ {id:'lamp',emoji:'🔦',name:'Lampe frontale',sub:['Frontale simple','Lampe renforcée','Trail nocturne','Longue portée','Ultra lumière','Projecteur des étoiles'],prices:[0,260,850,2250,5600,11500],effect:'Améliore la visibilité nocturne'}
 ];
+// Collectors : personnages et marques cités en clins d'œil non officiels.
+// Un collector occupe un seul emplacement. On conserve la propriété même déséquipé.
+const SPECIALS=[
+ {id:'clemShirt',slot:'top',emoji:'👕',name:'T-shirt « Bonjour » · ClemQuiCourt',price:4800,bonus:'+25 % de pièces ramassées',tag:'Violet · évocation graphique non officielle',blurb:'Clin d’œil à la collection Bonjour : tee-shirt violet, inscription simplifiée.'},
+ {id:'mathieuWatch',slot:'wrist',emoji:'⌚',name:'Montre GPS · Mathieu Blanchard',price:6700,bonus:'+12 % de vitesse en montée',tag:'Montre robuste façon fēnix · non officielle',blurb:'Un petit compteur GPS au poignet, pour dompter les côtes.'},
+ {id:'trailGlasses',slot:'eyes',emoji:'🕶️',name:'Lunettes anti-chaleur',price:2200,bonus:'−45 % de fatigue liée à la chaleur',tag:'Visière fumée · désert',blurb:'Des verres sportifs pour survivre aux dunes.'},
+ {id:'carbonPoles',slot:'hands',emoji:'🥢',name:'Bâtons carbone',price:3300,bonus:'+15 % de vitesse en montée',tag:'Montée technique',blurb:'Deux bâtons légers et visibles pendant la foulée.'},
+ {id:'ultraCap',slot:'head',emoji:'🧢',name:'Casquette grand raid',price:1900,bonus:'−20 % de fatigue liée à la chaleur',tag:'Casquette ivoire',blurb:'Protège du soleil et affiche un style ultra.'},
+ {id:'raceShoes',slot:'feet',emoji:'👟',name:'Chaussures de compétition',price:5700,bonus:'+5 % de vitesse en course',tag:'Chaussures corail fluo',blurb:'Une paire de trail rapide, plus lumineuse et visible.'},
+ {id:'softFlask',slot:'waist',emoji:'🧃',name:'Flasque d’ultra',price:2500,bonus:'+12 énergie à chaque ravito',tag:'Ceinture souple',blurb:'Un petit ravitaillement toujours à portée de main.'}
+];
+const SPECIAL_SLOTS={top:'Maillot',wrist:'Poignet',eyes:'Visage',hands:'Mains',head:'Tête',feet:'Pieds',waist:'Ceinture'};
 const SKINS=[
 {id:'corail',name:'Corail',tag:'Trail classique',top:'#fa674b',shadow:'#b63e36',short:'#1c3340',cap:'#c8ed77',sole:'#eefff7',stripe:'#9bead8',vest:'#255764',flask:'#83e8ed'},
 {id:'alpage',name:'Alpage',tag:'Rapide & léger',top:'#b9e46f',shadow:'#538e57',short:'#244c57',cap:'#e9f8d0',sole:'#f7fbf8',stripe:'#52d6bf',vest:'#255c52',flask:'#e1f9b2'},
 {id:'nocturne',name:'Nocturne',tag:'Ultra de nuit',top:'#8c86ef',shadow:'#574aa8',short:'#233246',cap:'#ecb768',sole:'#dfe8ff',stripe:'#d1caff',vest:'#354c67',flask:'#a1daf1'}
 ];
-const defaults={coins:0,levels:{shoes:0,vest:0,gel:0,lamp:0},unlocked:0,wins:0,best:{},sound:false,skin:"corail"};
+const defaults={coins:0,levels:{shoes:0,vest:0,gel:0,lamp:0},unlocked:0,wins:0,best:{},sound:false,skin:"corail",owned:{},equipped:{}};
 let stored=null;try{stored=JSON.parse(localStorage.getItem('trail-chaos-runner-v2')||'null')}catch(_){}
-let profile={...defaults,...(stored&&typeof stored==='object'?stored:{}),levels:{...defaults.levels,...(stored?.levels||{})}};
+let profile={...defaults,...(stored&&typeof stored==='object'?stored:{}),levels:{...defaults.levels,...(stored?.levels||{})},owned:{...(stored?.owned||{})},equipped:{...(stored?.equipped||{})}};
 if(!SKINS.some(s=>s.id===profile.skin))profile.skin='corail';
+for(const [slot,id] of Object.entries(profile.equipped)){const item=SPECIALS.find(s=>s.id===id&&s.slot===slot);if(!item||!profile.owned[id])delete profile.equipped[slot]}
+const wearing=id=>SPECIALS.some(s=>s.id===id&&profile.equipped[s.slot]===id&&profile.owned[id]);
 const save=()=>{try{localStorage.setItem('trail-chaos-runner-v2',JSON.stringify(profile))}catch(_){}};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t,fract=v=>v-Math.floor(v),hash=(a,b=0)=>fract(Math.sin(a*127.18+b*312.7+42.19)*43758.5453);
 const fmt=n=>Math.floor(n).toLocaleString('fr-FR');
@@ -69,9 +86,32 @@ const keys={boost:false,duck:false},swipe={active:false,x:0,y:0,id:null};
 function showToast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),1350)}
 function display(html){$('#panel').innerHTML=`<section class="sheet">${html}</section>`;$('#panel').classList.remove('hide');$('#hud').classList.remove('on');$('#controls').classList.remove('on');$('#modal').classList.remove('on');$('#bank').textContent=fmt(profile.coins)}
 function nav(target){screen=target;switch(target){case'home':home();break;case'courses':courses();break;case'shop':shop();break;default:help()}}
-function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V4.4</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>À Millau, le viaduc apparaît avant la montée, puis le coureur passe entre les pylônes et les haubans, avec la vallée sous la chaussée. L'ouvrage réapparaît après la sortie.</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=begin;$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
+function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V4.5</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>La boutique s’agrandit : équipements de progression, objets collectors à équiper et déséquiper, bonus actifs en course et vrais changements de tenue. Économise tes pièces pour les pièces rares !</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=begin;$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
 function courses(){display(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Circuits & légendes</h2><p>Parcours arcade inspirés des courses réelles. Le profil de Millau reprend les repères kilométriques officiels ; les profils des ultras sont des approximations de jeu, pas des tracés GPS. Tous les circuits sont accessibles en découverte : améliore ton équipement et bats tes records !</p>${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:1"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">${i===selected?'✓ CHOISI':i>profile.unlocked?'✨ DÉCOUVRIR':'CHOISIR'}</span></div>`).join('')}<div class="actions"><button class="btn alt" id="back">← Retour</button><button class="btn" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(el=>el.onclick=()=>{const i=+el.dataset.course;selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=begin}
-function shop(){const skin=SKINS.find(x=>x.id===profile.skin)||SKINS[0];display(`<span class="eyebrow">🎒 Ton équipement</span><h2>Boutique <span class="accent">🟡 ${fmt(profile.coins)}</span></h2><p>Améliore ton matériel et choisis la tenue de ton coureur. Les tenues sont cosmétiques et gratuites.</p><div class="eyebrow">🏃 Tenue du traileur</div><div class="skin-picker">${SKINS.map(s=>`<button class="skin-card ${profile.skin===s.id?'selected':''}" data-skin="${s.id}"><span class="skin-dot" style="background:linear-gradient(130deg,${s.top} 0 55%,${s.short} 55% 100%)"></span>${s.name}<small>${profile.skin===s.id?'✓ Équipée':s.tag}</small></button>`).join('')}</div><div class="skin-note">La casquette, le maillot, le short, les chaussures et le gilet changent avec ta tenue et tes équipements achetés.</div><div class="eyebrow">⚙️ Améliorations</div>${SHOP.map(g=>{const lvl=clamp(profile.levels[g.id]||0,0,3),cost=g.prices[lvl+1],max=lvl===3;return `<div class="gear"><span class="pic">${g.emoji}</span><div><strong>${g.name} <span class="accent">${lvl+1}/4</span></strong><small>${g.sub[lvl]} · ${g.effect}</small></div><button data-buy="${g.id}" ${max||profile.coins<cost?'disabled':''}>${max?'MAX':`🟡 ${cost}`}</button></div>`}).join('')}<button class="btn alt full" id="back">← Retour</button>`);document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const g=SHOP.find(i=>i.id===b.dataset.buy),lvl=profile.levels[g.id],cost=g.prices[lvl+1];if(lvl>=3||profile.coins<cost)return;profile.coins-=cost;profile.levels[g.id]++;save();shop();showToast('Équipement amélioré !')});document.querySelectorAll('[data-skin]').forEach(b=>b.onclick=()=>{profile.skin=b.dataset.skin;save();shop();showToast('🎽 Tenue '+SKINS.find(x=>x.id===profile.skin).name+' équipée !')});$('#back').onclick=()=>nav('home')}
+function shop(){
+ const clothes=SKINS.find(x=>x.id===profile.skin)||SKINS[0];
+ const collectorCount=Object.keys(profile.owned).filter(id=>profile.owned[id]&&SPECIALS.some(s=>s.id===id)).length;
+ display(`<span class="eyebrow">🎒 Vestiaire & équipement</span><h2>Boutique <span class="accent">🟡 ${fmt(profile.coins)}</span></h2>
+ <p>Les améliorations coûtent maintenant davantage et possèdent 6 niveaux. Les collectors sont achetés <b>une seule fois</b>, puis équipés ou retirés librement. Ta progression actuelle est conservée.</p>
+ <div class="shop-summary"><span>🎒 ${collectorCount}/${SPECIALS.length} collectors</span><span>⚡ Bonus actifs : ${Object.keys(profile.equipped).filter(slot=>SPECIALS.some(i=>i.id===profile.equipped[slot]&&profile.owned[i.id])).length}</span></div>
+ <div class="eyebrow">🏃 Couleurs de tenue — gratuites</div>
+ <div class="skin-picker">${SKINS.map(s=>`<button class="skin-card ${profile.skin===s.id?'selected':''}" data-skin="${s.id}"><span class="skin-dot" style="background:linear-gradient(130deg,${s.top} 0 55%,${s.short} 55% 100%)"></span>${s.name}<small>${profile.skin===s.id?'✓ Équipée':s.tag}</small></button>`).join('')}</div>
+ <div class="eyebrow">⚙️ Matériel évolutif</div>
+ ${SHOP.map(g=>{const lvl=clamp(profile.levels[g.id]||0,0,g.prices.length-1),next=lvl+1,max=next>=g.prices.length,cost=g.prices[next];return `<div class="gear"><span class="pic">${g.emoji}</span><div><strong>${g.name} <span class="accent">${lvl+1}/${g.prices.length}</span></strong><small>${g.sub[lvl]} · ${g.effect}</small></div><button data-buy="${g.id}" ${max||profile.coins<cost?'disabled':''}>${max?'MAX':`🟡 ${fmt(cost)}`}</button></div>`}).join('')}
+ <div class="eyebrow" style="margin-top:22px">✨ Équipement collector — achetables & amovibles</div>
+ <p class="muted">Un seul objet par emplacement. Un collector possédé reste dans ton inventaire même quand tu le retires.</p>
+ ${SPECIALS.map(it=>{const owned=!!profile.owned[it.id],worn=wearing(it.id),price=it.price;return `<div class="collector ${worn?'equipped':''}"><div class="collector-preview" aria-hidden="true">${it.id==='clemShirt'?'<span class="minishirt">BON<br>JOUR</span>':it.emoji}</div><div class="collector-description"><strong>${it.name}</strong><small>${it.tag} · ${SPECIAL_SLOTS[it.slot]}</small><span class="collector-bonus">${it.bonus}</span><small>${it.blurb}</small></div><button class="collector-action ${owned?(worn?'active':'owned'):''}" data-special="${it.id}" ${(!owned&&profile.coins<price)?'disabled':''}>${owned?(worn?'RETIRER':'ÉQUIPER'):'🟡 '+fmt(price)}</button></div>`}).join('')}
+ <p class="muted">Clin d’œil de fan non officiel : les objets associés à ClemQuiCourt et Mathieu Blanchard ne sont ni des reproductions exactes ni des partenariats. Pour voir le véritable motif du tee-shirt, consulte <a href="https://clemquicourt.com/products/baekdu-daegan-edition-n-2-bonjour" target="_blank" rel="noopener noreferrer" style="color:#d5f777">la boutique officielle</a>.</p>
+ <button class="btn alt full" id="back" style="margin-top:14px">← Retour</button>`);
+ document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const g=SHOP.find(i=>i.id===b.dataset.buy),lvl=clamp(profile.levels[g.id]||0,0,g.prices.length-1),cost=g.prices[lvl+1];if(lvl+1>=g.prices.length||profile.coins<cost)return;const scroll=$('#panel .sheet').scrollTop;profile.coins-=cost;profile.levels[g.id]=lvl+1;save();shop();$('#panel .sheet').scrollTop=scroll;showToast('⚙️ Matériel amélioré !')});
+ document.querySelectorAll('[data-skin]').forEach(b=>b.onclick=()=>{const scroll=$('#panel .sheet').scrollTop;profile.skin=b.dataset.skin;save();shop();$('#panel .sheet').scrollTop=scroll;showToast('🎽 Tenue '+SKINS.find(x=>x.id===profile.skin).name+' équipée !')});
+ document.querySelectorAll('[data-special]').forEach(b=>b.onclick=()=>{const it=SPECIALS.find(i=>i.id===b.dataset.special);if(!it)return;const scroll=$('#panel .sheet').scrollTop;
+ if(!profile.owned[it.id]){if(profile.coins<it.price)return;profile.coins-=it.price;profile.owned[it.id]=true;profile.equipped[it.slot]=it.id;showToast('✨ Collector acheté et équipé !')}
+ else if(profile.equipped[it.slot]===it.id){delete profile.equipped[it.slot];showToast('🎒 Objet retiré')}
+ else{profile.equipped[it.slot]=it.id;showToast('✅ Collector équipé !')}
+ save();shop();$('#panel .sheet').scrollTop=scroll});
+ $('#back').onclick=()=>nav('home')
+}
 function help(){display(`<span class="eyebrow">🎮 Comment jouer</span><h2>Maîtrise le terrain</h2><div class="tip"><b>Sur iPhone / téléphone</b><br>Glisse ton doigt <b>vers le haut</b> sur l’écran pour sauter.<br>Glisse <b>vers le bas</b> pour te baisser sous les branches.<br>Un appui rapide sur le terrain déclenche aussi un saut.<br>Maintiens ⚡ pour sprinter (cela consomme de l’énergie).<br>Les boutons du bas fonctionnent aussi.<br><br><b>Sur ordinateur</b><br>↑ / Espace : saut · ↓ : se baisser · Maj : sprint · P : pause</div><div class="stats"><span class="stat">🪵 Tronc → saute</span><span class="stat">🌿 Branche → baisse-toi</span><span class="stat">🟫 Boue → saute ou ralentis</span><span class="stat">🪨 Roche → saute</span><span class="stat">🟡 Pièces → collecte</span></div><button class="btn full" id="back">C'est parti !</button>`);$('#back').onclick=()=>nav('home')}
 // Relie les bosses, les faux plats et les descentes à une même altitude physique.
 function smooth(t){t=clamp(t,0,1);return t*t*(3-2*t)}
@@ -198,7 +238,7 @@ function makeWorld(c){const objects=[],rng=c.difficulty*23;const gap=c.difficult
  }
  const race=ROUTE_DATA[c.mode];if(race){for(const s of race.segments){if(!s.water)continue;const x=s.km/c.km*c.length+64;if(x<c.length-200)objects.push({x,type:'drink',alt:45,r:25,done:false,checkpoint:s.name})}}
  return objects.sort((a,b)=>a.x-b.x)}
-function begin(){const c=COURSES[selected];fx=[];run={course:c,x:0,elapsed:0,energy:100,hearts:3+profile.levels.shoes,coins:0,objects:makeWorld(c),jumpY:0,vy:0,duck:0,stumble:0,inv:0,paused:false,finished:false,grounded:true,steps:0,stage:-1,preview:false};camX=-W*.29;camHeight=elevation(0,c);keys.boost=false;keys.duck=false;screen='run';$('#modal').classList.remove('on');$('#panel').classList.add('hide');$('#hud').classList.add('on');$('#controls').classList.add('on');$('#courseName').textContent=c.name.toUpperCase();updateHUD();showToast(c.emoji+' '+c.name+' · GO !')}
+function begin(){const c=COURSES[selected];fx=[];run={course:c,x:0,elapsed:0,energy:100,hearts:3+Math.min(3,profile.levels.shoes),coins:0,objects:makeWorld(c),jumpY:0,vy:0,duck:0,stumble:0,inv:0,paused:false,finished:false,grounded:true,steps:0,stage:-1,preview:false};camX=-W*.29;camHeight=elevation(0,c);keys.boost=false;keys.duck=false;screen='run';$('#modal').classList.remove('on');$('#panel').classList.add('hide');$('#hud').classList.add('on');$('#controls').classList.add('on');$('#courseName').textContent=c.name.toUpperCase();updateHUD();showToast(c.emoji+' '+c.name+' · GO !')}
 function updateHUD(){if(!run)return;const c=run.course;$('#distance').textContent=(run.x/c.length*c.km).toFixed(1)+' / '+c.km+' km';$('#progress').style.width=clamp(run.x/c.length*100,0,100)+'%';$('#hearts').textContent='❤️'.repeat(clamp(run.hearts,0,6));$('#energy').style.width=clamp(run.energy,0,100)+'%';$('#energy').style.background=run.energy<25?'#ff8473':'#77ebd3';$('#wallet').textContent='🟡 '+run.coins;const sec=sectionFor(c,run.x);$('#sectionLabel').textContent=sec?sec.name:stage(c,run.x).name;const alt=altitudeAt(c,kmOf(run.x,c));$('#altLabel').textContent=alt===null?'Profil arcade':Math.round(alt)+' m '+(ROUTE_DATA[c.mode].actual?'':'≈');drawRouteProfile()}
 function drawRouteProfile(){const el=$('#routeProfile'),g=el.getContext('2d');const c=run?.course||COURSES[selected];if(!el)return;const pts=ROUTE_DATA[c.mode]?.profile;const w=el.width,h=el.height;g.clearRect(0,0,w,h);g.fillStyle='rgba(4,32,38,.16)';g.fillRect(0,0,w,h);
  if(pts){const low=Math.min(...pts.map(a=>a[1])),high=Math.max(...pts.map(a=>a[1])),span=Math.max(100,high-low);const yy=v=>h-6-((v-low)/span)*(h-13);g.beginPath();for(let i=0;i<=160;i++){const km=i/160*c.km,v=altitudeAt(c,km);i===0?g.moveTo(0,yy(v)):g.lineTo(w*i/160,yy(v))}g.strokeStyle='#b8eed5';g.lineWidth=2;g.stroke();g.lineTo(w,h);g.lineTo(0,h);g.closePath();g.fillStyle='rgba(120,220,190,.15)';g.fill()}
@@ -207,12 +247,12 @@ function drawRouteProfile(){const el=$('#routeProfile'),g=el.getContext('2d');co
 function jump(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded&&!run.duck){run.vy=545;run.grounded=false;run.jumpY=1;burst(run.x,groundY(run.x)-3,'dust',5);}}
 function duck(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded){run.duck=.9;run.vy=0;burst(run.x,groundY(run.x)-3,'dust',3);}}
 function hit(type){if(run.inv>0)return;burst(run.x,groundY(run.x)-18,'hit',15);run.hearts--;run.energy=clamp(run.energy-7,0,100);run.inv=1.2;run.stumble=.5;showToast(({rock:'🪨 Rocher !',log:'🪵 Tronc !',stump:'🌳 Souche !',branch:'🌿 Oups, la branche !',creek:'💦 Bain de pieds !',barrier:'🚧 Barrière !',dune:'🏜️ Dune molle !'}[type])||'Aïe !');if(run.hearts<=0)finish(false)}
-function collect(o){o.done=true;burst(o.x,groundY(o.x)-(o.alt||42),o.type==='coin'?'coin':'water',o.type==='coin'?6:13);if(o.type==='coin'){run.coins+=(o.value||1)}else{run.energy=clamp(run.energy+25+profile.levels.gel*15,0,100);showToast('🧃 Ravito : énergie récupérée !')}}
+function collect(o){o.done=true;burst(o.x,groundY(o.x)-(o.alt||42),o.type==='coin'?'coin':'water',o.type==='coin'?6:13);if(o.type==='coin'){run.coins+=(o.value||1);if(wearing('clemShirt')){run.coinBonus=(run.coinBonus||0)+(o.value||1)*.25;const extra=Math.floor(run.coinBonus);run.coins+=extra;run.coinBonus-=extra}}else{run.energy=clamp(run.energy+25+profile.levels.gel*12+(wearing('softFlask')?12:0),0,100);showToast('🧃 Ravito : énergie récupérée !')}}
 function update(dt){sceneTime+=dt;if(screen!=='run'||!run||run.paused||run.finished)return;const r=run,c=r.course;r.elapsed+=dt;r.inv=Math.max(0,r.inv-dt);r.stumble=Math.max(0,r.stumble-dt);r.duck=Math.max(0,r.duck-dt);
  if(r.grounded&&!r.duck&&r.elapsed-(r.lastStepFx||0)>.24){r.lastStepFx=r.elapsed;const nm=stage(c,r.x).name;if(nm.includes('PIERRIER')||nm.includes('RUISSEAU'))burst(r.x-9,groundY(r.x),'dust',2)}
- const steep=slope(r.x,c),section=sectionFor(c,r.x),sprint=keys.boost&&r.energy>5;let speed=(c.difficulty===1?179:c.difficulty===2?184:190)*(sprint?1.42:1)*(r.stumble>0?.58:1)*(r.energy<10?.73:1);speed*=clamp(1-steep*.8,.64,1.18);if(section?.surface==='sand')speed*=.86;if(section?.surface==='scree')speed*=.93;r.x+=speed*dt;
+ const steep=slope(r.x,c),section=sectionFor(c,r.x),sprint=keys.boost&&r.energy>5;let speed=(c.difficulty===1?179:c.difficulty===2?184:190)*(sprint?1.42:1)*(r.stumble>0?.58:1)*(r.energy<10?.73:1);speed*=clamp(1-steep*.8,.64,1.18);if(steep>.02&&wearing('mathieuWatch'))speed*=1.12;if(steep>.02&&wearing('carbonPoles'))speed*=1.15;if(wearing('raceShoes'))speed*=1.05;if(section?.surface==='sand')speed*=.86;if(section?.surface==='scree')speed*=.93;r.x+=speed*dt;
  if(!r.grounded){r.jumpY+=r.vy*dt;r.vy-=1180*dt;if(r.jumpY<=0){const hard=r.vy<-240;r.jumpY=0;r.vy=0;r.grounded=true;if(hard)burst(r.x,groundY(r.x)-3,'dust',9)}}
- r.energy=clamp(r.energy-dt*(sprint?1.6:.36)*(1-profile.levels.vest*.17)-Math.max(0,steep)*dt*3.5-(section?.weather==='heat'?dt*.48:0),0,100);
+ r.energy=clamp(r.energy-dt*(sprint?1.6:.36)*(1-Math.min(profile.levels.vest,5)*.13)-Math.max(0,steep)*dt*3.5-(section?.weather==='heat'?dt*.48*(wearing('trailGlasses')?.55:1)*(wearing('ultraCap')?.8:1):0),0,100);
  const st=stage(c,r.x);if(st.index!==r.stage){r.stage=st.index;$('#courseName').textContent=c.name.toUpperCase();if(r.x>100)showToast((sectionFor(c,r.x)?.weather==='night'?'🌙 ':'🏔️ ')+st.name)}
  for(const o of r.objects){if(o.done||o.x<r.x-43||o.x>r.x+43)continue;const dx=Math.abs(o.x-r.x);if(o.type==='coin'||o.type==='drink'){if(dx<25&&Math.abs((r.jumpY+43)-(o.alt||43))<65)collect(o)}else if(dx<24){o.done=true;if(o.type==='mud'){if(r.jumpY<19){r.energy=clamp(r.energy-17,0,100);r.stumble=.8;burst(r.x,groundY(r.x)-4,'mud',17);showToast('🟫 Bourbier — énergie -17')}}else if(o.type==='heat'||o.type==='gravel'){if(r.jumpY<22){r.energy=clamp(r.energy-(o.type==='heat'?11:9),0,100);r.stumble=o.type==='heat'?.42:.6;burst(r.x,groundY(r.x)-2,'dust',12);showToast(o.type==='heat'?'☀️ Chaleur sèche !':'🪨 Pierrier instable !')}}else if(o.type==='branch'){if(r.duck<=0)hit('branch')}else if(r.jumpY<30){if(o.type==='creek')burst(r.x,groundY(r.x),'water',18); if(o.type==='dune'){r.energy=clamp(r.energy-14,0,100);r.stumble=.7;burst(r.x,groundY(r.x)-2,'dust',12);showToast('🏜️ Dune molle — énergie -14')} else hit(o.type)}}}
  updateEffects(dt);camX=mix(camX,r.x-W*.29,Math.min(1,dt*8));camHeight=mix(camHeight,elevation(r.x,c),Math.min(1,dt*3));r.steps++;if(r.steps%4===0)updateHUD();if(r.x>=c.length)finish(true)}
@@ -237,38 +277,43 @@ function drawViaduct(x,y,s=.85,behind=false){ctx.save();ctx.translate(x,y);ctx.g
   for(const px of [-78,-22,48,108]){ctx.fillStyle=behind?'#82909b':'#c7d0d6';ctx.beginPath();ctx.moveTo((px-5)*s,8*s);ctx.lineTo((px+5)*s,8*s);ctx.lineTo((px+2)*s,73*s);ctx.lineTo((px-2)*s,73*s);ctx.closePath();ctx.fill()}
   for(const px of [-72,56]){ctx.fillStyle=behind?'#c4c9ce':'#eff4f5';ctx.beginPath();ctx.moveTo((px-3)*s,-1*s);ctx.lineTo((px-2)*s,-83*s);ctx.lineTo((px+2)*s,-83*s);ctx.lineTo((px+4)*s,-1*s);ctx.closePath();ctx.fill();ctx.strokeStyle=behind?'#a4b4bd':'#f5fbfc';ctx.lineWidth=1.2*s;for(let k=1;k<=5;k++){let off=k*15*s;ctx.beginPath();ctx.moveTo(px*s,-80*s);ctx.lineTo(px*s-off,-2*s);ctx.moveTo(px*s,-80*s);ctx.lineTo(px*s+off,-2*s);ctx.stroke()}}
   ctx.restore();ctx.globalAlpha=1}
-
-const MILLAU_MAST_KM=[10.36,10.77,11.18,11.59,12,12.41,12.79,13.21,13.61,14.02,14.43,14.84,15.25];
+// Viaduc en vue latérale : les 7 pylônes de chaque trajet sont placés à des km fixes.
+// Leurs haubans restent au-dessus du tablier et ne traversent jamais le coureur.
+const MILLAU_MAST_KM=[10.36,10.77,11.18,11.59,12.00,12.41,12.79,13.21,13.61,14.02,14.43,14.84,15.25];
 function millauBridge(c=run?.course||COURSES[selected],world=run?.x||0){return c.mode==='millau'&&sectionFor(c,world)?.surface==='bridge'}
 function drawMillauBridgeScene(){
  const c=run?.course||COURSES[selected];if(!millauBridge(c))return;
  ctx.save();
- // Fond de vallée visible sous la chaussée.
+ // Le fond de la vallée, en contrebas, est visible sous le tablier.
  const valley=ctx.createLinearGradient(0,H*.71,0,H);
  valley.addColorStop(0,'rgba(170,189,177,0)');valley.addColorStop(1,'rgba(96,136,133,.20)');
  ctx.fillStyle=valley;ctx.fillRect(0,H*.71,W,H*.29);
  ctx.strokeStyle='rgba(107,168,167,.28)';ctx.lineWidth=4;ctx.beginPath();
- for(let x=0;x<=W+10;x+=10){const y=H*.93+Math.sin((x+camX*.07)/50)*5;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
- // Pylônes à positions fixes du circuit : ils défilent avec le coureur.
+ for(let x=0;x<=W+10;x+=10){const y=H*.93+Math.sin((x+camX*.07)/50)*5; if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ // Les pylônes sont dans le même monde que le coureur : ils arrivent de la droite,
+ // le dépassent puis sortent à gauche, au lieu de rester bloqués sur l'écran.
  for(let k=0;k<MILLAU_MAST_KM.length;k++){
   const world=MILLAU_MAST_KM[k]/c.km*c.length,px=world-camX;
   if(px< -185||px>W+185)continue;
-  const deck=groundY(world),top=deck-Math.min(175,H*.23),root=deck-17,pierBottom=Math.min(H*.96,deck+190);
-  // Pile de soutien sous le tablier.
-  ctx.fillStyle='rgba(210,219,220,.63)';ctx.beginPath();
-  ctx.moveTo(px-9,deck+8);ctx.lineTo(px+9,deck+8);ctx.lineTo(px+6,pierBottom);ctx.lineTo(px-6,pierBottom);ctx.closePath();ctx.fill();
+  const deck=groundY(world),top=deck-Math.min(175,H*.23),root=deck-17;
+  // Pile de soutien visible *sous* le tablier (et non devant la route).
+  const pierBottom=Math.min(H*.96,deck+190);
+  ctx.fillStyle='rgba(210,219,220,.63)';ctx.beginPath();ctx.moveTo(px-9,deck+8);ctx.lineTo(px+9,deck+8);ctx.lineTo(px+6,pierBottom);ctx.lineTo(px-6,pierBottom);ctx.closePath();ctx.fill();
   ctx.fillStyle='rgba(115,140,151,.24)';ctx.fillRect(px+3,deck+10,4,pierBottom-deck-10);
-  // Mât au-dessus de la chaussée.
+  // Pylône effilé au-dessus du tablier. Sa silhouette reste derrière le joueur.
   ctx.fillStyle='rgba(221,231,235,.97)';ctx.beginPath();
   ctx.moveTo(px-6,root);ctx.lineTo(px+6,root);ctx.lineTo(px+3.5,top);ctx.lineTo(px-3.5,top);ctx.closePath();ctx.fill();
-  ctx.fillStyle='rgba(130,156,171,.42)';ctx.beginPath();
-  ctx.moveTo(px+1.2,root);ctx.lineTo(px+6,root);ctx.lineTo(px+3.5,top);ctx.lineTo(px+1.2,top);ctx.closePath();ctx.fill();
-  // Haubans fins et ordonnés en éventail, sans croisement massif.
+  ctx.fillStyle='rgba(130,156,171,.42)';ctx.beginPath();ctx.moveTo(px+1.2,root);ctx.lineTo(px+6,root);ctx.lineTo(px+3.5,top);ctx.lineTo(px+1.2,top);ctx.closePath();ctx.fill();
+  // Eventail de haubans : points d'ancrage régulièrement espacés sur le tablier ;
+  // aucune toile géante ni lignes croisées au niveau du personnage.
   ctx.lineCap='round';
   for(const side of [-1,1]){
-   for(let j=0;j<4;j++){
-    const distance=47+j*34,endWorld=world+side*distance,endX=px+side*distance;
-    const endY=groundY(endWorld)-21,startY=top+62-j*12;
+   for(let j=0;j<5;j++){
+    const distance=41+j*27;
+    const endWorld=world+side*distance;
+    const endX=px+side*distance;
+    const endY=groundY(endWorld)-21;
+    const startY=top+62-j*12;
     ctx.strokeStyle='rgba(238,246,248,.63)';ctx.lineWidth=1.25;
     ctx.beginPath();ctx.moveTo(px,startY);ctx.lineTo(endX,endY);ctx.stroke();
     ctx.fillStyle='rgba(229,237,240,.62)';ctx.fillRect(endX-1,endY-1,2.4,2.4);
@@ -280,14 +325,12 @@ function drawMillauBridgeScene(){
 function drawMillauBridgeRail(){
  const c=run?.course||COURSES[selected];if(!millauBridge(c))return;
  ctx.save();
+ // Parapet discret de la chaussée sur lequel se déplace le coureur.
  for(let x=-12;x<W+28;x+=6){const y=groundY(camX+x);if(x===-12){ctx.beginPath();ctx.moveTo(x,y-24)}else ctx.lineTo(x,y-24)}
  ctx.strokeStyle='rgba(233,241,243,.76)';ctx.lineWidth=2.2;ctx.stroke();
  ctx.beginPath();for(let x=-12;x<W+28;x+=6){const y=groundY(camX+x);if(x===-12)ctx.moveTo(x,y-12);else ctx.lineTo(x,y-12)}
  ctx.strokeStyle='rgba(173,189,200,.68)';ctx.lineWidth=1.3;ctx.stroke();
- for(let world=Math.floor(camX/60)*60;world<camX+W+60;world+=60){
-  const x=world-camX,y=groundY(world);ctx.strokeStyle='rgba(206,221,227,.74)';ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(x,y-23);ctx.lineTo(x,y-6);ctx.stroke();
- }
+ for(let world=Math.floor(camX/60)*60;world<camX+W+60;world+=60){const x=world-camX,y=groundY(world);ctx.strokeStyle='rgba(206,221,227,.74)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y-23);ctx.lineTo(x,y-6);ctx.stroke()}
  ctx.restore();
 }
 function drawCourseLandmarks(c,prog,st){
@@ -296,7 +339,10 @@ function drawCourseLandmarks(c,prog,st){
   // Avant le viaduc, les pylônes grandissent puis se rapprochent de la caméra.
   if(km<5){drawViaduct(W*(.78-(km/5)*.18),H*.43,.48+km*.037,false);ctx.fillStyle='rgba(85,171,199,.22)';ctx.fillRect(0,H*.63,W*.55,7)}
   else if(km<10){drawViaduct(W*(.67-(km-5)*.035),H*.37,.72+(km-5)*.17,false);ctx.fillStyle='rgba(119,131,116,.26)';ctx.beginPath();ctx.moveTo(W*.3,H*.66);ctx.lineTo(W*.65,H*.48);ctx.lineTo(W,H*.66);ctx.fill()}
-  else if(km<=15.7){ /* Pont masqué dans le fond pendant la traversée. */ }
+  else if(km<=15.7){
+   // Sur le tablier, aucune silhouette du viaduc n'est dessinée à l'arrière-plan.
+   // Le paysage de la vallée reste visible entre les pylônes.
+  }
   else{drawViaduct(W*(.25-(km-15.7)*.019),H*.44,.8-(km-15.7)*.038,true);ctx.fillStyle='rgba(97,121,129,.22)';for(let i=0;i<6;i++)ctx.fillRect(W*(.6+i*.06),H*.59-(i%3)*6,12,13)}
  } else if(c.mode==='saintelyon'){
   for(let i=0;i<48;i++){const xx=(i*31)%W,yy=H*(prog>.72?.62:.69)+Math.sin(i)*3;ctx.fillStyle=(i%3===0?'rgba(255,210,126,.55)':'rgba(255,239,179,.34)');if((prog<.15&&xx<W*.24)||(prog>.8&&xx>W*.7)){ctx.fillRect(xx,yy,2,2)}}
@@ -317,25 +363,24 @@ function drawBackground(){const c=run?.course||COURSES[selected],st=biomeColors(
  ctx.fillStyle=alphaColor(st.fog,.09);ctx.fillRect(0,H*.5,W,H*.16);
  for(let layer=0;layer<3;layer++){const par=[.10,.18,.28][layer],base=[.49,.57,.67][layer]*H,amp=[70,52,34][layer],width=[280,210,150][layer];ctx.fillStyle=layer===0?st.back:st.trees[Math.min(1,layer-1)];ctx.beginPath();ctx.moveTo(-20,H);for(let x=-20;x<=W+25;x+=12){const world=x+camX*par,y=base-(Math.sin(world/width)+Math.sin(world/(width*.57)+layer))*amp-(hash(Math.floor(world/55),layer)-.5)*amp*.22;ctx.lineTo(x,y)}ctx.lineTo(W+25,H);ctx.closePath();ctx.globalAlpha=[.34,.28,.19][layer];ctx.fill();ctx.globalAlpha=1}
  // Décor en plusieurs plans à vitesses différentes. Les éléments restent à leur place dans le monde.
- if(!millauBridge(c)){ const par=c.mode==='mountain'?.27:.43,unit=c.mode==='mountain'?245:225,min=Math.floor((camX*par-120)/unit),max=Math.ceil((camX*par+W+120)/unit);
+ const par=c.mode==='mountain'?.27:.43,unit=c.mode==='mountain'?245:225,min=Math.floor((camX*par-120)/unit),max=Math.ceil((camX*par+W+120)/unit);
  for(let i=min;i<=max;i++){const wx=i*unit+hash(i,91)*60,x=wx-camX*par,h=64+hash(i,21)*105,zone=worldPalette(wx/par,c),nm=zone.name;
   if(c.mode==='mountain'||nm.includes('PIERRIER')||nm.includes('CRÊTE')){const y=H*.72;ctx.fillStyle=alphaColor(zone.trees[0],.38);ctx.beginPath();ctx.moveTo(x-h*.6,y);ctx.lineTo(x-h*.2,y-h*.65);ctx.lineTo(x+h*.12,y-h*.83);ctx.lineTo(x+h*.58,y);ctx.closePath();ctx.fill()}
   else if(nm.includes('CLAIRIÈRE')){ctx.fillStyle=alphaColor(zone.trees[0],.33);ctx.fillRect(x-4,H*.70-h*.32,8,h*.32);ctx.fillStyle=alphaColor(zone.accent,.26);ctx.beginPath();ctx.arc(x,H*.70-h*.35,18+hash(i,81)*12,0,7);ctx.fill()}
   else {ctx.fillStyle=alphaColor(zone.trees[i%2===0?0:1],.46);ctx.fillRect(x-5,H*.72-h*.45,10,h*.45);for(let j=0;j<2;j++){ctx.beginPath();ctx.moveTo(x,H*.72-h*(1-j*.2));ctx.lineTo(x-h*.2,H*.72-h*(.32-j*.12));ctx.lineTo(x+h*.2,H*.72-h*(.32-j*.12));ctx.closePath();ctx.fill()}}
- }
  }
  drawCourseLandmarks(c,prog,st);
  drawSkyParticles();
 }
 function drawGround(){const c=run?.course||COURSES[selected],st=biomeColors();ctx.beginPath();ctx.moveTo(0,H);for(let sx=0;sx<=W+4;sx+=4){const wx=camX+sx;ctx.lineTo(sx,groundY(wx))}ctx.lineTo(W,H);ctx.closePath();ctx.save();ctx.clip();for(let sx=0;sx<W+12;sx+=12){const segment=sectionFor(c,camX+sx),surf=segment?.surface;
  if(surf==='bridge'){
- const gy=groundY(camX+sx);
- ctx.fillStyle='#768693';ctx.fillRect(sx,0,12,gy+16);
- ctx.fillStyle='#4c626d';ctx.fillRect(sx,gy+14,12,9);
- ctx.fillStyle='rgba(217,225,229,.35)';ctx.fillRect(sx,gy+23,12,2);
-}else{
- ctx.fillStyle=surf==='road'?'#6e7979':surf==='sand'?'#b99153':surf==='scree'?'#786f68':surf==='gravel'?'#8f806f':surf==='river'?'#687f7c':worldPalette(camX+sx,c).soil;ctx.fillRect(sx,0,12,H)
-}}ctx.restore();ctx.strokeStyle=st.edge;ctx.lineWidth=3;ctx.stroke();
+  const gy=groundY(camX+sx);
+  ctx.fillStyle='#768693';ctx.fillRect(sx,0,12,gy+16);
+  ctx.fillStyle='#4c626d';ctx.fillRect(sx,gy+14,12,9);
+  ctx.fillStyle='rgba(217,225,229,.35)';ctx.fillRect(sx,gy+23,12,2);
+ }else{
+  ctx.fillStyle=surf==='road'?'#6e7979':surf==='sand'?'#b99153':surf==='scree'?'#786f68':surf==='gravel'?'#8f806f':surf==='river'?'#687f7c':worldPalette(camX+sx,c).soil;ctx.fillRect(sx,0,12,H)
+ }}ctx.restore();ctx.strokeStyle=st.edge;ctx.lineWidth=3;ctx.stroke();
  const prog=clamp((run?.x||0)/c.length,0,1);
  if(c.mode==='mds'){ctx.strokeStyle='rgba(244,223,171,.35)';ctx.lineWidth=1.2;for(let sx=0;sx<W+30;sx+=28){const gy=groundY(camX+sx);ctx.beginPath();ctx.moveTo(sx-6,gy+3);ctx.quadraticCurveTo(sx+8,gy,sx+18,gy+3);ctx.stroke()}}
  if(c.mode==='utmb'||c.mode==='diagonale'){ctx.fillStyle='rgba(255,255,255,.08)';for(let sx=10;sx<W+20;sx+=34){const gy=groundY(camX+sx);ctx.beginPath();ctx.arc(sx,gy-3,2.2,0,7);ctx.fill()}}
@@ -389,9 +434,9 @@ function runnerRound(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.ro
 function runnerShoe(x,y,angle,palette,back=false){
  ctx.save();ctx.translate(x,y);ctx.rotate(angle);
  // Chaussure profilée de trail : pointe effilée, talon discret et semelle fine.
- const upper=back?'#cfdee4':palette.sole;
+ const upper=back?'#cfdee4':(wearing('raceShoes')?'#ffb56b':palette.sole);
  ctx.fillStyle=upper;ctx.beginPath();ctx.moveTo(-3.8,-3.2);ctx.quadraticCurveTo(-1.1,-5.0,2.1,-3.1);ctx.lineTo(5.5,-2.7);ctx.quadraticCurveTo(8.8,-2.4,9.2,-.65);ctx.lineTo(8.0,1.05);ctx.lineTo(-4.1,1.05);ctx.closePath();ctx.fill();
- ctx.fillStyle=back?'#5d7984':palette.stripe;ctx.beginPath();ctx.moveTo(-1.7,-2.7);ctx.lineTo(4,-2.25);ctx.lineTo(6,-.85);ctx.lineTo(.7,-.65);ctx.closePath();ctx.fill();
+ ctx.fillStyle=back?'#5d7984':(wearing('raceShoes')?'#ff5c62':palette.stripe);ctx.beginPath();ctx.moveTo(-1.7,-2.7);ctx.lineTo(4,-2.25);ctx.lineTo(6,-.85);ctx.lineTo(.7,-.65);ctx.closePath();ctx.fill();
  ctx.strokeStyle=back?'#b7c5ce':palette.shadow;ctx.lineWidth=.75;ctx.beginPath();ctx.moveTo(1,-3.1);ctx.lineTo(2.8,-1.45);ctx.moveTo(3,-2.9);ctx.lineTo(4.7,-1.4);ctx.stroke();
  // Semelle extérieure très fine, crampons optionnels.
  ctx.fillStyle='#24404a';ctx.beginPath();ctx.moveTo(-4,1);ctx.lineTo(8.15,1);ctx.lineTo(7.5,2.2);ctx.lineTo(-3.7,2.2);ctx.closePath();ctx.fill();
@@ -421,10 +466,12 @@ function runnerRigidArm(shoulderX,shoulderY,swing,front,color){
  ctx.stroke();
  ctx.fillStyle=front?'#e9b58f':'#d6a480';
  ctx.beginPath();ctx.arc(11.8,6.6,2.8,0,Math.PI*2);ctx.fill();
+ if(front&&wearing('mathieuWatch')){ctx.fillStyle='#152d35';ctx.fillRect(8.3,6.1,4.5,3.5);ctx.fillStyle='#a4f4d2';ctx.fillRect(9.1,6.7,2.5,1.5)}
+ if(front&&wearing('carbonPoles')){ctx.strokeStyle='#a9d8d4';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(11.8,6.6);ctx.lineTo(8.2,44);ctx.stroke();ctx.strokeStyle='#f4c878';ctx.beginPath();ctx.moveTo(6.8,44);ctx.lineTo(9.6,44);ctx.stroke()}
  ctx.restore();
 }
 function drawRunner(){
- const r=run, palette=SKINS.find(s=>s.id===profile.skin)||SKINS[0],x=(r?.x||0)-camX, ground=groundY(r?.x||0), y=ground-(r?.jumpY||0);
+ const r=run, base=SKINS.find(s=>s.id===profile.skin)||SKINS[0],palette={...base,top:wearing('clemShirt')?'#8050c5':base.top,shadow:wearing('clemShirt')?'#52298c':base.shadow,cap:wearing('ultraCap')?'#f0e4c9':base.cap},x=(r?.x||0)-camX, ground=groundY(r?.x||0), y=ground-(r?.jumpY||0);
  const crouch=(r?.duck||0)>0,air=!!r&&!r.grounded;
  const runSpeed=keys.boost?15.8:11.6,phase=(r?.elapsed||sceneTime)*runSpeed;
  const step=Math.sin(phase),bounce=r&&r.grounded&&!crouch?Math.cos(phase*2)*1.95:0;
@@ -434,7 +481,7 @@ function drawRunner(){
  if(crouch){
    runnerStroke([-10,-12,-21,-2,-24,0],7,palette.short);runnerShoe(-25,1,.02,palette,true);
    runnerStroke([4,-13,11,-5,18,-1],7,palette.short);runnerShoe(19,-1,-.08,palette);
-   runnerRound(-17,-42,33,25,10,palette.top);
+   runnerRound(-17,-42,33,25,10,palette.top);if(wearing('clemShirt')){ctx.fillStyle='#f9eeff';ctx.font='bold 5px system-ui';ctx.fillText('BON',-1,-33);ctx.fillText('JOUR',-1,-28)}
    runnerRound(-10,-36,7,13,4,palette.vest); /* gilet/sac réduit */
    runnerRound(-7,-22,24,9,4,palette.short);
    runnerRigidArm(-6,-38,-.15,false,'#ddad89');
@@ -466,7 +513,9 @@ function drawRunner(){
  runnerStroke([9.2,-59,9.2,-45],2.2,palette.stripe);
  runnerRound(7.6,-55.5,3.7,11.4,1.8,palette.vest);
  runnerRound(7.9,-53.8,3.0,8.0,1.5,palette.flask);
- runnerRound(8.0,-56.7,2.8,3.0,1.3,'#ecf7ed');
+ runnerRound(8.0,-56.7,2.8,3.0,1.3,'#ecf7ed');if(wearing('softFlask')){runnerRound(-15,-41,5,10,2,'#46c6ce');runnerRound(-14,-42,3,2,1,'#f8fbeb')}
+ // T-shirt collector : illustration miniature et simplifiée, non motif officiel.
+ if(wearing('clemShirt')){ctx.fillStyle='#fff0ff';ctx.font='900 5px system-ui';ctx.textAlign='center';ctx.fillText('BON',0,-54);ctx.fillText('JOUR',0,-49)}
  // dossard
  runnerRound(-3,-44,10,11,2,'#f0f2ed'); ctx.font='bold 7px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#16465b';ctx.fillText('42',2,-38);
  // bras avant : pivot unique à l'épaule
@@ -475,7 +524,7 @@ function drawRunner(){
  runnerRound(8,-74,7,10,3,'#dca985');
  ctx.fillStyle='#e6b68f';ctx.beginPath();ctx.arc(15,-82,10.5,0,Math.PI*2);ctx.fill();
  ctx.beginPath();ctx.moveTo(22.5,-81.8);ctx.lineTo(26.8,-78.4);ctx.lineTo(22.2,-76.5);ctx.closePath();ctx.fill();
- ctx.fillStyle='#2c3f41';ctx.beginPath();ctx.arc(20.5,-83,1.35,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#2c3f41';ctx.beginPath();ctx.arc(20.5,-83,1.35,0,Math.PI*2);ctx.fill();if(wearing('trailGlasses')){runnerRound(16,-86,11,5,2,'#203746');ctx.strokeStyle='#b3e9db';ctx.lineWidth=.9;ctx.beginPath();ctx.moveTo(16,-85);ctx.lineTo(11,-87);ctx.stroke()}
  // casquette plus nette
  runnerRound(5,-93.5,24,7.5,4,palette.cap); runnerRound(26.2,-90.8,10.5,2.8,2,palette.stripe);
  ctx.fillStyle=palette.shadow;ctx.beginPath();ctx.moveTo(7,-94.5);ctx.lineTo(12,-98.2);ctx.lineTo(18,-94.5);ctx.closePath();ctx.fill();
