@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V4.6 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
+<meta name="description" content="Trail Chaos V4.7 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V4.6</title>
+<title>Trail Chaos — Side Trail V4.7</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -34,7 +34,7 @@
 <div id="app">
 <canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V4.6</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V4.7</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div id="backyardHud" aria-live="polite"><span class="by-num" id="byLap">BOUCLE 01 / 25</span><span class="by-clock" id="byClock">00 / 60 min</span><span class="by-label" id="byDplus">+180 m D+</span></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -93,7 +93,7 @@ const keys={boost:false,duck:false},swipe={active:false,x:0,y:0,id:null};
 function showToast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),1350)}
 function display(html){$('#panel').innerHTML=`<section class="sheet">${html}</section>`;$('#panel').classList.remove('hide');$('#hud').classList.remove('on');$('#backyardHud').classList.remove('on');$('#controls').classList.remove('on');$('#modal').classList.remove('on');$('#bank').textContent=fmt(profile.coins)}
 function nav(target){screen=target;switch(target){case'home':home();break;case'courses':courses();break;case'shop':shop();break;default:help()}}
-function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V4.6</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
+function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V4.7</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
 function courses(){display(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Circuits & légendes</h2><p>Parcours arcade inspirés des courses réelles. Le profil de Millau reprend les repères kilométriques officiels ; les profils des ultras sont des approximations de jeu, pas des tracés GPS. Tous les circuits sont accessibles en découverte : améliore ton équipement et bats tes records !</p>${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:1"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">${i===selected?'✓ CHOISI':i>profile.unlocked?'✨ DÉCOUVRIR':'CHOISIR'}</span></div>`).join('')}<div class="actions"><button class="btn alt" id="back">← Retour</button><button class="btn" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(el=>el.onclick=()=>{const i=+el.dataset.course;selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=begin}
 function shop(){
  const clothes=SKINS.find(x=>x.id===profile.skin)||SKINS[0];
@@ -119,7 +119,7 @@ function shop(){
  save();shop();$('#panel .sheet').scrollTop=scroll});
  $('#back').onclick=()=>nav('home')
 }
-function help(){display(`<span class="eyebrow">🎮 Comment jouer</span><h2>Maîtrise le terrain</h2><div class="tip"><b>Sur iPhone / téléphone</b><br>Glisse ton doigt <b>vers le haut</b> sur l’écran pour sauter.<br>Glisse <b>vers le bas</b> pour te baisser sous les branches.<br>Un appui rapide sur le terrain déclenche aussi un saut.<br>Maintiens ⚡ pour sprinter (cela consomme de l’énergie).<br>Les boutons du bas fonctionnent aussi.<br><br><b>Sur ordinateur</b><br>↑ / Espace : saut · ↓ : se baisser · Maj : sprint · P : pause</div><div class="stats"><span class="stat">🪵 Tronc → saute</span><span class="stat">🌿 Branche → baisse-toi</span><span class="stat">🟫 Boue → saute ou ralentis</span><span class="stat">🪨 Roche → saute</span><span class="stat">🟡 Pièces → collecte</span></div><button class="btn full" id="back">C'est parti !</button>`);$('#back').onclick=()=>nav('home')}
+function help(){display(`<span class="eyebrow">🎮 Comment jouer</span><h2>Maîtrise le terrain</h2><div class="tip"><b>Sur iPhone / téléphone</b><br>Glisse ton doigt <b>vers le haut</b> sur l’écran pour sauter.<br>Glisse <b>vers le bas</b> pour te baisser sous les branches.<br>Un appui rapide sur le terrain déclenche aussi un saut.<br>Maintiens ⚡ pour sprinter (cela consomme de l’énergie).<br>Les boutons du bas fonctionnent aussi.<br><br><b>Sur ordinateur</b><br>↑ / Espace : saut · ↓ : se baisser · Maj : sprint · P : pause</div><div class="stats"><span class="stat">🪵 Tronc → saute</span><span class="stat">🌿 Branche → baisse-toi</span><span class="stat">🟫 Boue → saute ou ralentis</span><span class="stat">🪨 Roche → saute</span><span class="stat">🌳 Racines → saute</span><span class="stat">🟡 Pièces → collecte</span></div><button class="btn full" id="back">C'est parti !</button>`);$('#back').onclick=()=>nav('home')}
 // Relie les bosses, les faux plats et les descentes à une même altitude physique.
 function smooth(t){t=clamp(t,0,1);return t*t*(3-2*t)}
 function hill(x,mid,width,height){const t=Math.abs(x-mid)/width;return t>=1?0:height*.5*(1+Math.cos(Math.PI*t))}
@@ -251,6 +251,11 @@ function makeWorld(c){const objects=[],rng=c.difficulty*23;const gap=c.difficult
    else if(st.name.includes('RUISSEAU'))type=['creek','rock','log','branch'][Math.floor(roll*4)];
    else type=['rock','log','branch','mud','stump'][Math.floor(roll*5)];
    if(i===0&&(type==='branch'||type==='barrier'))type='log';
+   // Racines apparentes dans les zones boisées, jamais sur le bitume, le désert ou le tablier.
+   const wooded=(['forest','night','backyard','saintelyon','western','diagonale','utmb'].includes(c.mode))&&
+     (!sec||['trail','mud','river','forest'].includes(sec.surface))&&
+     !['PIERRIER','COL ALPIN','CANYONS BRÛLANTS','LUMIÈRES DE LYON'].some(s=>st.name.includes(s));
+   if(wooded&&((type==='stump'&&hash(i,72)<.67)||(type==='log'&&hash(i,72)<.21)))type='root';
    // No obstacles in a real refreshment area; retain a clear run-up.
    if(sec&&sec.water&&Math.abs(kmOf(x,c)-sec.km)<.35)type='coin';
    objects.push({x,type,done:false,r:30,alt:type==='coin'?42:0,value:1});
@@ -268,7 +273,7 @@ function drawRouteProfile(){const el=$('#routeProfile'),g=el.getContext('2d');co
  const pos=clamp(c.mode==='backyard'?((run?.x||0)%BACKYARD_LAP_LENGTH)/BACKYARD_LAP_LENGTH:(run?.x||0)/c.length,0,1)*w;g.fillStyle='#eeff94';g.beginPath();g.arc(pos,pts?h-6-((altitudeAt(c,kmOf(run?.x||0,c))-Math.min(...pts.map(p=>p[1])))/Math.max(100,Math.max(...pts.map(p=>p[1]))-Math.min(...pts.map(p=>p[1]))))*(h-13):h*.5,3.8,0,7);g.fill();}
 function jump(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded&&!run.duck){run.vy=545;run.grounded=false;run.jumpY=1;burst(run.x,groundY(run.x)-3,'dust',5);}}
 function duck(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded){run.duck=.9;run.vy=0;burst(run.x,groundY(run.x)-3,'dust',3);}}
-function hit(type){if(run.inv>0)return;burst(run.x,groundY(run.x)-18,'hit',15);run.hearts--;run.energy=clamp(run.energy-7,0,100);run.inv=1.2;run.stumble=.5;showToast(({rock:'🪨 Rocher !',log:'🪵 Tronc !',stump:'🌳 Souche !',branch:'🌿 Oups, la branche !',creek:'💦 Bain de pieds !',barrier:'🚧 Barrière !',dune:'🏜️ Dune molle !'}[type])||'Aïe !');if(run.hearts<=0)finish(false)}
+function hit(type){if(run.inv>0)return;burst(run.x,groundY(run.x)-18,'hit',15);run.hearts--;run.energy=clamp(run.energy-7,0,100);run.inv=1.2;run.stumble=.5;showToast(({rock:'🪨 Rocher !',log:'🪵 Tronc !',stump:'🌳 Souche !',branch:'🌿 Oups, la branche !',creek:'💦 Bain de pieds !',root:'🌳 Racines apparentes !',barrier:'🚧 Barrière !',dune:'🏜️ Dune molle !'}[type])||'Aïe !');if(run.hearts<=0)finish(false)}
 function collect(o){o.done=true;burst(o.x,groundY(o.x)-(o.alt||42),o.type==='coin'?'coin':'water',o.type==='coin'?6:13);if(o.type==='coin'){run.coins+=(o.value||1);if(wearing('clemShirt')||wearing('backyardFinisher')){run.coinBonus=(run.coinBonus||0)+(o.value||1)*(wearing('clemShirt')?.25:.08);const extra=Math.floor(run.coinBonus);run.coins+=extra;run.coinBonus-=extra}}else{run.energy=clamp(run.energy+25+profile.levels.gel*12+(wearing('softFlask')?12:0),0,100);showToast('🧃 Ravito : énergie récupérée !')}}
 function backyardPit(){const r=run,c=r.course;const minutes=Math.round(r.lapElapsed*BACKYARD_CLOCK);const spare=Math.max(0,60-minutes);r.waiting=true;r.paused=true;keys.boost=false;
  r.lapsDone++;r.lastLapMinutes=minutes;r.coins+=12+Math.min(12,r.lapsDone);r.restMinutes+=spare;
@@ -284,7 +289,7 @@ function update(dt){sceneTime+=dt;if(screen!=='run'||!run||run.paused||run.finis
  if(!r.grounded){r.jumpY+=r.vy*dt;r.vy-=1180*dt;if(r.jumpY<=0){const hard=r.vy<-240;r.jumpY=0;r.vy=0;r.grounded=true;if(hard)burst(r.x,groundY(r.x)-3,'dust',9)}}
  r.energy=clamp(r.energy-dt*(sprint?1.6:.36)*(1-Math.min(profile.levels.vest,5)*.13)-(c.mode==='backyard'?dt*(.055+.012*r.lapsDone):0)-Math.max(0,steep)*dt*3.5-(section?.weather==='heat'?dt*.48*(wearing('trailGlasses')?.55:1)*(wearing('ultraCap')?.8:1):0),0,100);
  const st=stage(c,r.x);if(st.index!==r.stage){r.stage=st.index;$('#courseName').textContent=c.name.toUpperCase();if(r.x>100)showToast((sectionFor(c,r.x)?.weather==='night'?'🌙 ':'🏔️ ')+st.name)}
- for(const o of r.objects){if(o.done||o.x<r.x-43||o.x>r.x+43)continue;const dx=Math.abs(o.x-r.x);if(o.type==='coin'||o.type==='drink'){if(dx<25&&Math.abs((r.jumpY+43)-(o.alt||43))<65)collect(o)}else if(dx<24){o.done=true;if(o.type==='mud'){if(r.jumpY<19){r.energy=clamp(r.energy-17,0,100);r.stumble=.8;burst(r.x,groundY(r.x)-4,'mud',17);showToast('🟫 Bourbier — énergie -17')}}else if(o.type==='heat'||o.type==='gravel'){if(r.jumpY<22){r.energy=clamp(r.energy-(o.type==='heat'?11:9),0,100);r.stumble=o.type==='heat'?.42:.6;burst(r.x,groundY(r.x)-2,'dust',12);showToast(o.type==='heat'?'☀️ Chaleur sèche !':'🪨 Pierrier instable !')}}else if(o.type==='branch'){if(r.duck<=0)hit('branch')}else if(r.jumpY<30){if(o.type==='creek')burst(r.x,groundY(r.x),'water',18); if(o.type==='dune'){r.energy=clamp(r.energy-14,0,100);r.stumble=.7;burst(r.x,groundY(r.x)-2,'dust',12);showToast('🏜️ Dune molle — énergie -14')} else hit(o.type)}}}
+ for(const o of r.objects){if(o.done||o.x<r.x-43||o.x>r.x+43)continue;const dx=Math.abs(o.x-r.x);if(o.type==='coin'||o.type==='drink'){if(dx<25&&Math.abs((r.jumpY+43)-(o.alt||43))<65)collect(o)}else if(dx<24){o.done=true;if(o.type==='mud'){if(r.jumpY<19){r.energy=clamp(r.energy-17,0,100);r.stumble=.8;burst(r.x,groundY(r.x)-4,'mud',17);showToast('🟫 Bourbier — énergie -17')}}else if(o.type==='heat'||o.type==='gravel'){if(r.jumpY<22){r.energy=clamp(r.energy-(o.type==='heat'?11:9),0,100);r.stumble=o.type==='heat'?.42:.6;burst(r.x,groundY(r.x)-2,'dust',12);showToast(o.type==='heat'?'☀️ Chaleur sèche !':'🪨 Pierrier instable !')}}else if(o.type==='branch'){if(r.duck<=0)hit('branch')}else if(o.type==='root'){if(r.jumpY<22)hit('root')}else if(r.jumpY<30){if(o.type==='creek')burst(r.x,groundY(r.x),'water',18); if(o.type==='dune'){r.energy=clamp(r.energy-14,0,100);r.stumble=.7;burst(r.x,groundY(r.x)-2,'dust',12);showToast('🏜️ Dune molle — énergie -14')} else hit(o.type)}}}
  updateEffects(dt);camX=mix(camX,r.x-W*.29,Math.min(1,dt*8));camHeight=mix(camHeight,elevation(r.x,c),Math.min(1,dt*3));r.steps++;if(r.steps%4===0)updateHUD();if(c.mode==='backyard'&&r.x>=(r.lapsDone+1)*BACKYARD_LAP_LENGTH){backyardPit();return}if(r.x>=c.length)finish(true)}
 function finish(win){if(!run||run.finished)return;run.finished=true;screen='results';keys.boost=keys.duck=false;$('#hud').classList.remove('on');$('#backyardHud').classList.remove('on');$('#controls').classList.remove('on');const r=run,c=r.course,isBackyard=c.mode==='backyard',earned=r.coins+(win?(isBackyard?120+c.loops*32:20+c.difficulty*20):0);profile.coins+=earned;if(isBackyard){const key=c.loops===5?'backyardTrainingBest':'backyardBest';profile[key]=Math.max(profile[key]||0,r.lapsDone)}if(win){if(isBackyard&&c.loops===25){profile.owned.backyardFinisher=true}profile.wins++;profile.unlocked=Math.max(profile.unlocked,Math.min(COURSES.length-1,selected+1));const old=profile.best[c.id];if(!old||r.elapsed<old.time)profile.best[c.id]={time:r.elapsed,coins:r.coins}}save();$('#bank').textContent=fmt(profile.coins);$('#modal').classList.add('on');$('#modal').innerHTML=`<div class="dialog"><div style="font-size:54px">${win?'🏆':'🩹'}</div><span class="eyebrow">${win?'Ligne d’arrivée':'Abandon technique'}</span><h2>${isBackyard?(win?(c.loops===5?'5 BOUCLES VALIDÉES !':'25H : DÉFI RÉUSSI !'):'FIN DU DÉFI BACKYARD'):win?'TRAIL TERMINÉ !':'QUADRIS EN PLS'}</h2><p>${isBackyard?`Record : ${r.lapsDone}/${c.loops} boucles · ${(r.lapsDone*5.9).toFixed(1).replace('.',',')} km validés. ${win?'Toutes les cloches ont sonné !':'Une boucle non bouclée avant le départ suivant.'}`:win?'Tu as dompté les côtes et évité les racines. Maintenant, place au ravito.':'Ce n’était peut-être pas le bon moment pour tenter un record Strava.'}</p>${isBackyard&&win&&c.loops===25?'<p class="muted">🏅 Maillot finisher obtenu ! À équiper dans la boutique.</p>':''}<div class="result"><div><b>${(r.x/c.length*c.km).toFixed(1)}</b><small>km parcourus</small></div><div><b>${fmt(earned)}</b><small>pièces gagnées</small></div><div><b>${Math.floor(r.elapsed/60)}:${String(Math.floor(r.elapsed%60)).padStart(2,'0')}</b><small>chrono arcade</small></div></div><div class="actions"><button class="btn alt" id="resShop">🎒 Boutique</button><button class="btn" id="retry">↻ Rejouer</button></div><button class="btn out full" id="resHome" style="margin-top:10px">Camp de base</button></div>`;$('#resShop').onclick=()=>nav('shop');$('#retry').onclick=()=>begin(isBackyard&&c.loops===5?'training':undefined);$('#resHome').onclick=()=>nav('home')}
 function pause(){if(screen!=='run'||!run||run.finished)return;run.paused=!run.paused;keys.boost=false;$('#modal').classList.toggle('on',run.paused);if(run.paused){$('#modal').innerHTML=`<div class="dialog"><div style="font-size:48px">⏸️</div><h2>Pause ravito</h2><p>« Il ne reste qu’une petite bosse » — le plus grand mensonge du trail.</p><button class="btn full" id="resume">▶ Reprendre</button><button class="btn alt full" id="quit" style="margin-top:10px">Abandonner et garder les pièces</button></div>`;$('#resume').onclick=pause;$('#quit').onclick=()=>finish(false)}}
@@ -401,9 +406,13 @@ function drawBackground(){const c=run?.course||COURSES[selected],st=biomeColors(
  // Décor en plusieurs plans à vitesses différentes. Les éléments restent à leur place dans le monde.
  const par=c.mode==='mountain'?.27:.43,unit=c.mode==='mountain'?245:225,min=Math.floor((camX*par-120)/unit),max=Math.ceil((camX*par+W+120)/unit);
  for(let i=min;i<=max;i++){const wx=i*unit+hash(i,91)*60,x=wx-camX*par,h=64+hash(i,21)*105,zone=worldPalette(wx/par,c),nm=zone.name;
+  if(c.mode==='mds'){
+   ctx.fillStyle=alphaColor(zone.accent,.18);ctx.beginPath();ctx.moveTo(x-h*.65,H*.71);ctx.quadraticCurveTo(x-h*.12,H*.71-h*.30,x+h*.62,H*.71);ctx.closePath();ctx.fill();continue;
+  }
+  if(c.mode==='millau'&&millauBridge(c))continue;
   if(c.mode==='mountain'||nm.includes('PIERRIER')||nm.includes('CRÊTE')){const y=H*.72;ctx.fillStyle=alphaColor(zone.trees[0],.38);ctx.beginPath();ctx.moveTo(x-h*.6,y);ctx.lineTo(x-h*.2,y-h*.65);ctx.lineTo(x+h*.12,y-h*.83);ctx.lineTo(x+h*.58,y);ctx.closePath();ctx.fill()}
   else if(nm.includes('CLAIRIÈRE')){ctx.fillStyle=alphaColor(zone.trees[0],.33);ctx.fillRect(x-4,H*.70-h*.32,8,h*.32);ctx.fillStyle=alphaColor(zone.accent,.26);ctx.beginPath();ctx.arc(x,H*.70-h*.35,18+hash(i,81)*12,0,7);ctx.fill()}
-  else {ctx.fillStyle=alphaColor(zone.trees[i%2===0?0:1],.46);ctx.fillRect(x-5,H*.72-h*.45,10,h*.45);for(let j=0;j<2;j++){ctx.beginPath();ctx.moveTo(x,H*.72-h*(1-j*.2));ctx.lineTo(x-h*.2,H*.72-h*(.32-j*.12));ctx.lineTo(x+h*.2,H*.72-h*(.32-j*.12));ctx.closePath();ctx.fill()}}
+  else {ctx.save();ctx.globalAlpha=.30;drawOrganicTree(x,H*.72,h*.82,'fir',zone,i+491);ctx.restore()}
  }
  drawCourseLandmarks(c,prog,st);
  drawSkyParticles();
@@ -446,22 +455,129 @@ function drawGround(){const c=run?.course||COURSES[selected],st=biomeColors();ct
    else if(here.name.includes('PIERRIER')){ctx.fillStyle='#7e786d';for(let p=0;p<110;p+=18){ctx.beginPath();ctx.ellipse(x+p,groundY(wx+p)-3,6,2.4,0,0,7);ctx.fill();}}
  }
 }
-function drawForeground(){const c=run?.course||COURSES[selected],st=biomeColors(),km=kmOf(run?.x||0,c);if(millauBridge(c)){drawMillauBridgeRail();return}for(let i=Math.floor(camX/118)-1;i<Math.ceil((camX+W)/118)+1;i++){const wx=i*118+hash(i,7)*30,x=wx-camX;if(x<-40||x>W+40)continue;const y=groundY(wx),size=28+hash(i,9)*52,here=worldPalette(wx,c);
- if(c.mode==='millau'&&sectionFor(c,wx)?.surface==='road'){if(i%4===0){ctx.fillStyle='#747b72';ctx.fillRect(x-3,y-18,5,18);ctx.fillStyle='#d7cec2';ctx.beginPath();ctx.ellipse(x,y-18,9,6,0,0,7);ctx.fill()}else{ctx.fillStyle='#afb3a4';ctx.fillRect(x-2,y-5,4,5)}}else if(c.mode==='mds'){ctx.fillStyle=here.soil;ctx.beginPath();ctx.ellipse(x,y-2,size*.42,size*.16,0,0,7);ctx.fill();if(i%4===0){ctx.strokeStyle='#8d734d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y-3);ctx.lineTo(x+3,y-12);ctx.stroke()}}else if(c.mode==='millau'&&sectionFor(c,wx)?.surface==='bridge'){ctx.fillStyle='#d2d9de';ctx.fillRect(x-3,y-15,4,15);ctx.fillStyle='#a7b6c1';ctx.fillRect(x-13,y-16,26,2)}else if(c.mode!=='mountain'&&!['utmb','western'].includes(c.mode)&&(!here.name.includes('CLAIRIÈRE')||i%3===0)){ctx.fillStyle='#5e452d';ctx.fillRect(x-4,y-size*.52,8,size*.54);ctx.fillStyle=here.trees[i%2];for(let j=0;j<3;j++){ctx.beginPath();ctx.moveTo(x,y-size*(1.0-j*.22));ctx.lineTo(x-size*(.26+j*.06),y-size*(.37-j*.1));ctx.lineTo(x+size*(.26+j*.06),y-size*(.37-j*.1));ctx.closePath();ctx.fill()} if(here.name.includes('RUISSEAU')&&i%4===0){ctx.fillStyle=here.flower;ctx.beginPath();ctx.arc(x+size*.18,y-size*.24,4,0,7);ctx.fill();}}
- else {ctx.fillStyle='#868d84';ctx.beginPath();ctx.moveTo(x-size*.33,y);ctx.lineTo(x-size*.12,y-size*.43);ctx.lineTo(x+size*.18,y-size*.46);ctx.lineTo(x+size*.42,y);ctx.closePath();ctx.fill();ctx.fillStyle='#bcb8ac';ctx.beginPath();ctx.arc(x-size*.02,y-size*.3,4,0,7);ctx.fill();}
-}}
+// V4.7 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
+function drawLeafMass(px,py,r,palette,seed){
+ ctx.save();
+ for(let j=0;j<7;j++){
+  const a=j*2.399+hash(seed,j)*.7,rr=r*(.18+.52*hash(j,seed+3));
+  ctx.fillStyle=j%3===0?palette.trees[1]:palette.trees[0];
+  ctx.beginPath();ctx.ellipse(px+Math.cos(a)*rr,py+Math.sin(a)*rr*.70,r*(.40+.11*hash(j,seed)),r*(.32+.10*hash(j+4,seed)),a*.12,0,7);ctx.fill();
+ }
+ ctx.fillStyle='rgba(211,240,167,.16)';ctx.beginPath();ctx.ellipse(px-r*.22,py-r*.3,r*.40,r*.16,-.35,0,7);ctx.fill();
+ ctx.restore();
+}
+function drawOrganicTree(px,py,h,kind,st,seed){
+ const lean=(hash(seed,11)-.5)*h*.18;
+ ctx.save();ctx.translate(px,py);
+ if(kind==='fir'){
+  ctx.strokeStyle='#594e3f';ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,1);ctx.quadraticCurveTo(lean*.7,-h*.55,lean,-h);ctx.stroke();
+  for(let tier=0;tier<6;tier++){
+   const k=tier/6,ty=-h*.20-k*h*.68,w=h*(.37-k*.24);
+   ctx.fillStyle=tier%2===0?st.trees[0]:st.trees[1];
+   ctx.beginPath();ctx.moveTo(lean*(.2+k),ty-h*.16);ctx.quadraticCurveTo(-w*.50,ty-h*.05,-w,ty+h*.07);ctx.quadraticCurveTo(lean*(.1+k),ty+h*.025,0,ty+h*.09);ctx.quadraticCurveTo(w*.52,ty+h*.02,w,ty+h*.07);ctx.quadraticCurveTo(w*.65,ty-h*.08,lean*(.2+k),ty-h*.16);ctx.fill();
+   ctx.strokeStyle='rgba(191,231,187,.21)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(lean*.2,ty-h*.06);ctx.lineTo(-w*.73,ty+h*.035);ctx.stroke();
+  }
+ }else if(kind==='tropical'){
+  ctx.strokeStyle='#725b44';ctx.lineCap='round';ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(0,3);ctx.bezierCurveTo(lean*.1,-h*.28,lean*1.1,-h*.75,lean,-h*.95);ctx.stroke();
+  ctx.strokeStyle='#a48b60';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-2,-h*.2);ctx.lineTo(lean*.6-3,-h*.72);ctx.stroke();
+  for(let n=-3;n<=3;n++){
+   const a=n*.42,tipX=lean+n*h*.24,tipY=-h*.90+Math.abs(n)*h*.11;
+   ctx.strokeStyle=st.trees[n%2===0?0:1];ctx.lineWidth=6.2;ctx.beginPath();ctx.moveTo(lean,-h*.94);ctx.quadraticCurveTo(lean+n*h*.16,-h*(1.11-Math.abs(n)*.02),tipX,tipY);ctx.stroke();
+   ctx.strokeStyle='rgba(195,240,169,.18)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(lean,-h*.94);ctx.lineTo(tipX,tipY);ctx.stroke();
+  }
+ }else{
+  // Tronc irrégulier et fourches : pas de rectangle droit ni de sapin triangulaire.
+  ctx.fillStyle='#765c45';ctx.beginPath();ctx.moveTo(-6,2);ctx.bezierCurveTo(-10,-h*.3,lean-6,-h*.54,lean-4,-h*.70);ctx.lineTo(lean+5,-h*.72);ctx.bezierCurveTo(lean+6,-h*.52,4,-h*.18,6,2);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#b4956d';ctx.lineWidth=1.25;ctx.beginPath();ctx.moveTo(-2,-h*.08);ctx.quadraticCurveTo(lean-2,-h*.49,lean,-h*.71);ctx.stroke();
+  ctx.strokeStyle='#735742';ctx.lineCap='round';ctx.lineWidth=5;
+  for(let k=-1;k<=1;k+=2){ctx.beginPath();ctx.moveTo(lean*.7,-h*.49);ctx.quadraticCurveTo(lean+k*h*.11,-h*.72,lean+k*h*.28,-h*.80);ctx.stroke()}
+  drawLeafMass(lean,-h*.78,h*.25,st,seed+3);
+  drawLeafMass(lean-h*.22,-h*.74,h*.21,st,seed+8);
+  drawLeafMass(lean+h*.21,-h*.69,h*.23,st,seed+12);
+ }
+ ctx.restore();
+}
+function drawForeground(){
+ const c=run?.course||COURSES[selected];if(millauBridge(c)){drawMillauBridgeRail();return}
+ for(let i=Math.floor(camX/157)-2;i<Math.ceil((camX+W)/157)+2;i++){
+  const wx=i*157+hash(i,7)*52,x=wx-camX;if(x<-115||x>W+115)continue;
+  const sec=sectionFor(c,wx),surf=sec?.surface,here=worldPalette(wx,c),y=groundY(wx),name=stage(c,wx).name;
+  const excluded=['road','bridge','sand','scree','gravel'].includes(surf)||c.mode==='mds';
+  if(c.mode==='millau'&&surf==='road'){
+   if(i%3===0){ctx.fillStyle='#747b72';ctx.fillRect(x-2,y-18,4,18);ctx.fillStyle='#d7cec2';ctx.beginPath();ctx.ellipse(x,y-18,8,5,0,0,7);ctx.fill()}continue;
+  }
+  if(excluded||name.includes('PIERRIER')||name.includes('HAUTE MONTAGNE')||name.includes('CANYONS')){
+   ctx.fillStyle='#878b85';ctx.beginPath();ctx.moveTo(x-17,y+2);ctx.lineTo(x-12,y-12);ctx.lineTo(x+4,y-16);ctx.lineTo(x+18,y-4);ctx.lineTo(x+14,y+3);ctx.closePath();ctx.fill();
+   ctx.fillStyle='#aab1a7';ctx.beginPath();ctx.moveTo(x-12,y-12);ctx.lineTo(x+3,y-16);ctx.lineTo(x+2,y-8);ctx.closePath();ctx.fill();continue;
+  }
+  if(hash(i,9)<.20){ctx.fillStyle=here.accent;ctx.beginPath();ctx.ellipse(x,y-2,11,2.8,0,0,7);ctx.fill();continue}
+  const size=72+hash(i,19)*36;
+  const kind=c.mode==='diagonale'&&name.includes('TROPICALE')?'tropical':(['mountain','utmb','backyard'].includes(c.mode)||hash(i,23)>.58)?'fir':'broad';
+  drawOrganicTree(x,y,size,kind,here,i);
+ }
+}
 function drawObstacle(o){const st=worldPalette(o.x),x=o.x-camX,y=groundY(o.x),wind=Math.sin(sceneTime*2+o.x*.013);if(x<-100||x>W+100)return;ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(x,y+2,30,6,0,0,7);ctx.fill();
  if(o.type==='coin'){const yy=y-o.alt+Math.sin(sceneTime*5+o.x)*3;ctx.save();ctx.translate(x,yy);ctx.scale(.78+.22*Math.abs(Math.cos(sceneTime*3+o.x)),1);ctx.fillStyle='#ffd258';ctx.strokeStyle='#fff5b5';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,11,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='#a97327';ctx.font='900 12px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('★',0,0);ctx.restore();return}
  if(o.type==='drink'){ctx.fillStyle='#7fe2d5';ctx.beginPath();ctx.roundRect(x-9,y-49,18,32,5);ctx.fill();ctx.fillStyle='#dffbf3';ctx.fillRect(x-5,y-54,10,6);ctx.fillStyle='#ffffffbb';ctx.fillRect(x-3,y-43,6,14);return}
- if(o.type==='rock'){ctx.fillStyle='#6f7b81';ctx.beginPath();ctx.moveTo(x-30,y);ctx.lineTo(x-24,y-18);ctx.lineTo(x-11,y-34);ctx.lineTo(x+8,y-36);ctx.lineTo(x+24,y-20);ctx.lineTo(x+31,y);ctx.closePath();ctx.fill();ctx.fillStyle='#aeb7b8';ctx.beginPath();ctx.moveTo(x-18,y-18);ctx.lineTo(x-7,y-33);ctx.lineTo(x+6,y-30);ctx.lineTo(x-3,y-15);ctx.closePath();ctx.fill();ctx.strokeStyle='#546066';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-5,y-13);ctx.lineTo(x+7,y-24);ctx.stroke()}
+ if(o.type==='rock'){
+  ctx.save();ctx.fillStyle='rgba(18,33,31,.26)';ctx.beginPath();ctx.ellipse(x+2,y,33,6,0,0,7);ctx.fill();
+  const pts=[[-32,0],[-27,-13],[-16,-29],[-3,-36],[16,-29],[27,-12],[31,0]];
+  ctx.fillStyle='#687776';ctx.beginPath();pts.forEach(([dx,dy],i)=>i?ctx.lineTo(x+dx,y+dy):ctx.moveTo(x+dx,y+dy));ctx.closePath();ctx.fill();
+  ctx.fillStyle='#9ea9a6';ctx.beginPath();ctx.moveTo(x-27,y-13);ctx.lineTo(x-16,y-29);ctx.lineTo(x-3,y-36);ctx.lineTo(x+2,y-16);ctx.lineTo(x-13,y-8);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#556b67';ctx.beginPath();ctx.moveTo(x+2,y-16);ctx.lineTo(x+16,y-29);ctx.lineTo(x+27,y-12);ctx.lineTo(x+31,y);ctx.lineTo(x+5,y);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#425b56';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x-5,y-32);ctx.lineTo(x+2,y-16);ctx.lineTo(x-4,y-8);ctx.stroke();
+  ctx.fillStyle='#9faf82';for(let j=0;j<4;j++){ctx.beginPath();ctx.ellipse(x-22+j*12,y-7-(j%2)*8,3.4,1.5,-.25,0,7);ctx.fill()}ctx.restore()
+ }
  else if(o.type==='gravel'){ctx.fillStyle='#756b60';for(let i=0;i<8;i++){const dx=(i%4)*13-20,dy=(i%2)*3;ctx.beginPath();ctx.moveTo(x+dx-6,y+dy);ctx.lineTo(x+dx,y-8-(i%3)*3);ctx.lineTo(x+dx+7,y+dy);ctx.closePath();ctx.fill()}ctx.strokeStyle='rgba(225,214,200,.5)';ctx.beginPath();ctx.moveTo(x-18,y-5);ctx.lineTo(x+16,y-4);ctx.stroke()}
  else if(o.type==='heat'){ctx.fillStyle='rgba(246,203,112,.36)';ctx.beginPath();ctx.ellipse(x,y-2,38,10,0,0,7);ctx.fill();for(let i=0;i<4;i++){const px=x-18+i*12;ctx.strokeStyle='rgba(255,227,161,.6)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px,y-7);ctx.quadraticCurveTo(px+5,y-16+Math.sin(sceneTime*3+i)*3,px,y-27);ctx.stroke()}}
  else if(o.type==='barrier'){ctx.fillStyle='#c95d38';ctx.fillRect(x-26,y-23,52,10);ctx.fillStyle='#f5f2dc';for(let p=-22;p<=14;p+=18){ctx.beginPath();ctx.moveTo(x+p,y-23);ctx.lineTo(x+p+8,y-13);ctx.lineTo(x+p+16,y-23);ctx.closePath();ctx.fill()}ctx.fillStyle='#6f5b4a';ctx.fillRect(x-18,y-13,5,13);ctx.fillRect(x+13,y-13,5,13)}
  else if(o.type==='dune'){ctx.fillStyle='#d3a766';ctx.beginPath();ctx.moveTo(x-38,y);ctx.quadraticCurveTo(x-15,y-28,x+2,y-22);ctx.quadraticCurveTo(x+24,y-15,x+38,y);ctx.closePath();ctx.fill();ctx.fillStyle='#edc985';ctx.beginPath();ctx.moveTo(x-26,y-2);ctx.quadraticCurveTo(x-4,y-20,x+20,y-9);ctx.lineTo(x+28,y);ctx.lineTo(x-28,y);ctx.closePath();ctx.fill()}
- else if(o.type==='stump'){ctx.fillStyle='#724f34';ctx.beginPath();ctx.roundRect(x-20,y-28,40,28,9);ctx.fill();ctx.fillStyle='#cba06b';ctx.beginPath();ctx.ellipse(x,y-28,19,8,0,0,7);ctx.fill();ctx.strokeStyle='#8a613f';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(x,y-28,10,4,0,0,7);ctx.stroke();ctx.strokeStyle='#5f412c';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-8,y-14);ctx.lineTo(x-14,y-34);ctx.moveTo(x+6,y-16);ctx.lineTo(x+12,y-38);ctx.stroke();}
- else if(o.type==='log'){ctx.fillStyle='#7a593c';ctx.beginPath();ctx.roundRect(x-29,y-22,58,20,9);ctx.fill();ctx.fillStyle='#b78d5d';ctx.beginPath();ctx.roundRect(x-24,y-19,46,4,2);ctx.fill();ctx.fillStyle='#d5ab77';ctx.beginPath();ctx.ellipse(x+23,y-12,7,10,0,0,7);ctx.fill();ctx.fillStyle='#5f402a';ctx.beginPath();ctx.arc(x+23,y-12,3.5,0,7);ctx.fill();ctx.fillStyle='#7ca265';ctx.beginPath();ctx.ellipse(x-10,y-19,8,4,.2,0,7);ctx.ellipse(x+2,y-18,7,4,-.2,0,7);ctx.fill();}
- else if(o.type==='branch'){ctx.strokeStyle='#5d422d';ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x+36,y+3);ctx.lineTo(x+34,y-70);ctx.lineTo(x-35,y-72);ctx.stroke();ctx.strokeStyle='#79aa64';ctx.lineWidth=5;for(let j=0;j<5;j++){ctx.beginPath();ctx.moveTo(x-31+j*15,y-70+(j%2)*4);ctx.lineTo(x-41+j*15,y-81+(j%2)*4);ctx.stroke();ctx.fillStyle=j%2?st.accent:st.trees[1];ctx.beginPath();ctx.ellipse(x-40+j*15+wind*(2+j*.4),y-80+(j%2)*4+Math.sin(sceneTime*2.4+j)*1.5,10,5,wind*.1,0,7);ctx.fill()}}
- else if(o.type==='mud'){ctx.fillStyle='#5d3f2a';ctx.beginPath();ctx.ellipse(x,y-2,41,11,0,0,7);ctx.fill();ctx.fillStyle='#8b623d';ctx.beginPath();ctx.ellipse(x-13,y-4,15+wind*1.5,4,0,0,7);ctx.ellipse(x+10,y-1,10,3,0,0,7);ctx.fill();ctx.strokeStyle='#3f291b';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x-8,y-1,7,3.5,5.8);ctx.stroke();}
+ else if(o.type==='stump'){
+  ctx.save();ctx.fillStyle='#644730';ctx.beginPath();ctx.moveTo(x-20,y+1);ctx.lineTo(x-21,y-25);ctx.quadraticCurveTo(x-16,y-33,x-5,y-30);ctx.lineTo(x+17,y-25);ctx.lineTo(x+22,y+2);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#ad8053';ctx.beginPath();ctx.ellipse(x-1,y-28,20,8,-.12,0,7);ctx.fill();ctx.strokeStyle='#735037';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(x-1,y-28,14,5,-.1,0,7);ctx.stroke();ctx.beginPath();ctx.ellipse(x-1,y-28,7,2.4,-.1,0,7);ctx.stroke();
+  ctx.strokeStyle='#b18a66';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x-12,y-16);ctx.lineTo(x-9,y-4);ctx.moveTo(x+6,y-18);ctx.lineTo(x+8,y-1);ctx.stroke();
+  ctx.fillStyle='#6e9460';ctx.beginPath();ctx.ellipse(x+14,y-28,8,3,-.2,0,7);ctx.fill();ctx.restore();
+ }
+ else if(o.type==='log'){
+  ctx.save();ctx.fillStyle='rgba(24,19,12,.25)';ctx.beginPath();ctx.ellipse(x,y+1,36,5,0,0,7);ctx.fill();
+  ctx.fillStyle='#795338';ctx.beginPath();ctx.moveTo(x-34,y-8);ctx.quadraticCurveTo(x-34,y-25,x-12,y-24);ctx.lineTo(x+26,y-18);ctx.quadraticCurveTo(x+34,y-16,x+34,y-9);ctx.lineTo(x+27,y-1);ctx.lineTo(x-30,y-2);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#a67d54';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-28,y-18);ctx.quadraticCurveTo(x-6,y-19,x+22,y-14);ctx.moveTo(x-25,y-11);ctx.lineTo(x+15,y-8);ctx.stroke();
+  ctx.fillStyle='#cfa579';ctx.beginPath();ctx.ellipse(x+27,y-10,6.4,9,-.10,0,7);ctx.fill();ctx.strokeStyle='#805535';ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(x+27,y-10,3.7,5.2,-.1,0,7);ctx.stroke();
+  ctx.fillStyle='#6e9b63';for(let j=0;j<4;j++){ctx.beginPath();ctx.ellipse(x-19+j*11,y-22+(j%2)*2,5.5,2.3,.15,0,7);ctx.fill()}ctx.restore();
+ }
+ else if(o.type==='root'){
+  // Racines épaisses provenant d'un vrai tronc à droite du sentier.
+  ctx.save();ctx.strokeStyle='#5e4232';ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(x+42,y+3);ctx.quadraticCurveTo(x+39,y-48,x+48,y-90);ctx.stroke();
+  ctx.strokeStyle='#927050';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x+43,y-1);ctx.lineTo(x+45,y-79);ctx.stroke();
+  drawLeafMass(x+51,y-90,22,st,o.x*.11);
+  ctx.strokeStyle='#5e4232';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x+39,y-4);ctx.bezierCurveTo(x+17,y-11,x+2,y-3,x-13,y-6);ctx.bezierCurveTo(x-22,y-13,x-30,y-11,x-35,y-4);ctx.stroke();
+  ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x+28,y-4);ctx.quadraticCurveTo(x+11,y-15,x-6,y-9);ctx.moveTo(x+19,y-4);ctx.quadraticCurveTo(x+3,y-10,x-19,y-2);ctx.stroke();
+  ctx.strokeStyle='#ad8260';ctx.lineWidth=1.35;ctx.beginPath();ctx.moveTo(x+38,y-34);ctx.lineTo(x+37,y-10);ctx.quadraticCurveTo(x+9,y-11,x-24,y-8);ctx.stroke();
+  ctx.fillStyle='#73a269';for(let j=0;j<4;j++){ctx.beginPath();ctx.ellipse(x-22+j*15,y-6-(j%2)*3,3.8,2,-.2,0,7);ctx.fill()}ctx.restore();
+ }
+ else if(o.type==='branch'){
+  // Branche basse bien reliée au tronc, avec ramure et feuillage mobiles.
+  ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+  const shift=wind*1.4;
+  ctx.strokeStyle='#5b4131';ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(x+42,y+6);ctx.bezierCurveTo(x+40,y-40,x+51,y-87,x+48,y-125);ctx.stroke();
+  ctx.strokeStyle='#a47d5a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+43,y-2);ctx.bezierCurveTo(x+43,y-45,x+51,y-86,x+48,y-116);ctx.stroke();
+  ctx.strokeStyle='#674a34';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(x+46,y-86);ctx.bezierCurveTo(x+28,y-81,x+20,y-64,x+2,y-65);ctx.quadraticCurveTo(x-20,y-65,x-37,y-61);ctx.stroke();
+  ctx.strokeStyle='#9d7550';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(x+37,y-79);ctx.quadraticCurveTo(x+4,y-67,x-28,y-62);ctx.stroke();
+  ctx.strokeStyle='#75583a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+11,y-67);ctx.quadraticCurveTo(x+2,y-84,x-9,y-86);ctx.moveTo(x-14,y-64);ctx.quadraticCurveTo(x-22,y-77,x-33,y-79);ctx.stroke();
+  drawLeafMass(x+44,y-124,24,st,o.x*.05);
+  drawLeafMass(x+1+shift,y-83,13,st,o.x*.03+2);
+  drawLeafMass(x-28+shift,y-78,10,st,o.x*.07+4);
+  ctx.fillStyle='#b4dc8a';for(let i=0;i<5;i++){const xx=x-31+i*12+shift;ctx.beginPath();ctx.ellipse(xx,y-61-(i%2)*4,7,3.4,i*.22,0,7);ctx.fill()}
+  // Ruban de balisage discret, accroché à la branche, pas un pictogramme flottant.
+  ctx.fillStyle='#faad58';ctx.beginPath();ctx.moveTo(x-25,y-65);ctx.lineTo(x-18,y-65);ctx.lineTo(x-18,y-54+Math.sin(sceneTime*2+o.x)*1.7);ctx.lineTo(x-24,y-59);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#745238';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+39,y-2);ctx.lineTo(x+56,y+2);ctx.stroke();ctx.restore();
+ }
+ else if(o.type==='mud'){
+  ctx.save();ctx.fillStyle='#4c3629';ctx.beginPath();ctx.moveTo(x-39,y-1);ctx.quadraticCurveTo(x-34,y-12,x-15,y-9);ctx.quadraticCurveTo(x+4,y-14,x+22,y-8);ctx.quadraticCurveTo(x+40,y-5,x+38,y+2);ctx.quadraticCurveTo(x+4,y+8,x-39,y-1);ctx.fill();
+  ctx.fillStyle='#927350';ctx.beginPath();ctx.ellipse(x-12+wind*1.2,y-3,15,3.1,0,0,7);ctx.ellipse(x+15,y,8,2,0,0,7);ctx.fill();
+  ctx.strokeStyle='rgba(204,173,132,.52)';ctx.lineWidth=1.1;ctx.beginPath();ctx.ellipse(x+2,y-3,11+Math.sin(sceneTime*3)*1.4,2.4,0,0,Math.PI);ctx.stroke();ctx.restore();
+ }
  else if(o.type==='creek'){ctx.fillStyle='#3d8ea7';ctx.beginPath();ctx.ellipse(x,y,40,10,0,0,7);ctx.fill();ctx.fillStyle='#8ad9ea';ctx.globalAlpha=.45;ctx.beginPath();ctx.ellipse(x-6+Math.sin(sceneTime*4)*3,y-1,18,4,0,0,7);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#dffcff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-30,y-2);ctx.quadraticCurveTo(x,y-13+Math.sin(sceneTime*3)*2,x+30,y-2);ctx.stroke();for(let p=-20;p<=18;p+=10){ctx.strokeStyle='#936a46';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+p,y+5);ctx.lineTo(x+p+8,y+5);ctx.stroke();}}
 }
 // Traileur de profil, genoux articulés. Le bassin suit le relief et le saut est physique.
