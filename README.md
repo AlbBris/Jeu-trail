@@ -1,13 +1,15 @@
-# TRAIL CHAOS — SIDE TRAIL V4.9
+# TRAIL CHAOS — V5.0
 
-## Correction des commandes tactiles iPhone
-- Le bouton **SPRINT** évite désormais la sélection de texte et le menu contextuel iOS lors d'un appui prolongé.
-- La sélection, le glisser-déposer et le menu natif sont désactivés **uniquement sur les boutons du jeu** (sauter, se baisser et sprint).
-- Le sprint reste actif tant que le doigt est appuyé et s'arrête au relâchement, à l'annulation, ou si Safari perd le focus.
-- L'appui tactile ne provoque plus de défilement ni de sélection de l'étiquette SPRINT.
-- Ancienne V4.8 conservée dans `side-v48.html`.
+## Refonte du personnage
+- Sprite 2D arcade original : proportions plus expressives, tête plus grande, contours contrastés.
+- Animations de foulée, saut, accroupissement et sprint conservées.
+- Coudes fixes : la rotation des bras part de l'épaule.
+- Les tenues et tous les objets de la boutique restent visibles (collectors, gilet, montre, bâtons, lunettes, chaussures, flasques, dossard).
+- Sauvegardes, parcours, collisions et défi 25 boucles conservés.
 
-## Compatibilité
-Les parcours, la boutique, les collectors, la progression, les obstacles et les défis existants sont inchangés.
+## Limite de la référence
+Le site 25H OS est accessible publiquement, mais le mini-jeu One More Loop n'a pas pu être affiché dans les outils disponibles : **ce sprite est une proposition originale orientée arcade, pas une reproduction vérifiée à l'identique**.
 
-Site : https://albbris.github.io/Jeu-trail/
+L'ancienne version est archivée dans `side-v49.html`.
+
+Jeu : https://albbris.github.io/Jeu-trail/
