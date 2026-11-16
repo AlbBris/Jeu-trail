@@ -1,5 +1,5 @@
-const CACHE='trail-chaos-v48-20261116';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./explorer-v3.html','./runner-v28.html','./side-v31.html','./side-v35.html','./side-v36.html','./side-v37.html','./side-v38.html','./side-v39.html','./side-v40.html','./side-v41.html','./side-v42.html','./side-v43.html','./side-v44.html','./side-v45.html','./side-v46.html','./side-v47.html'];
+const CACHE='trail-chaos-v49-20261116';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./explorer-v3.html','./runner-v28.html','./side-v31.html','./side-v35.html','./side-v36.html','./side-v37.html','./side-v38.html','./side-v39.html','./side-v40.html','./side-v41.html','./side-v42.html','./side-v43.html','./side-v44.html','./side-v45.html','./side-v46.html','./side-v47.html','./side-v48.html'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

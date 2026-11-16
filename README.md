@@ -1,16 +1,13 @@
-# TRAIL CHAOS — SIDE TRAIL V4.8
+# TRAIL CHAOS — SIDE TRAIL V4.9
 
-## Corrections et améliorations visuelles
-- Les sapins ont été corrigés : le tronc ne dépasse plus au-dessus du feuillage.
-- Une vraie ligne d’arrivée avec arche « ARRIVÉE » apparaît à la fin de chaque parcours principal.
-- La ligne d’arrivée comprend une bannière, deux montants et un marquage au sol façon damier.
-- Les obstacles disparaissent maintenant après avoir été correctement franchis :
-  - en sautant au-dessus d’un tronc, rocher, ruisseau, racine, dune, souche ou barrière ;
-  - en se baissant sous une branche ;
-  - après avoir passé une zone chaude, du gravier ou un bourbier en la franchissant proprement.
+## Correction des commandes tactiles iPhone
+- Le bouton **SPRINT** évite désormais la sélection de texte et le menu contextuel iOS lors d'un appui prolongé.
+- La sélection, le glisser-déposer et le menu natif sont désactivés **uniquement sur les boutons du jeu** (sauter, se baisser et sprint).
+- Le sprint reste actif tant que le doigt est appuyé et s'arrête au relâchement, à l'annulation, ou si Safari perd le focus.
+- L'appui tactile ne provoque plus de défilement ni de sélection de l'étiquette SPRINT.
+- Ancienne V4.8 conservée dans `side-v48.html`.
 
 ## Compatibilité
-- La boutique, les collectors, les circuits existants, le défi Backyard et les sauvegardes sont conservés.
-- L’ancienne version est archivée dans `side-v47.html`.
+Les parcours, la boutique, les collectors, la progression, les obstacles et les défis existants sont inchangés.
 
-Jeu : https://albbris.github.io/Jeu-trail/
+Site : https://albbris.github.io/Jeu-trail/
