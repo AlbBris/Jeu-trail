@@ -1,16 +1,16 @@
-# TRAIL CHAOS — SIDE TRAIL V4.7
+# TRAIL CHAOS — SIDE TRAIL V4.8
 
-## Obstacles et végétation
-- Arbres procéduraux plus naturels : feuillus aux houppiers irréguliers, conifères à branches étagées et végétation tropicale.
-- Branches basses ancrées à un tronc, avec rameaux, feuillage animé et ruban de balisage : **se baisser** pour les éviter.
-- Nouvel obstacle **racines apparentes** dans les zones boisées, rattachées à un arbre : **sauter** pour les franchir.
-- Troncs tombés, souches, rochers et flaques redessinés avec ombres, écorce, mousse et surfaces irrégulières.
-- Végétation conditionnée au terrain : pas de nouveaux arbres ou racines sur le viaduc, les routes ni dans le désert ; dunes au loin au Marathon des Sables.
-- Décors générés en Canvas, sans images externes et sans modification des commandes.
+## Corrections et améliorations visuelles
+- Les sapins ont été corrigés : le tronc ne dépasse plus au-dessus du feuillage.
+- Une vraie ligne d’arrivée avec arche « ARRIVÉE » apparaît à la fin de chaque parcours principal.
+- La ligne d’arrivée comprend une bannière, deux montants et un marquage au sol façon damier.
+- Les obstacles disparaissent maintenant après avoir été correctement franchis :
+  - en sautant au-dessus d’un tronc, rocher, ruisseau, racine, dune, souche ou barrière ;
+  - en se baissant sous une branche ;
+  - après avoir passé une zone chaude, du gravier ou un bourbier en la franchissant proprement.
 
 ## Compatibilité
-Les dix circuits, le défi Backyard, la boutique, les collectors, le système de pièces, les sauvegardes et les commandes iPhone sont conservés.
-La clé de sauvegarde `trail-chaos-runner-v2` est inchangée.
-L'ancienne version est archivée dans `side-v46.html`.
+- La boutique, les collectors, les circuits existants, le défi Backyard et les sauvegardes sont conservés.
+- L’ancienne version est archivée dans `side-v47.html`.
 
 Jeu : https://albbris.github.io/Jeu-trail/
