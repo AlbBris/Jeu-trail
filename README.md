@@ -1,10 +1,16 @@
-# TRAIL CHAOS — V5.6
+# TRAIL CHAOS — V5.7 — Millau, paysage évolutif
 
-## Retour aux animations de la V5.4
-- Restauration exacte du cycle de course, des six poses de saut et des six poses de glissade de la V5.4.
-- Retour à l'atlas original `sprites/coureur-animations.png` (218 × 306 px par pose).
-- Annulation des déformations, rebonds et interpolations ajoutés à la V5.5 et du chargement de l'atlas allégé.
-- Les circuits, la boutique, les objets équipés, les commandes et les sauvegardes restent inchangés.
-- V5.5 archivée dans `side-v55.html`.
+## Nouveautés
+- Cinq panoramas originaux en pixel-art qui évoluent avec la progression : vallée du Tarn, montée sous les piles, traversée du viaduc, Causse Rouge, descente vers Millau.
+- Trois couches de décors aux vitesses de parallaxe différentes, avec fondus de transition kilométriques.
+- Panoramas calculés une seule fois avant le lancement de Millau, dessinés depuis des canvases mis en cache ; aucun gros fichier image additionnel.
+- Repères visuels et signalétique intégrés au sol pour les sections routières et le causse.
+- Altimétrie, obstacles, joueurs et animations conservés : le personnage reste exactement celui de la V5.4 restauré en V5.6.
+- Archive de l'ancienne version dans `side-v56.html`.
+
+## Technique
+- `MILLAU_VISUAL_ZONES`, `millauBlend`, `paintMillauArt`, `drawMillauPixelLandscape`, `drawMillauPixelProps` dans `index.html`.
+- Les visuels passent progressivement d'une zone à l'autre autour des km 5, 10, 15,7 et 20.
+- Aucun changement de sauvegardes, de gameplay ou de fonctionnement de la boutique.
 
 Site : https://albbris.github.io/Jeu-trail/
