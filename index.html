@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V5.0 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
+<meta name="description" content="Trail Chaos V5.1 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V5.0</title>
+<title>Trail Chaos — Side Trail V5.1</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -34,7 +34,7 @@
 <div id="app">
 <canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V5.0</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V5.1</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div id="backyardHud" aria-live="polite"><span class="by-num" id="byLap">BOUCLE 01 / 25</span><span class="by-clock" id="byClock">00 / 60 min</span><span class="by-label" id="byDplus">+180 m D+</span></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -93,7 +93,7 @@ const keys={boost:false,duck:false},swipe={active:false,x:0,y:0,id:null};
 function showToast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),1350)}
 function display(html){$('#panel').innerHTML=`<section class="sheet">${html}</section>`;$('#panel').classList.remove('hide');$('#hud').classList.remove('on');$('#backyardHud').classList.remove('on');$('#controls').classList.remove('on');$('#modal').classList.remove('on');$('#bank').textContent=fmt(profile.coins)}
 function nav(target){screen=target;switch(target){case'home':home();break;case'courses':courses();break;case'shop':shop();break;default:help()}}
-function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le trail prend du relief · V5.0</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
+function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le coureur prend du pixel · V5.1</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
 function courses(){display(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Circuits & légendes</h2><p>Parcours arcade inspirés des courses réelles. Le profil de Millau reprend les repères kilométriques officiels ; les profils des ultras sont des approximations de jeu, pas des tracés GPS. Tous les circuits sont accessibles en découverte : améliore ton équipement et bats tes records !</p>${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:1"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">${i===selected?'✓ CHOISI':i>profile.unlocked?'✨ DÉCOUVRIR':'CHOISIR'}</span></div>`).join('')}<div class="actions"><button class="btn alt" id="back">← Retour</button><button class="btn" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(el=>el.onclick=()=>{const i=+el.dataset.course;selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=begin}
 function shop(){
  const clothes=SKINS.find(x=>x.id===profile.skin)||SKINS[0];
@@ -479,7 +479,7 @@ function drawGround(){const c=run?.course||COURSES[selected],st=biomeColors();ct
    else if(here.name.includes('PIERRIER')){ctx.fillStyle='#7e786d';for(let p=0;p<110;p+=18){ctx.beginPath();ctx.ellipse(x+p,groundY(wx+p)-3,6,2.4,0,0,7);ctx.fill();}}
  }
 }
-// V5.0 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
+// V5.1 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
 function drawLeafMass(px,py,r,palette,seed){
  ctx.save();
  for(let j=0;j<7;j++){
@@ -666,102 +666,143 @@ function runnerRigidArm(shoulderX,shoulderY,swing,front,color){
  if(front&&wearing('carbonPoles')){ctx.strokeStyle='#a9d8d4';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(11.8,6.6);ctx.lineTo(8.2,44);ctx.stroke();ctx.strokeStyle='#f4c878';ctx.beginPath();ctx.moveTo(6.8,44);ctx.lineTo(9.6,44);ctx.stroke()}
  ctx.restore();
 }
-
-// V5.0 — personnage arcade original redessiné (sans assets externes).
-function spriteSegment(x1,y1,x2,y2,w,color){
- ctx.lineCap='round';ctx.lineJoin='round';
- ctx.strokeStyle='#193840';ctx.lineWidth=w+2.6;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
- ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke()
+// V5.1 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
+// Silhouette compacte, aplats, contours sombres et poses discrètes à cadence arcade.
+function spriteRect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
+function spriteBlock(x,y,w,h,color,edge='#182432',border=1){
+ spriteRect(x-border,y-border,w+2*border,h+2*border,edge);
+ spriteRect(x,y,w,h,color)
 }
-function spritePolygon(coords,color,edge='#183740',stroke=2.1){
- ctx.fillStyle=color;ctx.strokeStyle=edge;ctx.lineWidth=stroke;ctx.lineJoin='round';
- ctx.beginPath();ctx.moveTo(coords[0][0],coords[0][1]);
- for(let i=1;i<coords.length;i++)ctx.lineTo(coords[i][0],coords[i][1]);
- ctx.closePath();ctx.fill();ctx.stroke()
+function spriteSegment(a,b,color,thickness=3,outline='#182432'){
+ const n=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*0.68));
+ for(let i=0;i<=n;i++){
+  const t=i/n,x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t);
+  spriteRect(x-Math.ceil(thickness/2)-1,y-Math.ceil(thickness/2)-1,thickness+2,thickness+2,outline);
+ }
+ for(let i=0;i<=n;i++){
+  const t=i/n,x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t);
+  spriteRect(x-Math.ceil(thickness/2),y-Math.ceil(thickness/2),thickness,thickness,color);
+ }
 }
-function spriteShoe(x,y,back,p){
- ctx.save();ctx.translate(x,y);
- const upper=back?'#afc1cb':wearing('raceShoes')?'#ffb262':p.sole;
- spritePolygon([[-6,-4],[-4,-8],[2,-8],[7,-5],[12,-2],[12,2],[-6,2]],upper,'#1b3842',1.6);
- ctx.fillStyle=back?'#577885':wearing('raceShoes')?'#f25d68':p.stripe;
- ctx.beginPath();ctx.moveTo(-1,-6);ctx.lineTo(5,-5);ctx.lineTo(7,-2);ctx.lineTo(1,-2);ctx.fill();
- ctx.strokeStyle='#f3f8f3';ctx.lineWidth=.9;ctx.beginPath();ctx.moveTo(-1,-6);ctx.lineTo(2,-3);ctx.moveTo(2,-6);ctx.lineTo(5,-3);ctx.stroke();
- ctx.strokeStyle='#1b353d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-6,2);ctx.lineTo(11,2);ctx.stroke();
- if(profile.levels.shoes>0){ctx.fillStyle='#cbb263';for(let i=0;i<3;i++)ctx.fillRect(-3+i*5,3,2,1.5)}
+function spriteShoe(x,y,pal,back=false){
+ const shade=wearing('raceShoes')?'#ffc46c':back?'#a2b2b9':pal.sole;
+ const detail=wearing('raceShoes')?'#ff5e69':pal.stripe;
+ spriteBlock(x-3,y-4,9,4,shade,'#152834');
+ spriteRect(x,y-3,5,2,detail);spriteRect(x-3,y,10,2,'#263d45');
+ spriteRect(x+3,y-2,2,1,'#e9f5e9');
+ if(profile.levels.shoes>0){for(let j=0;j<3;j++)spriteRect(x-2+j*3,y+2,2,1,'#f0c36e')}
+}
+const SPRITE_STRIDES=[
+ {bk:[-13,-12],bf:[-15,-2],fk:[9,-12],ff:[17,-3],arm:-.46},
+ {bk:[-10,-13],bf:[-10,-1],fk:[12,-15],ff:[14,-6],arm:-.22},
+ {bk:[-5,-15],bf:[-1,-3],fk:[10,-17],ff:[7,-9],arm:.03},
+ {bk:[8,-12],bf:[15,-3],fk:[-11,-12],ff:[-16,-2],arm:.45},
+ {bk:[12,-15],bf:[14,-6],fk:[-10,-13],ff:[-10,-1],arm:.22},
+ {bk:[10,-17],bf:[7,-9],fk:[-5,-15],ff:[-1,-3],arm:-.08}
+];
+function spriteLeg(knee,foot,back,pal){
+ const hip=back?[-3,-19]:[3,-19];
+ spriteSegment(hip,knee,back?'#263441':pal.short,4);
+ spriteRect(knee[0]-2,knee[1]-1,4,3,back?'#bd8e6e':'#eec09b');
+ spriteSegment(knee,[foot[0]-1,foot[1]-5],back?'#c28f72':'#f0c19a',3);
+ spriteBlock(foot[0]-3,foot[1]-9,4,5,back?'#687f8d':'#f7f4e8','#233441',1);
+ spriteShoe(foot[0],foot[1],pal,back)
+}
+function spriteArm(front,phase,pal,duck=false){
+ const shoulder=front?[8,-38]:[-8,-38],swing=(front?1:-1)*phase;
+ ctx.save();ctx.translate(shoulder[0],shoulder[1]);ctx.rotate((front?-.25:.25)+swing*.52);
+ // Bras + avant-bras rigides : rotation de l'ensemble autour de l'épaule.
+ spriteSegment([0,0],[3,9],front?'#eabb91':'#bf8d6f',4);
+ spriteSegment([3,9],[10,6],front?'#eec19a':'#cba17d',3);
+ spriteRect(9,5,4,4,front?'#f2c5a4':'#c79a7f');
+ if(front&&wearing('mathieuWatch')){spriteBlock(7,5,4,3,'#a4efc9','#1a3443',1)}
+ if(front&&wearing('carbonPoles')){spriteRect(11,8,1,24,'#b8d4d0');spriteRect(9,30,5,2,'#e8c987')}
  ctx.restore()
 }
-function spriteLeg(phase,back,jumping,crouching,p){
- const z=Math.sin(phase),lift=Math.max(0,Math.cos(phase));
- let hx=back?-5:4,ky=-19-lift*5,kx=hx+z*9+(back?-2:2),fy=-1-lift*7,fx=hx+z*18+(back?-4:4);
- if(jumping){ky-=7;fy-=8;fx+=back?-6:6}
- if(crouching){kx=hx+(back?-13:14);ky=-13;fx=hx+(back?-23:24);fy=0}
- spriteSegment(hx,-31,kx,ky,8,back?'#405e6c':p.short);
- spriteSegment(kx,ky,fx-1,fy-6,5.8,back?'#c99876':'#edb68b');
- spriteSegment(fx-1,fy-8,fx-1,fy-4,5,back?'#a7bac0':'#e9eff0');
- spriteShoe(fx,fy,back,p)
+function spriteTorso(pal){
+ // Mini gilet d'hydratation, maillot et short aux silhouettes nettement pixellisées.
+ spriteBlock(-11,-40,7,18,pal.vest,'#182e36');
+ spriteRect(-12,-33,3,8,pal.flask);
+ spriteBlock(-8,-40,20,20,pal.top,'#142330',1);
+ spriteRect(-8,-40,5,3,pal.stripe);spriteRect(6,-39,5,3,pal.stripe);
+ spriteRect(-8,-27,18,2,pal.shadow);
+ spriteRect(8,-36,2,12,pal.vest);
+ spriteRect(8,-33,3,7,pal.flask);
+ if(wearing('softFlask'))spriteRect(-12,-28,3,8,'#5de3da');
+ if(wearing('clemShirt')){
+  spriteRect(-4,-36,10,2,'#fff6ec');spriteRect(-3,-33,8,2,'#fff6ec');
+  // Motif miniature original, volontairement distinct du dessin commercial.
+  spriteRect(-3,-34,2,1,'#9e66d3');spriteRect(2,-31,2,1,'#9e66d3');
+ }else if(wearing('backyardFinisher')){
+  spriteRect(-3,-36,7,8,'#f4fba6');spriteRect(-1,-34,3,3,'#249c88');
+ }else{
+  spriteRect(-4,-35,8,2,pal.stripe);spriteRect(-4,-31,6,1,pal.shadow);
+ }
+ spriteBlock(-8,-21,19,8,pal.short,'#14232f');
+ spriteRect(-6,-17,15,1,pal.stripe)
 }
-function spriteArm(x,y,phase,front){
+function spriteHead(pal,x=0,y=0){
  ctx.save();ctx.translate(x,y);
- const swing=(front?-.20:.72)+(front?1:-1)*Math.sin(phase)*.61;
- ctx.rotate(swing);
- // Angle du coude fixe : le bras entier pivote autour de l'épaule.
- spriteSegment(0,0,4.6,13,6,front?'#eeb98f':'#ce9875');
- spriteSegment(4.6,13,15,9,5.4,front?'#efbb91':'#dca17c');
- ctx.fillStyle=front?'#eeb98f':'#ce9875';ctx.beginPath();ctx.arc(15,9,3.3,0,7);ctx.fill();
- if(front&&wearing('mathieuWatch')){spritePolygon([[9,8],[14,7],[15,12],[10,12]],'#223744','#1a3640',1);ctx.fillStyle='#8decca';ctx.fillRect(11,9,2,1.8)}
- if(front&&wearing('carbonPoles')){ctx.strokeStyle='#b8e0d7';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(15,9);ctx.lineTo(9,50);ctx.stroke()}
+ // Chevelure blonde stylisée, visage très lisible et bandeau de course.
+ spriteRect(-6,-57,19,16,'#192632');
+ spriteRect(-5,-58,18,4,'#fad25d');spriteRect(-7,-54,5,12,'#ecc14e');
+ spriteRect(-5,-60,11,3,'#ffe071');spriteRect(5,-59,8,4,'#f4c64c');
+ spriteRect(-2,-52,15,13,'#f1bd95');spriteRect(10,-49,5,8,'#f1bd95');
+ spriteRect(13,-47,4,3,'#db9a80');spriteRect(-2,-42,5,3,'#d39c7b');
+ spriteRect(-5,-55,16,3,pal.cap);spriteRect(10,-54,7,2,pal.stripe);
+ // Visor discret, plus grand avec les lunettes achetées.
+ if(wearing('trailGlasses')){
+  spriteBlock(5,-49,11,5,'#273c55','#222234',1);spriteRect(6,-48,7,1,'#a4c6e6');
+ }else {spriteRect(10,-49,3,2,'#293344');spriteRect(11,-48,1,1,'#f9efe8')}
+ spriteRect(10,-42,4,1,'#aa665e');
+ if(wearing('ultraCap')){
+  spriteBlock(-5,-59,18,5,'#eee0b6','#24333e',1);
+  spriteRect(12,-55,10,3,pal.stripe)
+ }
+ if(profile.levels.lamp>0||run?.course?.mode==='night')spriteBlock(10,-57,5,3,'#ffe28e','#33434a',1);
  ctx.restore()
 }
-function spriteHead(p){
- // Grosse tête expressive et casquette : langage visuel des petits jeux arcade.
- spriteSegment(7,-71,9,-67,5,'#db9d78');
- ctx.fillStyle='#e9b68c';ctx.strokeStyle='#203b43';ctx.lineWidth=2.2;ctx.beginPath();ctx.ellipse(15,-82,13.3,13,0,0,7);ctx.fill();ctx.stroke();
- ctx.fillStyle='#b87963';ctx.beginPath();ctx.ellipse(4,-80,2.3,3,0,0,7);ctx.fill();
- spritePolygon([[24,-82],[30,-78],[24,-76]],'#e9b68c','#203b43',1.1);
- ctx.fillStyle='#243a40';ctx.beginPath();ctx.arc(21,-85,1.7,0,7);ctx.fill();
- ctx.strokeStyle='#965f52';ctx.lineWidth=1.25;ctx.beginPath();ctx.moveTo(21,-75);ctx.lineTo(25,-76);ctx.stroke();
- ctx.fillStyle='#2b4047';ctx.beginPath();ctx.moveTo(5,-90);ctx.quadraticCurveTo(8,-96,19,-96);ctx.lineTo(13,-90);ctx.fill();
- if(wearing('trailGlasses'))spritePolygon([[16,-89],[27,-88],[25,-83],[17,-83]],'#284755','#aee9dc',1.2);
- ctx.fillStyle=p.cap;ctx.strokeStyle='#1d3941';ctx.lineWidth=2;ctx.beginPath();
- ctx.moveTo(3,-92);ctx.quadraticCurveTo(8,-103,21,-100);ctx.quadraticCurveTo(30,-97,29,-91);ctx.lineTo(5,-90);ctx.closePath();ctx.fill();ctx.stroke();
- spritePolygon([[23,-92],[38,-92],[39,-89],[24,-88]],p.stripe,'#1d3941',1.1);
- ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(9,-95);ctx.lineTo(19,-97);ctx.stroke();
- if(profile.levels.lamp>0||run?.course?.mode==='night'){ctx.fillStyle='#ffe294';ctx.strokeStyle='#2a4650';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(23,-95,3.5,0,7);ctx.fill();ctx.stroke()}
-}
-function spriteTorso(p){
- // Hydratation minimaliste : pas de gros sac de randonnée.
- spritePolygon([[-17,-65],[-10,-67],[-9,-42],[-15,-43]],p.vest,'#264b4f',1.5);
- spritePolygon([[-12,-68],[3,-70],[12,-63],[13,-40],[5,-35],[-9,-37],[-13,-46]],p.top,'#1b3942',2.4);
- ctx.strokeStyle=p.shadow;ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-10,-64);ctx.lineTo(-9,-42);ctx.stroke();
- ctx.strokeStyle=p.vest;ctx.lineWidth=2.3;ctx.beginPath();ctx.moveTo(-8,-66);ctx.lineTo(-8,-43);ctx.moveTo(9,-60);ctx.lineTo(9,-44);ctx.stroke();
- spritePolygon([[9,-58],[13,-58],[13,-46],[9,-46]],p.flask,'#274e54',.9);ctx.fillStyle='#eafbee';ctx.fillRect(10,-60,2.4,3);
- if(wearing('softFlask'))spritePolygon([[-16,-47],[-11,-47],[-11,-36],[-16,-36]],'#5bd6d8','#26474f',1);
- ctx.textAlign='center';ctx.textBaseline='middle';
- if(wearing('clemShirt')){ctx.fillStyle='#fff0fa';ctx.font='900 6px system-ui';ctx.fillText('BON',0,-56);ctx.fillText('JOUR',0,-50)}
- else if(wearing('backyardFinisher')){ctx.fillStyle='#e8ff96';ctx.font='900 11px system-ui';ctx.fillText('25',0,-53)}
- spritePolygon([[-5,-43],[8,-43],[8,-33],[-5,-33]],'#f8f4e8','#5a777b',1.2);ctx.fillStyle='#25464c';ctx.font='900 8px system-ui';ctx.fillText('42',1,-38)
+function spriteCrouch(pal,frame){
+ // Référence vidéo : glissade basse, corps quasi horizontal, bras en avant.
+ spriteSegment([-4,-11],[-12,-7],pal.short,5);
+ spriteSegment([-12,-7],[-23,-2],'#efbd9b',3);
+ spriteShoe(-22,-1,pal,true);
+ spriteSegment([4,-11],[16,-11],pal.short,5);
+ spriteSegment([16,-11],[22,-3],'#f3c49e',3);
+ spriteShoe(22,-1,pal,false);
+ spriteBlock(-11,-25,22,13,pal.top,'#162a37');
+ spriteRect(-13,-23,5,10,pal.vest);spriteRect(7,-21,3,8,pal.flask);
+ if(wearing('clemShirt'))spriteRect(-4,-20,9,2,'#fff1ff');
+ if(wearing('backyardFinisher'))spriteRect(-3,-20,7,3,'#defba4');
+ spriteSegment([8,-22],[20,-14],'#edbe94',4);
+ spriteSegment([20,-14],[24,-8],'#f0c7a6',3);
+ if(wearing('mathieuWatch'))spriteRect(19,-14,4,3,'#9df7cf');
+ ctx.save();ctx.translate(-15,21);spriteHead(pal);ctx.restore()
 }
 function drawRunner(){
  const r=run,base=SKINS.find(s=>s.id===profile.skin)||SKINS[0];
- const p={...base,top:wearing('clemShirt')?'#8050c5':wearing('backyardFinisher')?'#1ca898':base.top,
- shadow:wearing('clemShirt')?'#56348b':wearing('backyardFinisher')?'#17766a':base.shadow,
- cap:wearing('ultraCap')?'#f4e9c9':base.cap};
- const px=(r?.x||0)-camX,ground=groundY(r?.x||0),air=!!r&&!r.grounded,crouching=!!r&&r.duck>0;
- const phase=(r?.elapsed||sceneTime)*(keys.boost?16.2:12.0);
- const bob=r?.grounded&&!crouching?Math.cos(phase*2)*1.4:0;
+ const pal={...base,top:wearing('clemShirt')?'#7650c5':wearing('backyardFinisher')?'#1aaf9e':base.top,
+ shadow:wearing('clemShirt')?'#46258a':wearing('backyardFinisher')?'#126e65':base.shadow,
+ cap:wearing('ultraCap')?'#efe3be':base.cap};
+ const px=(r?.x||0)-camX,ground=groundY(r?.x||0),air=!!r&&!r.grounded,duck=!!r&&r.duck>0;
+ const clock=r?.elapsed||sceneTime,frame=Math.floor(clock*(keys.boost?17:12))%SPRITE_STRIDES.length;
+ const pose=SPRITE_STRIDES[frame],bob=(r?.grounded&&!duck)?((frame===1||frame===4)?-1:0):0;
  ctx.save();ctx.globalAlpha=r?.inv>0&&Math.sin(sceneTime*24)>0?.45:1;
- ctx.fillStyle='rgba(12,34,37,.27)';ctx.beginPath();ctx.ellipse(px,ground+4,air?16:23,air?3:5,0,0,7);ctx.fill();
- ctx.translate(px,ground-(r?.jumpY||0)+bob);
- if(crouching)ctx.scale(1.04,.74);
- spriteLeg(phase+Math.PI,true,air,crouching,p);
- spriteArm(-8,-63,phase,false);
- spriteLeg(phase,false,air,crouching,p);
- spritePolygon([[-12,-38],[11,-38],[14,-29],[3,-26],[-13,-28]],p.short,'#1b3942',2.2);
- ctx.strokeStyle=p.stripe;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(7,-32);ctx.lineTo(11,-32);ctx.stroke();
- spriteTorso(p);
- spriteArm(9,-63,phase,true);
- spriteHead(p);
- if(keys.boost&&r?.grounded){ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-29,-52);ctx.lineTo(-44,-52);ctx.moveTo(-28,-44);ctx.lineTo(-39,-44);ctx.stroke()}
+ ctx.fillStyle='rgba(12,22,28,.28)';ctx.beginPath();ctx.ellipse(px,ground+2,duck?25:air?14:18,air?3:4,0,0,Math.PI*2);ctx.fill();
+ // Canvas ne lisse pas ce sprite : chaque pixel est une cellule de dessin.
+ ctx.translate(Math.round(px),Math.round(ground-(r?.jumpY||0)+bob));ctx.scale(1.31,1.31);
+ ctx.imageSmoothingEnabled=false;
+ if(duck){spriteCrouch(pal,frame)}else{
+  const backK=air?[-10,-16]:pose.bk,backF=air?[-15,-9]:pose.bf;
+  const frontK=air?[8,-14]:pose.fk,frontF=air?[16,-7]:pose.ff;
+  spriteLeg(backK,backF,true,pal);
+  spriteArm(false,pose.arm,pal);
+  spriteLeg(frontK,frontF,false,pal);
+  spriteTorso(pal);
+  spriteArm(true,pose.arm,pal);
+  spriteHead(pal);
+ }
+ if(keys.boost&&!air){spriteRect(-34,-33,12,1,'rgba(246,254,241,.48)');spriteRect(-31,-25,8,1,'rgba(246,254,241,.34)')}
  ctx.restore()
 }
 function render(){ctx.clearRect(0,0,W,H);drawBackground();drawMillauBridgeScene();drawGround();drawForeground();if(run)drawFinishArch();if(run){for(const o of run.objects)if(!o.done&&o.x>camX-90&&o.x<camX+W+90)drawObstacle(o)}drawRunner();drawEffects();if(run?.inv>0&&Math.sin(sceneTime*23)>0){ctx.fillStyle='#ff596120';ctx.fillRect(0,0,W,H)}const c=run?.course||COURSES[selected];if((c.mode==='night'&&(run?.x||0)/c.length>.32)||sectionFor(c,run?.x||0)?.weather==='night'){let lvl=profile.levels.lamp,xx=run?run.x-camX:W*.35;const grad=ctx.createRadialGradient(xx,H*.52,H*.13+lvl*15,xx,H*.52,H*.91);grad.addColorStop(0,'#00061600');grad.addColorStop(1,`rgba(1,6,18,${Math.max(.2,.63-lvl*.12)})`);ctx.fillStyle=grad;ctx.fillRect(0,0,W,H)}}
@@ -772,7 +813,7 @@ canvas.addEventListener('pointerdown',e=>{if(screen!=='run'||run?.paused)return;
 canvas.addEventListener('pointerup',e=>{if(!swipe.active||e.pointerId!==swipe.id)return;const dy=e.clientY-swipe.y,dx=e.clientX-swipe.x;swipe.active=false;if(Math.abs(dy)>28&&Math.abs(dy)>Math.abs(dx)*.75){if(dy<0)jump();else duck()}else if(Math.abs(dy)<20&&Math.abs(dx)<30)jump()});
 canvas.addEventListener('pointercancel',()=>swipe.active=false);
 $('#jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});$('#duck').addEventListener('pointerdown',e=>{e.preventDefault();duck()});
-// V5.0 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
+// V5.1 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
 const controlZone=$('#controls'),boostButton=$('#boost');
 for(const name of ['contextmenu','selectstart','dragstart'])controlZone.addEventListener(name,e=>e.preventDefault());
 const preventTouchDefault=e=>{if(e.cancelable)e.preventDefault()};
