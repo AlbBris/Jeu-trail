@@ -1,22 +1,23 @@
-# TRAIL CHAOS V6.1 — Millau en HD
+# TRAIL CHAOS V6.2 — Arrivée urbaine de Millau
 
-Le circuit **Viaduc de Millau** utilise désormais les cinq panoramas `assets/millau/panorama-1.webp` à `panorama-5.webp` (941 × 556 px) sans bandes de premier plan supplémentaires. Les bandes `vallee-*.webp` qui apparaissaient sous le sentier ont été retirées du rendu.
+La fin du parcours du Viaduc de Millau arrive maintenant au centre-ville, après la descente et la traversée du causse. Le reste des courses et les mécaniques existantes sont conservés.
 
-## Rendu
-- Cadrage des panoramas sans déformation du ratio d'origine, avec lissage haute qualité sur le décor (le sprite du coureur reste en pixels nets).
-- Défilement panoramique progressif à l'avancement et transition douce entre les 5 zones.
-- Sol jouable distinct du fond, tracé selon `groundY()` et texturé selon `sectionFor()` ; la partie sous la piste est maintenant un terrain continu, sans seconde image floue.
-- Les pylônes et câbles supplémentaires dessinés par le jeu sont supprimés : seul le viaduc du panorama HD reste visible, avec un garde-corps discret.
-- Cache PWA mis à jour pour actualiser les fichiers sur iPhone.
+## Modifications V6.2
 
-| Section | Terrain et décor |
-| --- | --- |
-| 0–5 km | Vallée du Tarn, sentier doux |
-| 5–10 km | Montée rocheuse et route d'accès |
-| 10–15,7 km | Tablier du viaduc presque horizontal |
-| 15,7–20 km | Causse Rouge, terrain minéral |
-| 20–23,7 km | Descente et arrivée avec public |
+- À partir d'environ **21,1 km** : arrivée progressive du décor urbain avec les panoramas du Tarn derrière les immeubles, sans coupure brutale.
+- À partir de **21,8 km** : sol de route et section « Faubourgs de Millau ».
+- À partir de **22,4 km** : rues du centre avec façades ocres et rosées, toits en tuiles, boutiques, volets, une silhouette stylisée du beffroi et fanions festifs.
+- À partir de **22,55 km** : spectateurs sur le bord de la route derrière des barrières **purement décoratives** (sans collision), densité croissante à l'approche de l'arrivée.
+- Après **23,25 km** : confettis et animation visuelle légère.
+- À **23,7 km** : arche d'arrivée « MILLAU / ARRIVÉE » visible et ligne à damiers alignée sur le sol du jeu.
 
-Les profils d'altitude sont des **approximations de gameplay, pas des relevés GPS**. Les commandes, l'équipement, le sprite, les autres courses et les sauvegardes n'ont pas été modifiés.
+Le décor et les foules sont dessinés par le moteur Canvas (positions liées au monde), sans télécharger d'images basse résolution. La direction artistique est inspirée des rues et façades traditionnelles de Millau, sans prétendre reproduire précisément un itinéraire réel. Les sections et altitudes restent des approximations de jeu.
 
-L'ancienne version est conservée dans `side-v58.html` et les bandes storyboard restent archivées sous `assets/millau/storyboard-*.webp`.
+## Corrections conservées depuis V6.1
+
+- Panoramas Millau détaillés en 941 × 556 px.
+- Pas de bande d'image floue sous le sentier : sol continu distinct du fond.
+- Aucun pylône ni hauban supplémentaire dessiné sur le viaduc.
+- Garde-corps, joueur, contrôles, équipements et sauvegardes conservés.
+
+Le cache PWA est versionné pour que les iPhone récupèrent la V6.2 au prochain chargement.
