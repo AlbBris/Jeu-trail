@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V6.1 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
+<meta name="description" content="Trail Chaos V6.2 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V6.1</title>
+<title>Trail Chaos — Side Trail V6.2</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -34,7 +34,7 @@
 <div id="app">
 <canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V6.1</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V6.2</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div id="backyardHud" aria-live="polite"><span class="by-num" id="byLap">BOUCLE 01 / 25</span><span class="by-clock" id="byClock">00 / 60 min</span><span class="by-label" id="byDplus">+180 m D+</span></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -47,7 +47,7 @@ const COURSES=[
  {id:'forest',name:'Forêt des Racines',emoji:'🌲',km:8,length:11200,mode:'forest',difficulty:1,desc:'Sous-bois, passages boueux et petit ruisseau'},
  {id:'crest',name:'Crêtes du Vent',emoji:'⛰️',km:21,length:16000,mode:'mountain',difficulty:2,desc:'Alpages, sentier pierreux et dénivelé'},
  {id:'night',name:'Ultra Nocturne',emoji:'🌙',km:45,length:21200,mode:'night',difficulty:3,desc:'Nuit, frontale, racines et brouillard'},
- {id:'millau',name:'Viaduc de Millau',emoji:'🌉',km:23.7,length:17800,mode:'millau',difficulty:3,desc:'Panoramas HD : Tarn, viaduc, causse et arrivée'},
+ {id:'millau',name:'Viaduc de Millau',emoji:'🌉',km:23.7,length:17800,mode:'millau',difficulty:3,desc:'Panoramas HD, viaduc et arrivée en centre-ville'},
  {id:'saintelyon',name:'SaintéLyon',emoji:'🌌',km:80,length:24600,mode:'saintelyon',difficulty:4,desc:'Course nocturne, crêtes des Monts du Lyonnais et arrivée sur Lyon'},
  {id:'utmb',name:'UTMB',emoji:'🏔️',km:174,length:30200,mode:'utmb',difficulty:5,desc:'Tour du Mont-Blanc entre vallées, cols alpins et haute montagne'},
  {id:'diagonale',name:'Diagonale des Fous',emoji:'🌋',km:180,length:31800,mode:'diagonale',difficulty:6,desc:'Forêts tropicales, remparts volcaniques et ravines réunionnaises'},
@@ -110,7 +110,7 @@ const keys={boost:false,duck:false},swipe={active:false,x:0,y:0,id:null};
 function showToast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),1350)}
 function display(html){$('#panel').innerHTML=`<section class="sheet">${html}</section>`;$('#panel').classList.remove('hide');$('#hud').classList.remove('on');$('#backyardHud').classList.remove('on');$('#controls').classList.remove('on');$('#modal').classList.remove('on');$('#bank').textContent=fmt(profile.coins)}
 function nav(target){screen=target;switch(target){case'home':home();break;case'courses':courses();break;case'shop':shop();break;default:help()}}
-function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Animation V5.4 restaurée · V6.1</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><a class="btn alt full editor-link" href="./atelier-perso.html" style="display:block;margin-top:10px;text-align:center;text-decoration:none">✏️ Atelier du personnage — personnaliser mon coureur</a><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
+function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Animation V5.4 restaurée · V6.2</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><a class="btn alt full editor-link" href="./atelier-perso.html" style="display:block;margin-top:10px;text-align:center;text-decoration:none">✏️ Atelier du personnage — personnaliser mon coureur</a><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
 function courses(){display(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Circuits & légendes</h2><p>Parcours arcade inspirés des courses réelles. Le profil de Millau suit les cinq zones du parcours avec un dénivelé de jeu approximatif ; aucun profil n’est un relevé GPS. Tous les circuits sont accessibles en découverte : améliore ton équipement et bats tes records !</p>${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:1"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">${i===selected?'✓ CHOISI':i>profile.unlocked?'✨ DÉCOUVRIR':'CHOISIR'}</span></div>`).join('')}<div class="actions"><button class="btn alt" id="back">← Retour</button><button class="btn" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(el=>el.onclick=()=>{const i=+el.dataset.course;selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=begin}
 function shop(){
  const clothes=SKINS.find(x=>x.id===profile.skin)||SKINS[0];
@@ -160,8 +160,10 @@ const ROUTE_DATA={
  {km:15.7,name:'Sortie du viaduc · Causse Rouge',scene:1,weather:'sun',surface:'gravel',hazards:['rock','gravel'],water:false},
  {km:17,name:'Plateau caussenard · ravito',scene:1,weather:'sun',surface:'gravel',hazards:['rock','gravel'],water:true},
  {km:20,name:'Descente vers Millau',scene:0,weather:'sun',surface:'trail',hazards:['rock','root'],water:false},
- {km:22.4,name:'Millau · derniers virages',scene:0,weather:'sun',surface:'road',hazards:['barrier'],water:false},
- {km:23.1,name:'Arrivée · public de Millau',scene:0,weather:'sun',surface:'road',hazards:['barrier'],water:false}]},
+ {km:21.8,name:'Faubourgs de Millau',scene:0,weather:'sun',surface:'road',hazards:['barrier'],water:false},
+ {km:22.4,name:'Millau · rues du centre',scene:0,weather:'sun',surface:'road',hazards:['barrier'],water:false},
+ {km:23.1,name:'Centre-ville · public en fête',scene:0,weather:'sun',surface:'road',hazards:['barrier'],water:false},
+ {km:23.5,name:'Dernière ligne droite · arrivée',scene:0,weather:'sun',surface:'road',hazards:['barrier'],water:false}]},
  saintelyon:{actual:false,dplus:2500,profile:[[0,510],[17,740],[32,685],[46,780],[60,400],[67,480],[80,180]],segments:[
  {km:0,name:'Saint-Étienne · départ',scene:0,weather:'night',surface:'road',hazards:['barrier','rock']},
  {km:17,name:'Saint-Christo · ravito',scene:1,weather:'night',surface:'mud',hazards:['mud','rock','log'],water:true},
@@ -355,7 +357,7 @@ function drawViaduct(x,y,s=.85,behind=false){ctx.save();ctx.translate(x,y);ctx.g
   for(const px of [-78,-22,48,108]){ctx.fillStyle=behind?'#82909b':'#c7d0d6';ctx.beginPath();ctx.moveTo((px-5)*s,8*s);ctx.lineTo((px+5)*s,8*s);ctx.lineTo((px+2)*s,73*s);ctx.lineTo((px-2)*s,73*s);ctx.closePath();ctx.fill()}
   for(const px of [-72,56]){ctx.fillStyle=behind?'#c4c9ce':'#eff4f5';ctx.beginPath();ctx.moveTo((px-3)*s,-1*s);ctx.lineTo((px-2)*s,-83*s);ctx.lineTo((px+2)*s,-83*s);ctx.lineTo((px+4)*s,-1*s);ctx.closePath();ctx.fill();ctx.strokeStyle=behind?'#a4b4bd':'#f5fbfc';ctx.lineWidth=1.2*s;for(let k=1;k<=5;k++){let off=k*15*s;ctx.beginPath();ctx.moveTo(px*s,-80*s);ctx.lineTo(px*s-off,-2*s);ctx.moveTo(px*s,-80*s);ctx.lineTo(px*s+off,-2*s);ctx.stroke()}}
   ctx.restore();ctx.globalAlpha=1}
-// V6.1 — Aucun pylône ou hauban n'est dessiné par-dessus la photo du viaduc.
+// V6.2 — Aucun pylône ou hauban n'est dessiné par-dessus la photo du viaduc.
 // Les pylônes du panorama HD suffisent ; le garde-corps de la piste est conservé.
 function millauBridge(c=run?.course||COURSES[selected],world=run?.x||0){
  return c.mode==='millau'&&sectionFor(c,world)?.surface==='bridge';
@@ -401,7 +403,7 @@ function drawCourseLandmarks(c,prog,st){
   ctx.fillStyle='rgba(152,98,65,.34)';ctx.fillRect(W*.08,H*.47,W*.16,H*.12);ctx.fillRect(W*.3,H*.41,W*.2,H*.18);ctx.fillStyle='rgba(117,177,188,.28)';ctx.fillRect(W*.58,H*.67,W*.26,6);ctx.fillStyle='rgba(96,72,55,.3)';ctx.fillRect(W*.58,H*.55,W*.18,H*.1)
  }
 }
-// V6.1 — panoramas originaux en pixel-art pour Millau.
+// V6.2 — panoramas originaux en pixel-art pour Millau.
 // Les couches 2D sont précalculées à résolution réduite. Aucun dessin lourd par frame.
 const MILLAU_VISUAL_ZONES=[
  {km:0,name:'Vallée du Tarn',sky:['#3e8cbd','#9bd3dc','#e9e6ca'],far:['#91a99a','#6f8d8b'],mid:['#708f78','#47755f'],land:'#638c64',stone:'#d6c59d',accent:'#71cbd5'},
@@ -562,7 +564,7 @@ function paintMillauArt(zoneIndex,depth){
 }
 function millauArt(zone,depth){const key=zone+':'+depth;if(!millauArtCache.has(key))millauArtCache.set(key,paintMillauArt(zone,depth));return millauArtCache.get(key)}
 
-// V6.1 — Cinq panoramas HD. Les bandes floues `vallee-*.webp` sous la piste
+// V6.2 — Cinq panoramas HD. Les bandes floues `vallee-*.webp` sous la piste
 // ont été supprimées. Le paysage et le sol sont désormais deux plans distincts.
 const MILLAU_STAGE_LIMITS=[0,5,10,15.7,20,23.7];
 const millauScenes=Array.from({length:5},(_,i)=>{
@@ -719,8 +721,135 @@ function drawMillauPixelProps(){
  }
 }
 
+
+// V6.2 — Derniers kilomètres en ville : façades millavoises dessinées en Canvas.
+// Aucune image basse résolution : bâtiments et public défilent dans le monde.
+function drawMillauCityBackdrop(c){
+ const km=kmOf(run?.x||0,c);
+ if(km<21.05)return;
+ const opacity=smooth(clamp((km-21.05)/1.28,0,1));
+ const start=c.length*21.45/c.km;
+ ctx.save();ctx.globalAlpha=opacity;
+ // Skyline arrière : façades claires et toitures en terre cuite, profondeur 0.72.
+ const pale=['#c4b59d','#d6c5a8','#b6ad9b','#dac4ad','#c6b9a0'];
+ for(let i=0;i<26;i++){
+  const wx=start+i*104,x=(wx-camX)*.72,w=106;
+  if(x<-140||x>W+140)continue;
+  const y=groundY(wx)-52,h=107+(i*29%74);
+  ctx.fillStyle=pale[i%pale.length];ctx.fillRect(x,y-h,w-4,h);
+  ctx.fillStyle='#a7634b';ctx.beginPath();
+  ctx.moveTo(x-7,y-h+3);ctx.lineTo(x+w*.46,y-h-23);ctx.lineTo(x+w+4,y-h+3);
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='#877d6f';
+  for(let j=0;j<3;j++)for(let k=0;k<2;k++)ctx.fillRect(x+17+k*42,y-h+22+j*34,13,20);
+ }
+ // Beffroi stylisé du centre ancien : placé derrière les façades de la rue.
+ const towerWorld=c.length*22.66/c.km,tx=towerWorld-camX*.84-towerWorld*.16;
+ if(tx>-100&&tx<W+110){
+  const ty=groundY(towerWorld)-31;
+  ctx.fillStyle='#9d826c';ctx.fillRect(tx-39,ty-284,77,284);
+  ctx.fillStyle='#cfb69b';ctx.fillRect(tx-34,ty-279,62,270);
+  ctx.fillStyle='#b39378';ctx.fillRect(tx-45,ty-287,87,13);
+  for(let k=0;k<5;k++){ctx.fillStyle=k%2?'#b39378':'#dbc5ae';ctx.fillRect(tx-39+k*16,ty-302,13,19)}
+  for(let j=0;j<3;j++){
+   const by=ty-244+j*62;ctx.fillStyle='#765e50';ctx.beginPath();
+   ctx.arc(tx-4,by,10,Math.PI,0);ctx.rect(tx-14,by,20,27);ctx.fill();
+   ctx.strokeStyle='#e7d1b8';ctx.lineWidth=2;ctx.strokeRect(tx-16,by-2,24,30);
+  }
+  ctx.fillStyle='#877567';ctx.fillRect(tx-17,ty-39,30,39);
+ }
+ // Rue principale : immeubles R+2/R+3, volets, commerces et toits de tuiles.
+ const walls=['#e7c59f','#d9b4a1','#ead6b9','#e2b98a','#cbb4a0','#e7caaa'];
+ const roofs=['#b96244','#ad6b50','#c4794a','#a75e48'];
+ for(let i=0;i<24;i++){
+  const wx=start+110+i*121,x=wx-camX,w=115;
+  if(x<-140||x>W+140)continue;
+  const road=groundY(wx),bottom=road-15,h=176+(i*41%87),top=bottom-h;
+  ctx.fillStyle='rgba(23,35,41,.18)';ctx.fillRect(x+5,top+9,w,bottom-top);
+  ctx.fillStyle=walls[i%walls.length];ctx.fillRect(x,top,w-5,h);
+  ctx.fillStyle='#b69a82';ctx.fillRect(x,top,w-5,5);
+  ctx.fillStyle=roofs[i%roofs.length];ctx.beginPath();
+  ctx.moveTo(x-8,top+1);ctx.lineTo(x+w*.43,top-25-(i%3)*5);
+  ctx.lineTo(x+w+2,top+1);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='rgba(80,55,47,.35)';ctx.lineWidth=1;ctx.beginPath();
+  ctx.moveTo(x-7,top+1);ctx.lineTo(x+w+1,top+1);ctx.stroke();
+  for(let floor=0;floor<2;floor++)for(let col=0;col<2;col++){
+   const px=x+18+col*53,py=top+28+floor*58;
+   ctx.fillStyle='#f5e4cb';ctx.fillRect(px-4,py-4,30,38);
+   ctx.fillStyle='#526878';ctx.fillRect(px,py,22,29);
+   ctx.fillStyle='#a6c3d0';ctx.fillRect(px+2,py+3,18,20);
+   ctx.fillStyle='#ffffff77';ctx.fillRect(px+4,py+4,5,16);
+   ctx.fillStyle=i%3===0?'#4d786a':'#78685d';
+   ctx.fillRect(px-7,py-1,5,30);ctx.fillRect(px+24,py-1,5,30);
+   ctx.fillStyle='#b7987f';ctx.fillRect(px-5,py+29,30,4);
+  }
+  // Arcades et devantures — le joueur est au premier plan.
+  ctx.fillStyle='#6b675c';ctx.fillRect(x+8,bottom-53,w-25,49);
+  ctx.fillStyle='#314b54';ctx.fillRect(x+13,bottom-48,w-35,37);
+  ctx.fillStyle='#7ab3b1';ctx.fillRect(x+18,bottom-44,w-46,19);
+  ctx.fillStyle=roofs[(i+1)%roofs.length];ctx.fillRect(x+6,bottom-64,w-21,13);
+  ctx.fillStyle='#fff0d3';ctx.font='bold 10px system-ui';ctx.textAlign='center';
+  if(i%4===0)ctx.fillText('CAFÉ',x+w*.5,bottom-54);
+  else if(i%5===0)ctx.fillText('MILLAU',x+w*.5,bottom-54);
+  ctx.fillStyle='#aa8e74';ctx.fillRect(x,bottom-6,w-5,6);
+ }
+ // Fanions de course au-dessus de la rue (ancrés au monde).
+ if(km>22.25){
+  for(let i=0;i<14;i++){
+   const wx=start+260+i*170,x=wx-camX,y=groundY(wx)-153;
+   if(x<-170||x>W+180)continue;
+   ctx.strokeStyle='rgba(249,235,203,.65)';ctx.lineWidth=1.2;
+   ctx.beginPath();ctx.moveTo(x-65,y);ctx.quadraticCurveTo(x,y+7,x+75,y-2);ctx.stroke();
+   for(let k=0;k<8;k++){
+    const xx=x-58+k*17,yy=y+Math.sin(k/7*Math.PI)*5;
+    ctx.fillStyle=['#e6c764','#c26847','#eae2ca','#356b68'][k%4];
+    ctx.beginPath();ctx.moveTo(xx,yy);ctx.lineTo(xx+10,yy);ctx.lineTo(xx+5,yy+11);ctx.closePath();ctx.fill();
+   }
+  }
+ }
+ ctx.restore();
+}
+function drawMillauCityCrowd(c){
+ const km=kmOf(run?.x||0,c);if(km<22.35)return;
+ const fade=smooth(clamp((km-22.35)/.44,0,1));
+ const start=c.length*22.55/c.km,last=c.length-90;
+ ctx.save();ctx.globalAlpha=fade;
+ for(let i=Math.floor(start/54);i<=Math.ceil(last/54);i++){
+  const wx=i*54;if(wx<start||wx>last)continue;
+  const x=wx-camX;if(x<-50||x>W+50)continue;
+  const y=groundY(wx);
+  for(let p=0;p<2;p++){
+   const px=x-13+p*21,by=y-20;
+   const shirt=['#e6c054','#51897f','#d36b62','#567bb3','#ad7094'][(i+p)%5];
+   ctx.fillStyle='#495058';ctx.fillRect(px-4,by-7,4,12);ctx.fillRect(px+2,by-7,4,12);
+   ctx.fillStyle=shirt;ctx.fillRect(px-7,by-24,15,18);
+   ctx.fillStyle='#e7b997';ctx.beginPath();ctx.arc(px,by-31,7,0,7);ctx.fill();
+   ctx.strokeStyle=shirt;ctx.lineWidth=3;ctx.beginPath();
+   ctx.moveTo(px-6,by-20);ctx.lineTo(px-13,by-26-(i%3)*6);
+   ctx.moveTo(px+7,by-20);ctx.lineTo(px+13,by-32+((i+p)%3)*3);ctx.stroke();
+  }
+  // Barrières de spectateurs derrière la zone de course : non dangereuses.
+  ctx.strokeStyle='#ced6d4';ctx.lineWidth=3;ctx.strokeRect(x-23,y-25,50,18);
+  ctx.strokeStyle='#e7ece7';ctx.lineWidth=2;ctx.beginPath();
+  ctx.moveTo(x-23,y-16);ctx.lineTo(x+27,y-16);ctx.stroke();
+  ctx.fillStyle='#cb6247';ctx.fillRect(x-18,y-22,16,5);
+  ctx.fillStyle='#d9d5c7';ctx.fillRect(x+3,y-22,17,5);
+ }
+ if(km>23.25){
+  const startFX=c.length*23.30/c.km;
+  for(let i=0;i<70;i++){
+   const wx=startFX+i*9,x=wx-camX;
+   if(x<-6||x>W+6)continue;
+   const y=groundY(wx)-65-hash(i,43)*115+Math.sin(sceneTime*2+i)*3;
+   ctx.fillStyle=['#f1d061','#f6f0e5','#de7b64','#68ad9b'][i%4];
+   ctx.fillRect(x,y,3+(i%2)*2,2+(i%3));
+  }
+ }
+ ctx.restore();
+}
+
 function drawBackground(){const c=run?.course||COURSES[selected],st=biomeColors(),prog=clamp((run?.x||0)/c.length,0,1);
- if(c.mode==='millau'){if(!drawMillauPhotoLandscape(c,prog))drawMillauPixelLandscape(c,prog);return;}
+ if(c.mode==='millau'){if(!drawMillauPhotoLandscape(c,prog))drawMillauPixelLandscape(c,prog);drawMillauCityBackdrop(c);return;}
 
  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,st.sky[0]);g.addColorStop(.56,st.sky[1]);g.addColorStop(1,st.ground);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
  const byNight=c.mode==='backyard'&&backyardRound(run?.x||0)>=8&&backyardRound(run?.x||0)<18,nightSky=c.mode==='night'||byNight;const sunX=W*(.78-.18*prog)+Math.sin(sceneTime*.03)*9,sunY=H*(nightSky?.18:.16);ctx.fillStyle=nightSky?'rgba(235,246,255,.7)':'rgba(255,242,193,.45)';ctx.beginPath();ctx.arc(sunX,sunY,nightSky?27:35,0,7);ctx.fill();if(byNight){ctx.fillStyle='rgba(3,15,36,.65)';ctx.fillRect(0,0,W,H*.75)}
@@ -778,7 +907,7 @@ function drawGround(){const c=run?.course||COURSES[selected],st=biomeColors();if
    else if(here.name.includes('PIERRIER')){ctx.fillStyle='#7e786d';for(let p=0;p<110;p+=18){ctx.beginPath();ctx.ellipse(x+p,groundY(wx+p)-3,6,2.4,0,0,7);ctx.fill();}}
  }
 }
-// V6.1 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
+// V6.2 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
 function drawLeafMass(px,py,r,palette,seed){
  ctx.save();
  for(let j=0;j<7;j++){
@@ -828,12 +957,27 @@ function drawFinishArch(){
  const wx=c.length-58,x=wx-camX;
  if(x<-120||x>W+120)return;
  const y=groundY(wx),surface=sectionFor(c,wx)?.surface;
- // Millau : une seule arche d'arrivée jouable, intégrée dans le monde
- // and spectators: do not superimpose a second competing arch.
- if(c.mode==='millau'&&millauSceneReady()){
-  ctx.save();ctx.strokeStyle='rgba(250,252,243,.87)';ctx.lineWidth=2.5;
-  ctx.beginPath();ctx.moveTo(x-40,groundY(wx-40)+1);ctx.lineTo(x+40,groundY(wx+40)+1);ctx.stroke();
-  for(let off=-36;off<36;off+=12){ctx.fillStyle=((off+36)/12)%2===0?'#fbfbf0':'#23414d';ctx.fillRect(x+off,groundY(wx+off)-1,12,5)}
+ // Arche urbaine visible, en avant des façades, sans superposition artificielle.
+ if(c.mode==='millau'){
+  ctx.save();
+  const ay=y-139;
+  ctx.fillStyle='rgba(11,28,36,.18)';ctx.beginPath();ctx.ellipse(x,y+5,95,8,0,0,7);ctx.fill();
+  ctx.fillStyle='#24444b';ctx.fillRect(x-73,ay+31,13,108);ctx.fillRect(x+60,ay+31,13,108);
+  ctx.fillStyle='#cbd8d3';ctx.fillRect(x-70,ay+33,3,100);ctx.fillRect(x+62,ay+33,3,100);
+  ctx.fillStyle='#20595a';ctx.beginPath();ctx.roundRect(x-87,ay,174,41,8);ctx.fill();
+  ctx.strokeStyle='#e5d9aa';ctx.lineWidth=2.4;ctx.strokeRect(x-87,ay,174,41);
+  ctx.fillStyle='#f6e9c9';ctx.font='900 12px system-ui';ctx.textAlign='center';
+  ctx.fillText('MILLAU',x,ay+16);
+  ctx.fillStyle='#f0ce69';ctx.font='900 17px system-ui';ctx.fillText('ARRIVÉE',x,ay+34);
+  for(const side of [-1,1]){
+   ctx.fillStyle='#d2ad55';ctx.fillRect(x+side*73-4,ay+3,8,34);
+  }
+  // Ligne à damiers alignée avec la route.
+  for(let k=-6;k<=6;k++){
+   const world=wx+k*13,xx=world-camX;
+   ctx.fillStyle=k%2?'#f1f1e9':'#203d44';
+   ctx.fillRect(xx-7,groundY(world)+1,13,8);
+  }
   ctx.restore();return;
  }
  const pole='#e7efe9',accent=surface==='road'||surface==='bridge'?'#2d3c45':'#21433a';
@@ -849,7 +993,7 @@ function drawFinishArch(){
  ctx.restore();
 }
 function drawForeground(){
- const c=run?.course||COURSES[selected];if(c.mode==='millau'&&millauSceneReady()){if(millauBridge(c))drawMillauBridgeRail();return}
+ const c=run?.course||COURSES[selected];if(c.mode==='millau'&&millauSceneReady()){if(millauBridge(c))drawMillauBridgeRail();drawMillauCityCrowd(c);return}
  if(millauBridge(c)){drawMillauBridgeRail();return}
  for(let i=Math.floor(camX/157)-2;i<Math.ceil((camX+W)/157)+2;i++){
   const wx=i*157+hash(i,7)*52,x=wx-camX;if(x<-115||x>W+115)continue;
@@ -974,7 +1118,7 @@ function runnerRigidArm(shoulderX,shoulderY,swing,front,color){
  if(front&&wearing('carbonPoles')){ctx.strokeStyle='#a9d8d4';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(11.8,6.6);ctx.lineTo(8.2,44);ctx.stroke();ctx.strokeStyle='#f4c878';ctx.beginPath();ctx.moveTo(6.8,44);ctx.lineTo(9.6,44);ctx.stroke()}
  ctx.restore();
 }
-// V6.1 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
+// V6.2 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
 // Silhouette compacte, aplats, contours sombres et poses discrètes à cadence arcade.
 function spriteRect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
 function spriteBlock(x,y,w,h,color,edge='#182432',border=1){
@@ -1090,7 +1234,7 @@ function spriteCrouch(pal,frame){
  ctx.save();ctx.translate(-15,21);spriteHead(pal);ctx.restore()
 }
 
-// V6.1 : véritable planche de 18 images recadrées de l'illustration validée :
+// V6.2 : véritable planche de 18 images recadrées de l'illustration validée :
 // 6 images course, 6 saut et 6 accroupissement. Les poses ne sont pas interpolées.
 const RUNNER_FRAMES={width:218,height:306,count:6};
 const runnerAtlas=new Image();runnerAtlas.decoding='async';
@@ -1204,7 +1348,7 @@ canvas.addEventListener('pointerdown',e=>{if(screen!=='run'||run?.paused)return;
 canvas.addEventListener('pointerup',e=>{if(!swipe.active||e.pointerId!==swipe.id)return;const dy=e.clientY-swipe.y,dx=e.clientX-swipe.x;swipe.active=false;if(Math.abs(dy)>28&&Math.abs(dy)>Math.abs(dx)*.75){if(dy<0)jump();else duck()}else if(Math.abs(dy)<20&&Math.abs(dx)<30)jump()});
 canvas.addEventListener('pointercancel',()=>swipe.active=false);
 $('#jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});$('#duck').addEventListener('pointerdown',e=>{e.preventDefault();duck()});
-// V6.1 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
+// V6.2 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
 const controlZone=$('#controls'),boostButton=$('#boost');
 for(const name of ['contextmenu','selectstart','dragstart'])controlZone.addEventListener(name,e=>e.preventDefault());
 const preventTouchDefault=e=>{if(e.cancelable)e.preventDefault()};
