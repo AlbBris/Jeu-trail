@@ -1,16 +1,13 @@
-# TRAIL CHAOS — V5.7 — Millau, paysage évolutif
+# TRAIL CHAOS V5.8 — Millau : panoramas fidèles aux visuels
 
-## Nouveautés
-- Cinq panoramas originaux en pixel-art qui évoluent avec la progression : vallée du Tarn, montée sous les piles, traversée du viaduc, Causse Rouge, descente vers Millau.
-- Trois couches de décors aux vitesses de parallaxe différentes, avec fondus de transition kilométriques.
-- Panoramas calculés une seule fois avant le lancement de Millau, dessinés depuis des canvases mis en cache ; aucun gros fichier image additionnel.
-- Repères visuels et signalétique intégrés au sol pour les sections routières et le causse.
-- Altimétrie, obstacles, joueurs et animations conservés : le personnage reste exactement celui de la V5.4 restauré en V5.6.
-- Archive de l'ancienne version dans `side-v56.html`.
+Cinq panoramas et cinq fonds de vallée dérivés des rendus validés, sans interface ni coureur intégrés aux images du jeu. Les images WebP compressées préservent les falaises, le Tarn, le viaduc et les paysages du Causse Rouge.
 
-## Technique
-- `MILLAU_VISUAL_ZONES`, `millauBlend`, `paintMillauArt`, `drawMillauPixelLandscape`, `drawMillauPixelProps` dans `index.html`.
-- Les visuels passent progressivement d'une zone à l'autre autour des km 5, 10, 15,7 et 20.
-- Aucun changement de sauvegardes, de gameplay ou de fonctionnement de la boutique.
+- 5 étapes reliées aux kilométrages existants : 0–5, 5–10, 10–15,7, 15,7–20, 20–23,7 km.
+- Transitions douces entre deux décors via opacité progressive, sans flash.
+- Défilement panoramique horizontal, cohérent avec l'avancement.
+- Sol jouable à position physique inchangée, avec asphalte/chemin, garde-corps, marquages et texture.
+- Cache images WebP chargées une seule fois et conservation des anciens dessins comme repli si chargement impossible.
+- Animations V5.4 du coureur, commandes, boutique et sauvegardes conservées.
+- Archive de sécurité V5.7 : `side-v57.html`.
 
-Site : https://albbris.github.io/Jeu-trail/
+Le jeu en ligne : https://albbris.github.io/Jeu-trail/?v=58
