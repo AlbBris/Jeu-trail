@@ -1,12 +1,12 @@
-# TRAIL CHAOS V6.0 — Millau en HD
+# TRAIL CHAOS V6.1 — Millau en HD
 
-Le circuit **Viaduc de Millau** utilise désormais les cinq panoramas `assets/millau/panorama-1.webp` à `panorama-5.webp` (941 × 556 px) et les bandes de premier plan `vallee-1.webp` à `vallee-5.webp`, au lieu des bandes storyboard de 147–176 px de haut étirées sur tout l'écran.
+Le circuit **Viaduc de Millau** utilise désormais les cinq panoramas `assets/millau/panorama-1.webp` à `panorama-5.webp` (941 × 556 px) sans bandes de premier plan supplémentaires. Les bandes `vallee-*.webp` qui apparaissaient sous le sentier ont été retirées du rendu.
 
 ## Rendu
 - Cadrage des panoramas sans déformation du ratio d'origine, avec lissage haute qualité sur le décor (le sprite du coureur reste en pixels nets).
 - Défilement panoramique progressif à l'avancement et transition douce entre les 5 zones.
-- Sol jouable distinct du fond, tracé selon `groundY()` et texturé selon `sectionFor()` ; le coureur et les obstacles restent attachés au vrai sol du jeu.
-- Les pylônes et câbles du viaduc passent dans le plan du monde pendant la traversée, derrière le coureur.
+- Sol jouable distinct du fond, tracé selon `groundY()` et texturé selon `sectionFor()` ; la partie sous la piste est maintenant un terrain continu, sans seconde image floue.
+- Les pylônes et câbles supplémentaires dessinés par le jeu sont supprimés : seul le viaduc du panorama HD reste visible, avec un garde-corps discret.
 - Cache PWA mis à jour pour actualiser les fichiers sur iPhone.
 
 | Section | Terrain et décor |
