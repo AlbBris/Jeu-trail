@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V5.2 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
+<meta name="description" content="Trail Chaos V5.4 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V5.2</title>
+<title>Trail Chaos — Side Trail V5.4</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -34,7 +34,7 @@
 <div id="app">
 <canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V5.2</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V5.4</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div id="backyardHud" aria-live="polite"><span class="by-num" id="byLap">BOUCLE 01 / 25</span><span class="by-clock" id="byClock">00 / 60 min</span><span class="by-label" id="byDplus">+180 m D+</span></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -75,25 +75,33 @@ const SPECIALS=[
 ];
 const SPECIAL_SLOTS={top:'Maillot',wrist:'Poignet',eyes:'Visage',hands:'Mains',head:'Tête',feet:'Pieds',waist:'Ceinture'};
 const SKINS=[
+{id:'sprite',name:'Sprite homme',tag:'Pixel officiel',top:'#f4f5f6',shadow:'#cad0d7',short:'#2a2f36',cap:'#183e8d',sole:'#ff7c16',stripe:'#ffffff',vest:'#163978',flask:'#b8d7ff'},
 {id:'corail',name:'Corail',tag:'Trail classique',top:'#fa674b',shadow:'#b63e36',short:'#1c3340',cap:'#c8ed77',sole:'#eefff7',stripe:'#9bead8',vest:'#255764',flask:'#83e8ed'},
 {id:'alpage',name:'Alpage',tag:'Rapide & léger',top:'#b9e46f',shadow:'#538e57',short:'#244c57',cap:'#e9f8d0',sole:'#f7fbf8',stripe:'#52d6bf',vest:'#255c52',flask:'#e1f9b2'},
 {id:'nocturne',name:'Nocturne',tag:'Ultra de nuit',top:'#8c86ef',shadow:'#574aa8',short:'#233246',cap:'#ecb768',sole:'#dfe8ff',stripe:'#d1caff',vest:'#354c67',flask:'#a1daf1'}
 ];
-const defaults={coins:0,levels:{shoes:0,vest:0,gel:0,lamp:0},unlocked:0,wins:0,best:{},sound:false,skin:"corail",owned:{},equipped:{},backyardBest:0,backyardTrainingBest:0};
+const defaults={coins:0,levels:{shoes:0,vest:0,gel:0,lamp:0},unlocked:0,wins:0,best:{},sound:false,skin:"sprite",owned:{},equipped:{},backyardBest:0,backyardTrainingBest:0};
 let stored=null;try{stored=JSON.parse(localStorage.getItem('trail-chaos-runner-v2')||'null')}catch(_){}
 let profile={...defaults,...(stored&&typeof stored==='object'?stored:{}),levels:{...defaults.levels,...(stored?.levels||{})},owned:{...(stored?.owned||{})},equipped:{...(stored?.equipped||{})}};
-if(!SKINS.some(s=>s.id===profile.skin))profile.skin='corail';
+if(!SKINS.some(s=>s.id===profile.skin)||['corail','alpage','nocturne'].includes(profile.skin))profile.skin='sprite';
 for(const [slot,id] of Object.entries(profile.equipped)){const item=SPECIALS.find(s=>s.id===id&&s.slot===slot);if(!item||!profile.owned[id])delete profile.equipped[slot]}
 const wearing=id=>SPECIALS.some(s=>s.id===id&&profile.equipped[s.slot]===id&&profile.owned[id]);
 const save=()=>{try{localStorage.setItem('trail-chaos-runner-v2',JSON.stringify(profile))}catch(_){}};
 const CHARACTER_KEY='trail-chaos-character-v1';
-const CHARACTER_DEFAULT={size:1,head:1,stride:1,arms:1,pack:1,top:'',short:'',cap:'',shoe:'',hair:'#fad25d',skin:'#f1bd95',pixels:[]};
+const CHARACTER_DEFAULT={size:1,head:.96,stride:1.02,arms:.92,pack:.9,top:'',short:'',cap:'',shoe:'',hair:'#6b4026',skin:'#f1bd95',pixels:[]};
 let custom={...CHARACTER_DEFAULT};
 try{const decoded=JSON.parse(localStorage.getItem(CHARACTER_KEY)||'null');if(decoded&&typeof decoded==='object'){
   for(const k of ['size','head','stride','arms','pack']){const v=Number(decoded[k]);if(Number.isFinite(v))custom[k]=Math.max(.55,Math.min(1.65,v))}
   for(const k of ['top','short','cap','shoe','hair','skin']){if(typeof decoded[k]==='string'&&(decoded[k]===''||/^#[0-9a-fA-F]{6}$/.test(decoded[k])))custom[k]=decoded[k]}
   if(Array.isArray(decoded.pixels))custom.pixels=decoded.pixels.filter(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=-24&&p.x<=30&&p.y>=-67&&p.y<=6&&/^#[0-9a-fA-F]{6}$/.test(p.c||'')).slice(-300)
 }}catch(_){}
+const SPRITE_MALE_MIGRATION='trail-chaos-sprite-homme-v53';
+if(!localStorage.getItem(SPRITE_MALE_MIGRATION)){
+ custom={...custom,size:1,head:.96,stride:1.02,arms:.92,pack:.9,top:'',short:'',cap:'',shoe:'',hair:'#6b4026',skin:custom.skin||'#f1bd95'};
+ if(['corail','alpage','nocturne'].includes(profile.skin)||!SKINS.some(s=>s.id===profile.skin))profile.skin='sprite';
+ save();
+ try{localStorage.setItem(CHARACTER_KEY,JSON.stringify(custom));localStorage.setItem(SPRITE_MALE_MIGRATION,'1')}catch(_){}
+}
 
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t,fract=v=>v-Math.floor(v),hash=(a,b=0)=>fract(Math.sin(a*127.18+b*312.7+42.19)*43758.5453);
 const fmt=n=>Math.floor(n).toLocaleString('fr-FR');
@@ -102,7 +110,7 @@ const keys={boost:false,duck:false},swipe={active:false,x:0,y:0,id:null};
 function showToast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),1350)}
 function display(html){$('#panel').innerHTML=`<section class="sheet">${html}</section>`;$('#panel').classList.remove('hide');$('#hud').classList.remove('on');$('#backyardHud').classList.remove('on');$('#controls').classList.remove('on');$('#modal').classList.remove('on');$('#bank').textContent=fmt(profile.coins)}
 function nav(target){screen=target;switch(target){case'home':home();break;case'courses':courses();break;case'shop':shop();break;default:help()}}
-function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le coureur prend du pixel · V5.2</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><a class="btn alt full editor-link" href="./atelier-perso.html" style="display:block;margin-top:10px;text-align:center;text-decoration:none">✏️ Atelier du personnage — personnaliser mon coureur</a><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
+function home(){const c=COURSES[selected];display(`<span class="eyebrow">🏔️ Le coureur prend du pixel · V5.4</span><h1>COURS.<br><span class="accent">LÉGENDE.</span><br>FRANCHIS.</h1><p>Nouveau défi : 25 boucles façon backyard, des départs horaires accélérés, des ravitos tactiques et une vraie alternance jour-nuit. Tiendras-tu jusqu'à la dernière boucle ?</p><div class="stats"><span class="stat">🏆 ${profile.wins} arrivées</span><span class="stat">🟡 ${fmt(profile.coins)} pièces</span><span class="stat">👟 Niv. ${profile.levels.shoes+1}</span><span class="stat">🎽 ${SKINS.find(x=>x.id===profile.skin)?.name||"Corail"}</span><span class="stat">✨ ${Object.values(profile.equipped).length} collectors</span></div><div class="event-card"><div class="event-kicker">⚡ NOUVEAU · DÉFI ENDURANCE</div><h3>25 BOUCLES.<br><span class="accent">UNE HEURE CHACUNE.</span></h3><p>Une boucle dans les Pyrénées, 25 départs à suivre. Cours, récupère, puis repars avant la cloche.</p><div class="event-figures"><span>5,9 KM / BOUCLE</span><span>180 M D+</span><span>25 H MAX</span><span>🏅 RECORD ${profile.backyardBest||0}/25</span></div><div class="event-actions"><button id="backyard5" class="btn alt">⚡ TEST · 5 BOUCLES</button><button id="backyard25" class="btn">▶ DÉFI 25 BOUCLES</button></div><div class="event-note">Défi de jeu original inspiré du format des 25H qui courent, sans affiliation ni collecte réelle.</div></div><div class="course active" id="change"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">CHANGER ›</span></div><button id="go" class="btn full" style="margin-top:10px">▶ COURIR SUR LE SENTIER</button><div class="actions"><button id="shopBtn" class="btn alt">🎒 Boutique</button><button id="helpBtn" class="btn alt">🎮 Commandes</button></div><a class="btn alt full editor-link" href="./atelier-perso.html" style="display:block;margin-top:10px;text-align:center;text-decoration:none">✏️ Atelier du personnage — personnaliser mon coureur</a><p class="muted" style="text-align:center;margin-bottom:0">↑ Glisse vers le haut pour sauter · ↓ vers le bas pour te baisser</p>`);$('#go').onclick=()=>begin();$('#backyard25').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin()};$('#backyard5').onclick=()=>{selected=COURSES.findIndex(c=>c.mode==='backyard');begin('training')};$('#change').onclick=()=>nav('courses');$('#shopBtn').onclick=()=>nav('shop');$('#helpBtn').onclick=()=>nav('help')}
 function courses(){display(`<span class="eyebrow">🗺️ Choisis ton parcours</span><h2>Circuits & légendes</h2><p>Parcours arcade inspirés des courses réelles. Le profil de Millau reprend les repères kilométriques officiels ; les profils des ultras sont des approximations de jeu, pas des tracés GPS. Tous les circuits sont accessibles en découverte : améliore ton équipement et bats tes records !</p>${COURSES.map((c,i)=>`<div class="course ${i===selected?'active':''}" data-course="${i}" style="opacity:1"><span class="pic">${c.emoji}</span><div><strong>${c.name}</strong><small>${c.km} km · ${c.desc}</small></div><span class="right">${i===selected?'✓ CHOISI':i>profile.unlocked?'✨ DÉCOUVRIR':'CHOISIR'}</span></div>`).join('')}<div class="actions"><button class="btn alt" id="back">← Retour</button><button class="btn" id="go">▶ Courir</button></div>`);document.querySelectorAll('[data-course]').forEach(el=>el.onclick=()=>{const i=+el.dataset.course;selected=i;courses()});$('#back').onclick=()=>nav('home');$('#go').onclick=begin}
 function shop(){
  const clothes=SKINS.find(x=>x.id===profile.skin)||SKINS[0];
@@ -274,13 +282,13 @@ function makeWorld(c){const objects=[],rng=c.difficulty*23;const gap=c.difficult
  if(c.mode==='backyard'){for(let lap=0;lap<(c.loops||25);lap++){const x=(lap+1)*BACKYARD_LAP_LENGTH-140;objects.push({x,type:'drink',alt:45,r:25,done:false,checkpoint:'Ravito de la boucle '+(lap+1)})}return objects.sort((a,b)=>a.x-b.x)}
  const race=ROUTE_DATA[c.mode];if(race){for(const s of race.segments){if(!s.water)continue;const x=s.km/c.km*c.length+64;if(x<c.length-200)objects.push({x,type:'drink',alt:45,r:25,done:false,checkpoint:s.name})}}
  return objects.sort((a,b)=>a.x-b.x)}
-function begin(mode){const original=COURSES[selected];const c=original.mode==='backyard'&&mode==='training'?{...original,id:'backyard-5',name:'Backyard · 5 boucles',km:29.5,length:BACKYARD_LAP_LENGTH*5,loops:5}:original;fx=[];run={course:c,x:0,elapsed:0,energy:100,hearts:3+Math.min(3,profile.levels.shoes),coins:0,objects:makeWorld(c),jumpY:0,vy:0,duck:0,stumble:0,inv:0,paused:false,finished:false,grounded:true,steps:0,stage:-1,preview:false,lapsDone:0,lapElapsed:0,lastLapMinutes:0,restMinutes:0,waiting:false};camX=-W*.29;camHeight=elevation(0,c);keys.boost=false;keys.duck=false;screen='run';$('#modal').classList.remove('on');$('#panel').classList.add('hide');$('#hud').classList.add('on');$('#backyardHud').classList.toggle('on',c.mode==='backyard');$('#controls').classList.add('on');$('#courseName').textContent=c.name.toUpperCase();updateHUD();showToast(c.emoji+' '+c.name+' · GO !')}
+function begin(mode){const original=COURSES[selected];const c=original.mode==='backyard'&&mode==='training'?{...original,id:'backyard-5',name:'Backyard · 5 boucles',km:29.5,length:BACKYARD_LAP_LENGTH*5,loops:5}:original;fx=[];run={course:c,x:0,elapsed:0,energy:100,hearts:3+Math.min(3,profile.levels.shoes),coins:0,objects:makeWorld(c),jumpY:0,vy:0,duck:0,stumble:0,inv:0,paused:false,finished:false,grounded:true,jumpStarted:-100,steps:0,stage:-1,preview:false,lapsDone:0,lapElapsed:0,lastLapMinutes:0,restMinutes:0,waiting:false};camX=-W*.29;camHeight=elevation(0,c);keys.boost=false;keys.duck=false;screen='run';$('#modal').classList.remove('on');$('#panel').classList.add('hide');$('#hud').classList.add('on');$('#backyardHud').classList.toggle('on',c.mode==='backyard');$('#controls').classList.add('on');$('#courseName').textContent=c.name.toUpperCase();updateHUD();showToast(c.emoji+' '+c.name+' · GO !')}
 function updateHUD(){if(!run)return;const c=run.course;$('#distance').textContent=c.mode==='backyard'?(lapKmOf(run.x,c).toFixed(1)+' / 5,9 km'):(run.x/c.length*c.km).toFixed(1)+' / '+c.km+' km';$('#progress').style.width=clamp((c.mode==='backyard'?(run.x%BACKYARD_LAP_LENGTH)/BACKYARD_LAP_LENGTH:run.x/c.length)*100,0,100)+'%';$('#hearts').textContent='❤️'.repeat(clamp(run.hearts,0,6));$('#energy').style.width=clamp(run.energy,0,100)+'%';$('#energy').style.background=run.energy<25?'#ff8473':'#77ebd3';$('#wallet').textContent='🟡 '+run.coins;const sec=sectionFor(c,run.x);$('#sectionLabel').textContent=sec?sec.name:stage(c,run.x).name;if(c.mode==='backyard'){$('#byLap').textContent='BOUCLE '+String(Math.min(run.lapsDone+1,c.loops)).padStart(2,'0')+' / '+c.loops;const minutes=Math.min(60,Math.floor(run.lapElapsed*BACKYARD_CLOCK));$('#byClock').textContent='⏱ '+String(minutes).padStart(2,'0')+' / 60 MIN';$('#byClock').classList.toggle('urgent',minutes>=50);$('#byDplus').textContent='+180 m D+'}const alt=altitudeAt(c,kmOf(run.x,c));$('#altLabel').textContent=alt===null?'Profil arcade':Math.round(alt)+' m '+(ROUTE_DATA[c.mode].actual?'':'≈');drawRouteProfile()}
 function drawRouteProfile(){const el=$('#routeProfile'),g=el.getContext('2d');const c=run?.course||COURSES[selected];if(!el)return;const pts=ROUTE_DATA[c.mode]?.profile;const routeKm=c.mode==='backyard'?BACKYARD_KM:c.km;const w=el.width,h=el.height;g.clearRect(0,0,w,h);g.fillStyle='rgba(4,32,38,.16)';g.fillRect(0,0,w,h);
  if(pts){const low=Math.min(...pts.map(a=>a[1])),high=Math.max(...pts.map(a=>a[1])),span=Math.max(100,high-low);const yy=v=>h-6-((v-low)/span)*(h-13);g.beginPath();for(let i=0;i<=160;i++){const km=i/160*routeKm,v=altitudeAt(c,km);i===0?g.moveTo(0,yy(v)):g.lineTo(w*i/160,yy(v))}g.strokeStyle='#b8eed5';g.lineWidth=2;g.stroke();g.lineTo(w,h);g.lineTo(0,h);g.closePath();g.fillStyle='rgba(120,220,190,.15)';g.fill()}
  else{g.beginPath();for(let i=0;i<=140;i++){const v=elevation(i/140*c.length,c);const y=h*.58-v*.12;i===0?g.moveTo(0,y):g.lineTo(i*w/140,y)}g.strokeStyle='#a7edd1';g.lineWidth=1.6;g.stroke()}
  const pos=clamp(c.mode==='backyard'?((run?.x||0)%BACKYARD_LAP_LENGTH)/BACKYARD_LAP_LENGTH:(run?.x||0)/c.length,0,1)*w;g.fillStyle='#eeff94';g.beginPath();g.arc(pos,pts?h-6-((altitudeAt(c,kmOf(run?.x||0,c))-Math.min(...pts.map(p=>p[1])))/Math.max(100,Math.max(...pts.map(p=>p[1]))-Math.min(...pts.map(p=>p[1]))))*(h-13):h*.5,3.8,0,7);g.fill();}
-function jump(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded&&!run.duck){run.vy=545;run.grounded=false;run.jumpY=1;burst(run.x,groundY(run.x)-3,'dust',5);}}
+function jump(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded&&!run.duck){run.vy=545;run.grounded=false;run.jumpY=1;run.jumpStarted=run.elapsed;burst(run.x,groundY(run.x)-3,'dust',5);}}
 function duck(){if(screen!=='run'||!run||run.paused||run.finished)return;if(run.grounded){run.duck=.9;run.vy=0;burst(run.x,groundY(run.x)-3,'dust',3);}}
 function hit(type){if(run.inv>0)return;burst(run.x,groundY(run.x)-18,'hit',15);run.hearts--;run.energy=clamp(run.energy-7,0,100);run.inv=1.2;run.stumble=.5;showToast(({rock:'🪨 Rocher !',log:'🪵 Tronc !',stump:'🌳 Souche !',branch:'🌿 Oups, la branche !',creek:'💦 Bain de pieds !',root:'🌳 Racines apparentes !',barrier:'🚧 Barrière !',dune:'🏜️ Dune molle !'}[type])||'Aïe !');if(run.hearts<=0)finish(false)}
 function collect(o){o.done=true;burst(o.x,groundY(o.x)-(o.alt||42),o.type==='coin'?'coin':'water',o.type==='coin'?6:13);if(o.type==='coin'){run.coins+=(o.value||1);if(wearing('clemShirt')||wearing('backyardFinisher')){run.coinBonus=(run.coinBonus||0)+(o.value||1)*(wearing('clemShirt')?.25:.08);const extra=Math.floor(run.coinBonus);run.coins+=extra;run.coinBonus-=extra}}else{run.energy=clamp(run.energy+25+profile.levels.gel*12+(wearing('softFlask')?12:0),0,100);showToast('🧃 Ravito : énergie récupérée !')}}
@@ -488,7 +496,7 @@ function drawGround(){const c=run?.course||COURSES[selected],st=biomeColors();ct
    else if(here.name.includes('PIERRIER')){ctx.fillStyle='#7e786d';for(let p=0;p<110;p+=18){ctx.beginPath();ctx.ellipse(x+p,groundY(wx+p)-3,6,2.4,0,0,7);ctx.fill();}}
  }
 }
-// V5.2 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
+// V5.4 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
 function drawLeafMass(px,py,r,palette,seed){
  ctx.save();
  for(let j=0;j<7;j++){
@@ -675,7 +683,7 @@ function runnerRigidArm(shoulderX,shoulderY,swing,front,color){
  if(front&&wearing('carbonPoles')){ctx.strokeStyle='#a9d8d4';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(11.8,6.6);ctx.lineTo(8.2,44);ctx.stroke();ctx.strokeStyle='#f4c878';ctx.beginPath();ctx.moveTo(6.8,44);ctx.lineTo(9.6,44);ctx.stroke()}
  ctx.restore();
 }
-// V5.2 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
+// V5.4 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
 // Silhouette compacte, aplats, contours sombres et poses discrètes à cadence arcade.
 function spriteRect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
 function spriteBlock(x,y,w,h,color,edge='#182432',border=1){
@@ -694,11 +702,11 @@ function spriteSegment(a,b,color,thickness=3,outline='#182432'){
  }
 }
 function spriteShoe(x,y,pal,back=false){
- const shade=wearing('raceShoes')?'#ffc46c':back?'#a2b2b9':(custom.shoe||pal.sole);
- const detail=wearing('raceShoes')?'#ff5e69':pal.stripe;
- spriteBlock(x-3,y-4,9,4,shade,'#152834');
- spriteRect(x,y-3,5,2,detail);spriteRect(x-3,y,10,2,'#263d45');
- spriteRect(x+3,y-2,2,1,'#e9f5e9');
+ const shade=wearing('raceShoes')?'#ffc46c':back?'#c6ced5':(custom.shoe||pal.sole);
+ const detail=wearing('raceShoes')?'#ff5e69':'#f5f8ff';
+ spriteBlock(x-4,y-5,10,5,shade,'#152834');
+ spriteRect(x-1,y-4,6,2,detail);spriteRect(x-4,y,11,2,'#1b2c35');
+ spriteRect(x+3,y-2,2,1,'#fffaf3');
  if(profile.levels.shoes>0){for(let j=0;j<3;j++)spriteRect(x-2+j*3,y+2,2,1,'#f0c36e')}
 }
 const SPRITE_STRIDES=[
@@ -731,43 +739,41 @@ function spriteArm(front,phase,pal,duck=false){
  ctx.restore()
 }
 function spriteTorso(pal){
- // Mini gilet d'hydratation, maillot et short aux silhouettes nettement pixellisées.
- const bagW=Math.max(3,Math.round(7*custom.pack)),bagH=Math.max(9,Math.round(18*custom.pack));
- spriteBlock(-4-bagW,-22-bagH,bagW,bagH,pal.vest,'#182e36');
- spriteRect(-6-bagW,-22-Math.round(bagH*.62),3,Math.max(4,Math.round(8*custom.pack)),pal.flask);
+ const bagW=Math.max(3,Math.round(6*custom.pack)),bagH=Math.max(8,Math.round(16*custom.pack));
+ spriteBlock(-3-bagW,-23-bagH,bagW,bagH,pal.vest,'#182e36');
+ spriteRect(-5-bagW,-23-Math.round(bagH*.6),3,Math.max(4,Math.round(7*custom.pack)),pal.flask);
  spriteBlock(-8,-40,20,20,pal.top,'#142330',1);
- spriteRect(-8,-40,5,3,pal.stripe);spriteRect(6,-39,5,3,pal.stripe);
+ spriteRect(-8,-40,5,3,'#edf1f8');spriteRect(6,-39,5,3,'#edf1f8');
  spriteRect(-8,-27,18,2,pal.shadow);
- spriteRect(8,-36,2,12,pal.vest);
- spriteRect(8,-33,3,7,pal.flask);
+ spriteRect(-7,-38,5,16,pal.vest);spriteRect(7,-37,4,15,pal.vest);
+ spriteRect(-2,-35,4,2,pal.stripe);spriteRect(7,-33,3,7,pal.flask);
  if(wearing('softFlask'))spriteRect(-12,-28,3,8,'#5de3da');
  if(wearing('clemShirt')){
   spriteRect(-4,-36,10,2,'#fff6ec');spriteRect(-3,-33,8,2,'#fff6ec');
-  // Motif miniature original, volontairement distinct du dessin commercial.
   spriteRect(-3,-34,2,1,'#9e66d3');spriteRect(2,-31,2,1,'#9e66d3');
  }else if(wearing('backyardFinisher')){
   spriteRect(-3,-36,7,8,'#f4fba6');spriteRect(-1,-34,3,3,'#249c88');
  }else{
-  spriteRect(-4,-35,8,2,pal.stripe);spriteRect(-4,-31,6,1,pal.shadow);
+  spriteRect(-4,-36,7,2,'#173d8f');spriteRect(-3,-32,6,1,'#d1d6de');
  }
  spriteBlock(-8,-21,19,8,pal.short,'#14232f');
- spriteRect(-6,-17,15,1,pal.stripe)
+ spriteRect(-6,-17,15,1,'#dbe0e8')
 }
 function spriteHead(pal,x=0,y=0){
  ctx.save();ctx.translate(x,y);
  ctx.translate(2,-40);ctx.scale(custom.head,custom.head);ctx.translate(-2,40);
- // Chevelure blonde stylisée, visage très lisible et bandeau de course.
- spriteRect(-6,-57,19,16,'#192632');
+ // Style sprite homme : casquette bleu foncé, cheveux bruns et barbe légère.
+ spriteRect(-6,-57,19,16,'#16212f');
  spriteRect(-5,-58,18,4,custom.hair);spriteRect(-7,-54,5,12,custom.hair);
  spriteRect(-5,-60,11,3,custom.hair);spriteRect(5,-59,8,4,custom.hair);
  spriteRect(-2,-52,15,13,custom.skin);spriteRect(10,-49,5,8,custom.skin);
  spriteRect(13,-47,4,3,custom.skin);spriteRect(-2,-42,5,3,'#d39c7b');
- spriteRect(-5,-55,16,3,pal.cap);spriteRect(10,-54,7,2,pal.stripe);
- // Visor discret, plus grand avec les lunettes achetées.
+ spriteRect(-5,-55,16,4,pal.cap);spriteRect(10,-53,8,3,'#102e6d');spriteRect(2,-54,5,2,'#f4f7ff');
  if(wearing('trailGlasses')){
   spriteBlock(5,-49,11,5,'#273c55','#222234',1);spriteRect(6,-48,7,1,'#a4c6e6');
  }else {spriteRect(10,-49,3,2,'#293344');spriteRect(11,-48,1,1,'#f9efe8')}
  spriteRect(10,-42,4,1,'#aa665e');
+ spriteRect(7,-44,5,2,'#5e3824');spriteRect(9,-42,5,2,'#5e3824');spriteRect(12,-41,2,1,'#5e3824');
  if(wearing('ultraCap')){
   spriteBlock(-5,-59,18,5,'#eee0b6','#24333e',1);
   spriteRect(12,-55,10,3,pal.stripe)
@@ -792,12 +798,91 @@ function spriteCrouch(pal,frame){
  if(wearing('mathieuWatch'))spriteRect(19,-14,4,3,'#9df7cf');
  ctx.save();ctx.translate(-15,21);spriteHead(pal);ctx.restore()
 }
+
+// V5.4 : véritable planche de 18 images recadrées de l'illustration validée :
+// 6 images course, 6 saut et 6 accroupissement. Les poses ne sont pas interpolées.
+const RUNNER_FRAMES={width:218,height:306,count:6};
+const runnerAtlas=new Image();runnerAtlas.decoding='async';
+runnerAtlas.src='./sprites/coureur-animations.png?v=54';
+let runnerTintAtlas=null,runnerTintKey='';
+function alteredBodyProportions(){
+ return (custom.pixels?.length||0)>0||Math.abs(custom.head-.96)>.03||Math.abs(custom.stride-1.02)>.03||Math.abs(custom.arms-.92)>.03||Math.abs(custom.pack-.9)>.03||custom.hair!=='#6b4026'||custom.skin!=='#f1bd95';
+}
+function pixelColor(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)]}
+function runnerPaletteAtlas(pal){
+ if(!runnerAtlas.complete||!runnerAtlas.naturalWidth)return null;
+ const shirt=pal.top,hat=pal.cap,shoes=pal.sole,bag=pal.vest,shorts=pal.short;
+ const target=[shirt,hat,shoes,bag,shorts];
+ const key=target.join('|');if(key===runnerTintKey&&runnerTintAtlas)return runnerTintAtlas;
+ const orig=['#f4f5f6','#183e8d','#ff7c16','#163978','#2a2f36'];
+ if(target.every((v,i)=>v.toLowerCase()===orig[i])){runnerTintAtlas=runnerAtlas;runnerTintKey=key;return runnerAtlas}
+ const sheet=document.createElement('canvas');sheet.width=runnerAtlas.naturalWidth;sheet.height=runnerAtlas.naturalHeight;
+ const g=sheet.getContext('2d',{willReadFrequently:true});g.drawImage(runnerAtlas,0,0);
+ const image=g.getImageData(0,0,sheet.width,sheet.height),data=image.data;
+ const colors=target.map(pixelColor);
+ for(let yy=0;yy<sheet.height;yy++){
+  const localY=yy%RUNNER_FRAMES.height;
+  for(let xx=0;xx<sheet.width;xx++){
+   const k=(yy*sheet.width+xx)*4;if(data[k+3]<40)continue;
+   const r=data[k],gg=data[k+1],b=data[k+2];let slot=-1;
+   // Palette modifiée par zones : évite de teinter chaussettes et peau.
+   if(localY>110&&localY<231&&r>163&&gg>163&&b>163&&Math.max(r,gg,b)-Math.min(r,gg,b)<50)slot=0;
+   else if(localY>28&&localY<137&&r<115&&gg<125&&b>gg*1.17&&b>r*1.4)slot=1;
+   else if(localY>177&&r>130&&r>gg*1.24&&b<105)slot=2;
+   else if(localY>110&&localY<224&&r<80&&gg<110&&b>gg*1.16&&b>r*1.3)slot=3;
+   else if(localY>173&&localY<246&&r<71&&gg<80&&b<90&&Math.max(r,gg,b)>22)slot=4;
+   if(slot<0||target[slot].toLowerCase()===orig[slot])continue;
+   const light=Math.max(.47,Math.min(1.24,(r+gg+b)/430));
+   const col=colors[slot];data[k]=Math.min(255,Math.round(col[0]*light));data[k+1]=Math.min(255,Math.round(col[1]*light));data[k+2]=Math.min(255,Math.round(col[2]*light));
+  }
+ }
+ g.putImageData(image,0,0);runnerTintAtlas=sheet;runnerTintKey=key;return sheet;
+}
+function runnerFrameState(r){
+ const clock=r?.elapsed??sceneTime;
+ if(r?.duck>0){
+  const t=Math.max(0,Math.min(.999,(.9-r.duck)/.9));
+  return{row:2,index:[0,1,2,3,3,4,5,5][Math.floor(t*8)]};
+ }
+ if(r&&!r.grounded){
+  const t=Math.max(0,Math.min(.999,(clock-r.jumpStarted)/.93));
+  return{row:1,index:Math.min(5,Math.floor(t*6))};
+ }
+ if(r&&clock-r.jumpStarted<.10)return{row:1,index:5};
+ return{row:0,index:Math.floor(clock*(keys.boost?16:10.8))%6};
+}
+function runnerAccessories(x,ground,row,index,scale){
+ ctx.save();
+ if(wearing('trailGlasses')){ctx.fillStyle='#182d44';ctx.fillRect(x+3*scale,ground-77*scale,12*scale,4*scale);ctx.fillStyle='#9ec9e7';ctx.fillRect(x+5*scale,ground-77*scale,7*scale,2*scale)}
+ // Même poignet gauche sur toutes les images : placé côté arrière du coureur.
+ if(wearing('mathieuWatch')){ctx.fillStyle='#172a42';ctx.fillRect(x-22*scale,ground-(row===2?40:56)*scale,10*scale,7*scale);ctx.fillStyle='#9ce1f3';ctx.fillRect(x-19*scale,ground-(row===2?39:55)*scale,5*scale,3*scale)}
+ if(wearing('carbonPoles')){ctx.strokeStyle='#d9e5f2';ctx.lineWidth=Math.max(1,1.7*scale);const wx=x-17*scale,wy=ground-51*scale;ctx.beginPath();ctx.moveTo(wx,wy);ctx.lineTo(wx+12*scale,ground+3);ctx.stroke()}
+ if(wearing('softFlask')){ctx.fillStyle='#aee4f2';ctx.fillRect(x-2*scale,ground-60*scale,5*scale,15*scale)}
+ ctx.restore();
+}
+function renderAtlasRunner(r,pal){
+ if(alteredBodyProportions())return false;
+ const sheet=runnerPaletteAtlas(pal);if(!sheet)return false;
+ const f=runnerFrameState(r),scale=.395*custom.size;
+ const xx=(r?.x||0)-camX,ground=groundY(r?.x||0),jump=r?.jumpY||0;
+ // Sprite aligné sur le niveau de la chaussure, avec ombre indépendante.
+ const ww=RUNNER_FRAMES.width*scale,hh=RUNNER_FRAMES.height*scale;
+ const dx=Math.round(xx-ww*.5),dy=Math.round(ground-jump-hh+6*scale);
+ ctx.save();ctx.globalAlpha=r?.inv>0&&Math.sin(sceneTime*24)>0?.45:1;
+ ctx.fillStyle='rgba(12,22,28,.18)';ctx.beginPath();ctx.ellipse(xx,ground+2,r?.duck>0?25:18,3.2,0,0,Math.PI*2);ctx.fill();
+ ctx.imageSmoothingEnabled=false;
+ ctx.drawImage(sheet,f.index*RUNNER_FRAMES.width,f.row*RUNNER_FRAMES.height,RUNNER_FRAMES.width,RUNNER_FRAMES.height,dx,dy,ww,hh);
+ runnerAccessories(xx,ground-jump,f.row,f.index,scale);
+ if(keys.boost&&!r?.duck&&r?.grounded){ctx.strokeStyle='#fff9';ctx.lineWidth=1.7;ctx.beginPath();ctx.moveTo(xx-31*scale,ground-18);ctx.lineTo(xx-68*scale,ground-18);ctx.stroke()}
+ ctx.restore();return true;
+}
 function drawRunner(){
  const r=run,base=SKINS.find(s=>s.id===profile.skin)||SKINS[0];
  const pal={...base,top:wearing('clemShirt')?'#7650c5':wearing('backyardFinisher')?'#1aaf9e':(custom.top||base.top),
  short:custom.short||base.short,sole:custom.shoe||base.sole,
  shadow:wearing('clemShirt')?'#46258a':wearing('backyardFinisher')?'#126e65':base.shadow,
  cap:wearing('ultraCap')?'#efe3be':(custom.cap||base.cap)};
+ if(renderAtlasRunner(r,pal))return;
  const px=(r?.x||0)-camX,ground=groundY(r?.x||0),air=!!r&&!r.grounded,duck=!!r&&r.duck>0;
  const clock=r?.elapsed||sceneTime,frame=Math.floor(clock*(keys.boost?17:12))%SPRITE_STRIDES.length;
  const pose=SPRITE_STRIDES[frame],bob=(r?.grounded&&!duck)?((frame===1||frame===4)?-1:0):0;
@@ -828,7 +913,7 @@ canvas.addEventListener('pointerdown',e=>{if(screen!=='run'||run?.paused)return;
 canvas.addEventListener('pointerup',e=>{if(!swipe.active||e.pointerId!==swipe.id)return;const dy=e.clientY-swipe.y,dx=e.clientX-swipe.x;swipe.active=false;if(Math.abs(dy)>28&&Math.abs(dy)>Math.abs(dx)*.75){if(dy<0)jump();else duck()}else if(Math.abs(dy)<20&&Math.abs(dx)<30)jump()});
 canvas.addEventListener('pointercancel',()=>swipe.active=false);
 $('#jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});$('#duck').addEventListener('pointerdown',e=>{e.preventDefault();duck()});
-// V5.2 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
+// V5.4 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
 const controlZone=$('#controls'),boostButton=$('#boost');
 for(const name of ['contextmenu','selectstart','dragstart'])controlZone.addEventListener(name,e=>e.preventDefault());
 const preventTouchDefault=e=>{if(e.cancelable)e.preventDefault()};

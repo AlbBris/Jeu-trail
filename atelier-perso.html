@@ -9,24 +9,26 @@
 </style>
 </head>
 <body><main>
-<header><div><div class="eyebrow">TRAIL CHAOS · V5.2</div><h1>Atelier du <span style="color:var(--lime)">coureur</span></h1></div><span class="pill">ÉDITEUR PERSO</span></header>
+<header><div><div class="eyebrow">TRAIL CHAOS · V5.4</div><h1>Atelier du <span style="color:var(--lime)">coureur</span></h1></div><span class="pill">ÉDITEUR PERSO</span></header>
 <p>Personnalise réellement le sprite utilisé dans le jeu, directement depuis ton iPhone. Tous les réglages se mettent à jour dans l'aperçu et se conservent sur cet appareil.</p>
 <div class="grid">
-<section class="card"><h2>🏃 Aperçu animé</h2><div class="preview"><canvas id="spritePreview" width="360" height="320" aria-label="Aperçu animé du coureur"></canvas></div><div class="controls" role="group" aria-label="Posture du coureur"><button class="mode active" data-pose="run">🏃 Courir</button><button class="mode" data-pose="jump">⬆️ Sauter</button><button class="mode" data-pose="duck">⬇️ Se baisser</button></div><p class="hint">Les vêtements et accessoires achetés dans la boutique apparaissent ici aussi.</p><div class="divider"></div><h2>📐 Proportions et animation</h2><div id="sliders"></div></section>
+<section class="card"><h2>🏃 Aperçu animé</h2><div class="preview"><canvas id="spritePreview" width="360" height="320" aria-label="Aperçu animé du coureur"></canvas></div><div class="controls" role="group" aria-label="Posture du coureur"><button class="mode active" data-pose="run">🏃 Courir</button><button class="mode" data-pose="jump">⬆️ Sauter</button><button class="mode" data-pose="duck">⬇️ Se baisser</button></div><p class="hint">18 images animées du nouveau coureur. En personnalisant ses proportions ou son équipement, l’aperçu passe au mode dessin modifiable pour conserver tes réglages.</p><div class="divider"></div><h2>📐 Proportions et animation</h2><div id="sliders"></div></section>
 <section class="card"><h2>🎨 Couleurs du personnage</h2><p>Le tee-shirt collector et la casquette spéciale restent prioritaires lorsqu'ils sont équipés.</p><div class="colors" id="colors"></div><button class="action alt wide" id="colorsReset">Couleurs de ma tenue actuelle</button><div class="divider"></div><h2>🖌️ Retouche pixel par pixel</h2><p>Dessine de petits détails sur le corps en position debout : motif de maillot, liserés, patches… Les retouches suivent le coureur pendant la course et les sauts.</p><div class="tools"><input type="color" id="brush" value="#f7e47a" aria-label="Couleur du pinceau"><button class="mode active" id="paint">✏️ Pinceau</button><button class="mode" id="erase">⌫ Gomme</button><button class="action alt" id="undo">↶ Annuler</button><span class="stat" id="pixelCount">0 pixel</span></div><canvas id="paintCanvas" width="330" height="444" aria-label="Grille modifiable du personnage"></canvas><p class="hint">Glisse ton doigt sur la grille pour dessiner. Maximum 300 pixels personnalisés pour garder le jeu fluide.</p><button class="action alt wide" id="clearPixels">Effacer tous les pixels ajoutés</button></section>
 </div>
-<div class="card" style="margin-top:15px"><div class="savelabel" id="saved">✓ Modifications enregistrées automatiquement</div><div class="footer"><button class="action alt" id="reset">Tout réinitialiser</button><button class="action alt" id="export">Exporter ma création (.json)</button><a class="action" href="./index.html?v=52">▶ Jouer avec mon personnage</a></div><p class="hint">Les changements sont personnels à ce navigateur. Pour définir ce personnage pour tous les joueurs sur GitHub, exporte le fichier JSON et partage-le dans cette conversation.</p></div>
+<div class="card" style="margin-top:15px"><div class="savelabel" id="saved">✓ Modifications enregistrées automatiquement</div><div class="footer"><button class="action alt" id="reset">Tout réinitialiser</button><button class="action alt" id="export">Exporter ma création (.json)</button><a class="action" href="./index.html?v=54">▶ Jouer avec mon personnage</a></div><p class="hint">Les changements sont personnels à ce navigateur. Pour définir ce personnage pour tous les joueurs sur GitHub, exporte le fichier JSON et partage-le dans cette conversation.</p></div>
 </main>
 <script>
 (()=>{'use strict';
 const KEY='trail-chaos-character-v1',minX=-24,minY=-67,cell=6,GRID_W=55,GRID_H=74;
-const DEFAULT={size:1,head:1,stride:1,arms:1,pack:1,top:'',short:'',cap:'',shoe:'',hair:'#fad25d',skin:'#f1bd95',pixels:[]};
-const skins=[{id:'corail',top:'#fa674b',shadow:'#b63e36',short:'#1c3340',cap:'#c8ed77',sole:'#eefff7',stripe:'#9bead8',vest:'#255764',flask:'#83e8ed'},{id:'alpage',top:'#b9e46f',shadow:'#538e57',short:'#244c57',cap:'#e9f8d0',sole:'#f7fbf8',stripe:'#52d6bf',vest:'#255c52',flask:'#e1f9b2'},{id:'nocturne',top:'#8c86ef',shadow:'#574aa8',short:'#233246',cap:'#ecb768',sole:'#dfe8ff',stripe:'#d1caff',vest:'#354c67',flask:'#a1daf1'}];
+const DEFAULT={size:1,head:.96,stride:1.02,arms:.92,pack:.9,top:'',short:'',cap:'',shoe:'',hair:'#6b4026',skin:'#f1bd95',pixels:[]};
+const skins=[{id:'sprite',top:'#f4f5f6',shadow:'#cad0d7',short:'#2a2f36',cap:'#183e8d',sole:'#ff7c16',stripe:'#ffffff',vest:'#163978',flask:'#b8d7ff'},{id:'corail',top:'#fa674b',shadow:'#b63e36',short:'#1c3340',cap:'#c8ed77',sole:'#eefff7',stripe:'#9bead8',vest:'#255764',flask:'#83e8ed'},{id:'alpage',top:'#b9e46f',shadow:'#538e57',short:'#244c57',cap:'#e9f8d0',sole:'#f7fbf8',stripe:'#52d6bf',vest:'#255c52',flask:'#e1f9b2'},{id:'nocturne',top:'#8c86ef',shadow:'#574aa8',short:'#233246',cap:'#ecb768',sole:'#dfe8ff',stripe:'#d1caff',vest:'#354c67',flask:'#a1daf1'}];
 let custom={...DEFAULT};try{const data=JSON.parse(localStorage.getItem(KEY)||'null');if(data&&typeof data==='object')custom={...DEFAULT,...data,pixels:Array.isArray(data.pixels)?data.pixels:[]}}catch(_){}
-let profile={skin:'corail',equipped:{},owned:{},levels:{shoes:0,lamp:0}};try{profile={...profile,...(JSON.parse(localStorage.getItem('trail-chaos-runner-v2')||'null')||{})}}catch(_){}
+let profile={skin:'sprite',equipped:{},owned:{},levels:{shoes:0,lamp:0}};try{profile={...profile,...(JSON.parse(localStorage.getItem('trail-chaos-runner-v2')||'null')||{})}}catch(_){}
+if(!skins.some(s=>s.id===profile.skin)||['corail','alpage','nocturne'].includes(profile.skin))profile.skin='sprite';
 const wearing=id=>Object.values(profile.equipped||{}).includes(id)&&!!(profile.owned||{})[id];
 let run={course:{mode:'forest'}},sceneTime=0;
 const canvas=document.querySelector('#spritePreview');let ctx=canvas.getContext('2d');
+const atlas=new Image();atlas.src='./sprites/coureur-animations.png?v=54';const SHEET_W=218,SHEET_H=306;
 const brush=document.querySelector('#brush');let pose='run',tool='paint',drawing=false,lastPixels=[];
 function save(){try{localStorage.setItem(KEY,JSON.stringify(custom));document.querySelector('#saved').textContent='✓ Enregistré · ton personnage est prêt à jouer'}catch(e){document.querySelector('#saved').textContent='⚠️ Stockage indisponible sur cet appareil'}}
 function palette(){const b=skins.find(s=>s.id===profile.skin)||skins[0];return {...b,top:wearing('clemShirt')?'#7650c5':wearing('backyardFinisher')?'#1aaf9e':(custom.top||b.top),short:custom.short||b.short,sole:custom.shoe||b.sole,shadow:wearing('clemShirt')?'#46258a':wearing('backyardFinisher')?'#126e65':b.shadow,cap:wearing('ultraCap')?'#efe3be':(custom.cap||b.cap)}}
@@ -49,11 +51,11 @@ function spriteSegment(a,b,color,thickness=3,outline='#182432'){
  }
 }
 function spriteShoe(x,y,pal,back=false){
- const shade=wearing('raceShoes')?'#ffc46c':back?'#a2b2b9':(custom.shoe||pal.sole);
- const detail=wearing('raceShoes')?'#ff5e69':pal.stripe;
- spriteBlock(x-3,y-4,9,4,shade,'#152834');
- spriteRect(x,y-3,5,2,detail);spriteRect(x-3,y,10,2,'#263d45');
- spriteRect(x+3,y-2,2,1,'#e9f5e9');
+ const shade=wearing('raceShoes')?'#ffc46c':back?'#c6ced5':(custom.shoe||pal.sole);
+ const detail=wearing('raceShoes')?'#ff5e69':'#f5f8ff';
+ spriteBlock(x-4,y-5,10,5,shade,'#152834');
+ spriteRect(x-1,y-4,6,2,detail);spriteRect(x-4,y,11,2,'#1b2c35');
+ spriteRect(x+3,y-2,2,1,'#fffaf3');
  if(profile.levels.shoes>0){for(let j=0;j<3;j++)spriteRect(x-2+j*3,y+2,2,1,'#f0c36e')}
 }
 const SPRITE_STRIDES=[
@@ -86,43 +88,41 @@ function spriteArm(front,phase,pal,duck=false){
  ctx.restore()
 }
 function spriteTorso(pal){
- // Mini gilet d'hydratation, maillot et short aux silhouettes nettement pixellisées.
- const bagW=Math.max(3,Math.round(7*custom.pack)),bagH=Math.max(9,Math.round(18*custom.pack));
- spriteBlock(-4-bagW,-22-bagH,bagW,bagH,pal.vest,'#182e36');
- spriteRect(-6-bagW,-22-Math.round(bagH*.62),3,Math.max(4,Math.round(8*custom.pack)),pal.flask);
+ const bagW=Math.max(3,Math.round(6*custom.pack)),bagH=Math.max(8,Math.round(16*custom.pack));
+ spriteBlock(-3-bagW,-23-bagH,bagW,bagH,pal.vest,'#182e36');
+ spriteRect(-5-bagW,-23-Math.round(bagH*.6),3,Math.max(4,Math.round(7*custom.pack)),pal.flask);
  spriteBlock(-8,-40,20,20,pal.top,'#142330',1);
- spriteRect(-8,-40,5,3,pal.stripe);spriteRect(6,-39,5,3,pal.stripe);
+ spriteRect(-8,-40,5,3,'#edf1f8');spriteRect(6,-39,5,3,'#edf1f8');
  spriteRect(-8,-27,18,2,pal.shadow);
- spriteRect(8,-36,2,12,pal.vest);
- spriteRect(8,-33,3,7,pal.flask);
+ spriteRect(-7,-38,5,16,pal.vest);spriteRect(7,-37,4,15,pal.vest);
+ spriteRect(-2,-35,4,2,pal.stripe);spriteRect(7,-33,3,7,pal.flask);
  if(wearing('softFlask'))spriteRect(-12,-28,3,8,'#5de3da');
  if(wearing('clemShirt')){
   spriteRect(-4,-36,10,2,'#fff6ec');spriteRect(-3,-33,8,2,'#fff6ec');
-  // Motif miniature original, volontairement distinct du dessin commercial.
   spriteRect(-3,-34,2,1,'#9e66d3');spriteRect(2,-31,2,1,'#9e66d3');
  }else if(wearing('backyardFinisher')){
   spriteRect(-3,-36,7,8,'#f4fba6');spriteRect(-1,-34,3,3,'#249c88');
  }else{
-  spriteRect(-4,-35,8,2,pal.stripe);spriteRect(-4,-31,6,1,pal.shadow);
+  spriteRect(-4,-36,7,2,'#173d8f');spriteRect(-3,-32,6,1,'#d1d6de');
  }
  spriteBlock(-8,-21,19,8,pal.short,'#14232f');
- spriteRect(-6,-17,15,1,pal.stripe)
+ spriteRect(-6,-17,15,1,'#dbe0e8')
 }
 function spriteHead(pal,x=0,y=0){
  ctx.save();ctx.translate(x,y);
  ctx.translate(2,-40);ctx.scale(custom.head,custom.head);ctx.translate(-2,40);
- // Chevelure blonde stylisée, visage très lisible et bandeau de course.
- spriteRect(-6,-57,19,16,'#192632');
+ // Style sprite homme : casquette bleu foncé, cheveux bruns et barbe légère.
+ spriteRect(-6,-57,19,16,'#16212f');
  spriteRect(-5,-58,18,4,custom.hair);spriteRect(-7,-54,5,12,custom.hair);
  spriteRect(-5,-60,11,3,custom.hair);spriteRect(5,-59,8,4,custom.hair);
  spriteRect(-2,-52,15,13,custom.skin);spriteRect(10,-49,5,8,custom.skin);
  spriteRect(13,-47,4,3,custom.skin);spriteRect(-2,-42,5,3,'#d39c7b');
- spriteRect(-5,-55,16,3,pal.cap);spriteRect(10,-54,7,2,pal.stripe);
- // Visor discret, plus grand avec les lunettes achetées.
+ spriteRect(-5,-55,16,4,pal.cap);spriteRect(10,-53,8,3,'#102e6d');spriteRect(2,-54,5,2,'#f4f7ff');
  if(wearing('trailGlasses')){
   spriteBlock(5,-49,11,5,'#273c55','#222234',1);spriteRect(6,-48,7,1,'#a4c6e6');
  }else {spriteRect(10,-49,3,2,'#293344');spriteRect(11,-48,1,1,'#f9efe8')}
  spriteRect(10,-42,4,1,'#aa665e');
+ spriteRect(7,-44,5,2,'#5e3824');spriteRect(9,-42,5,2,'#5e3824');spriteRect(12,-41,2,1,'#5e3824');
  if(wearing('ultraCap')){
   spriteBlock(-5,-59,18,5,'#eee0b6','#24333e',1);
   spriteRect(12,-55,10,3,pal.stripe)
@@ -156,7 +156,10 @@ function drawPreview(t){sceneTime=t/1000;const w=canvas.width,h=canvas.height;ct
  const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#3c7774');g.addColorStop(.77,'#8fb4a6');g.addColorStop(.77,'#8a7653');g.addColorStop(1,'#736042');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
  ctx.fillStyle='#587869';ctx.beginPath();ctx.moveTo(0,h*.76);ctx.lineTo(w*.35,h*.40);ctx.lineTo(w*.72,h*.61);ctx.lineTo(w,h*.50);ctx.lineTo(w,h*.77);ctx.fill();
  ctx.strokeStyle='#bad8bc';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,h*.77);ctx.lineTo(w,h*.77);ctx.stroke();
- const frame=pose==='run'?Math.floor(t/1000*12)%6:1;ctx.save();ctx.translate(w*.50,h*.77-(pose==='jump'?36:0)+(pose==='run'?Math.sin(t/110)*1.5:0));const zoom=3.0*custom.size;ctx.scale(zoom,zoom);ctx.imageSmoothingEnabled=false;drawSprite(pose,frame);ctx.restore();
+ const elapsed=t/1000,frame=pose==='run'?Math.floor(elapsed*11)%6:Math.floor(elapsed*(pose==='jump'?7:6))%6;
+ const modified=custom.pixels?.length||Math.abs(custom.head-.96)>.03||Math.abs(custom.stride-1.02)>.03||Math.abs(custom.arms-.92)>.03||Math.abs(custom.pack-.9)>.03||custom.hair!=='#6b4026'||custom.skin!=='#f1bd95'||!!custom.top||!!custom.cap||!!custom.shoe||!!custom.short||profile.skin!=='sprite'||Object.keys(profile.equipped||{}).length>0;
+ if(atlas.complete&&atlas.naturalWidth&&!modified){const row=pose==='run'?0:pose==='jump'?1:2;const scale=1.12*custom.size,ww=SHEET_W*scale,hh=SHEET_H*scale;ctx.imageSmoothingEnabled=false;ctx.drawImage(atlas,frame*SHEET_W,row*SHEET_H,SHEET_W,SHEET_H,Math.round(w*.50-ww*.5),Math.round(h*.77-hh+scale*6-(pose==='jump'?27:0)),ww,hh)}
+ else{ctx.save();ctx.translate(w*.50,h*.77-(pose==='jump'?36:0)+(pose==='run'?Math.sin(t/110)*1.5:0));const zoom=3.0*custom.size;ctx.scale(zoom,zoom);ctx.imageSmoothingEnabled=false;drawSprite(pose,frame);ctx.restore()}
  requestAnimationFrame(drawPreview)}
 const sliders=[['size','Taille du personnage',.65,1.5,.05],['head','Proportions de la tête',.75,1.4,.05],['stride','Amplitude de foulée',.65,1.55,.05],['arms','Balancement des bras',.5,1.5,.05],['pack','Taille du gilet',.55,1.55,.05]];
 function setupSliders(){const div=document.querySelector('#sliders');sliders.forEach(([key,label,min,max,step])=>{const row=document.createElement('label');row.innerHTML=`<span class="line"><span>${label}</span><output id="val-${key}"></output></span><input data-setting="${key}" type="range" min="${min}" max="${max}" step="${step}">`;div.append(row);const input=row.querySelector('input'),out=row.querySelector('output');input.value=custom[key];out.textContent=Math.round(custom[key]*100)+' %';input.addEventListener('input',()=>{custom[key]=Number(input.value);out.textContent=Math.round(custom[key]*100)+' %';save();drawPainting()})})}
