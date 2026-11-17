@@ -47,7 +47,7 @@ const COURSES=[
  {id:'forest',name:'Forêt des Racines',emoji:'🌲',km:8,length:11200,mode:'forest',difficulty:1,desc:'Sous-bois, passages boueux et petit ruisseau'},
  {id:'crest',name:'Crêtes du Vent',emoji:'⛰️',km:21,length:16000,mode:'mountain',difficulty:2,desc:'Alpages, sentier pierreux et dénivelé'},
  {id:'night',name:'Ultra Nocturne',emoji:'🌙',km:45,length:21200,mode:'night',difficulty:3,desc:'Nuit, frontale, racines et brouillard'},
- {id:'millau',name:'Viaduc de Millau',emoji:'🌉',km:23.7,length:17800,mode:'millau',difficulty:3,desc:'Cinq zones : vallée, montée, viaduc, causse et arrivée'},
+ {id:'millau',name:'Viaduc de Millau',emoji:'🌉',km:23.7,length:17800,mode:'millau',difficulty:3,desc:'Storyboard continu : vallée, pont, causse et arrivée'},
  {id:'saintelyon',name:'SaintéLyon',emoji:'🌌',km:80,length:24600,mode:'saintelyon',difficulty:4,desc:'Course nocturne, crêtes des Monts du Lyonnais et arrivée sur Lyon'},
  {id:'utmb',name:'UTMB',emoji:'🏔️',km:174,length:30200,mode:'utmb',difficulty:5,desc:'Tour du Mont-Blanc entre vallées, cols alpins et haute montagne'},
  {id:'diagonale',name:'Diagonale des Fous',emoji:'🌋',km:180,length:31800,mode:'diagonale',difficulty:6,desc:'Forêts tropicales, remparts volcaniques et ravines réunionnaises'},
@@ -602,91 +602,80 @@ function paintMillauArt(zoneIndex,depth){
 }
 function millauArt(zone,depth){const key=zone+':'+depth;if(!millauArtCache.has(key))millauArtCache.set(key,paintMillauArt(zone,depth));return millauArtCache.get(key)}
 
-// V5.9 — véritables panoramas 2D découpés des cinq visuels validés.
-// Ni l'interface ni le personnage présents sur les rendus ne sont incorporés aux décors.
-// Deux panoramas maximum sont rendus par frame; toutes les images sont décodées une fois.
+// V5.9 — 5 bandes extrait du storyboard approuvé, réparties sur le kilométrage.
+// Chaque pixel du paysage est attaché à une position du parcours, donc il ne glisse
+// pas d'un côté à l'autre de l'écran en fonction du coureur ni ne se mélange avec
+// le panorama suivant par transparence.
 const MILLAU_STAGE_LIMITS=[0,5,10,15.7,20,23.7];
 const millauScenes=Array.from({length:5},(_,i)=>{
- const pano=new Image(),lower=new Image();
- pano.decoding=lower.decoding='async';
- pano.src='./assets/millau/panorama-'+(i+1)+'.webp?v=58';
- lower.src='./assets/millau/vallee-'+(i+1)+'.webp?v=58';
- return{pano,lower}
+ const image=new Image(); image.decoding='async';
+ image.src='./assets/millau/storyboard-'+(i+1)+'.webp?v=59';
+ return image;
 });
-function millauSceneReady(){return millauScenes.every(s=>s.pano.complete&&s.pano.naturalWidth>0&&s.lower.complete&&s.lower.naturalWidth>0)}
-function millauStagePan(stage,km,img,visibleWidth){
- const a=MILLAU_STAGE_LIMITS[stage],b=MILLAU_STAGE_LIMITS[stage+1];
- const t=smooth(clamp((km-a)/(b-a),0,1));
- const room=Math.max(0,img.naturalWidth-visibleWidth);
- const edges=[[.22,.94],[.10,.82],[.015,.95],[.15,.92],[.16,.86]];
- return Math.max(0,Math.min(room,room*(edges[stage][0]+(edges[stage][1]-edges[stage][0])*t)));
-}
-function millauImageStage(image,stage,km,alpha,y,renderHeight,landscape=false){
- if(!image.complete||!image.naturalWidth||alpha<.002)return;
- const scale=renderHeight/image.naturalHeight;
- const sourceWidth=Math.min(image.naturalWidth,Math.max(1,W/scale*1.18));
- const sx=millauStagePan(stage,km,image,sourceWidth);
- ctx.globalAlpha=alpha;
- ctx.imageSmoothingEnabled=true;
- ctx.imageSmoothingQuality='high';
- ctx.drawImage(image,sx,0,sourceWidth,image.naturalHeight,0,y,W,renderHeight);
-}
-function millauBlendLayers(km,kind,y,height){
- const b=millauBlend(km);
- const stageA=millauScenes[b.a],stageB=millauScenes[b.b];
- const imgA=kind==='pano'?stageA.pano:stageA.lower;
- const imgB=kind==='pano'?stageB.pano:stageB.lower;
- ctx.save();
- millauImageStage(imgA,b.a,km,1, y,height);
- if(b.a!==b.b&&b.mix>.003){
-  // L'opacité du second paysage remplace doucement le premier : pas de flash.
-  millauImageStage(imgB,b.b,km,b.mix,y,height);
- }
- ctx.restore();
-}
-// V5.9 — déroulement spatial du parcours. Les images existantes sont provisoires.
-// Aucune transition par fondu : les fonds sont attachés aux kilomètres du monde.
-function millauBoundaryX(km,c){return km/c.km*c.length}
+function millauSceneReady(){return millauScenes.every(im=>im.complete&&im.naturalWidth>0)}
+function millauBoundaryX(km,c){return (km/c.km)*c.length}
+// No alpha fades. At a stage boundary, the new scenery enters from the right
+// as the camera advances. The foreground path masks any residual mismatch.
 function drawMillauPhotoLandscape(c){
  if(!millauSceneReady())return false;
- ctx.save();ctx.fillStyle='#278fda';ctx.fillRect(0,0,W,H);
+ ctx.save(); ctx.fillStyle='#278fda';ctx.fillRect(0,0,W,H);
  ctx.imageSmoothingEnabled=false;
  const high=H*.768;
  for(let i=0;i<5;i++){
-  const x0=millauBoundaryX(MILLAU_STAGE_LIMITS[i],c)-camX;
-  const x1=millauBoundaryX(MILLAU_STAGE_LIMITS[i+1],c)-camX;
-  if(x1<0||x0>W)continue;
-  const a=Math.max(0,x0),b=Math.min(W,x1);
-  if(b<=a)continue;
-  const art=millauScenes[i].pano;
-  ctx.save();ctx.beginPath();ctx.rect(a,0,b-a,high);ctx.clip();
-  const cropHeight=Math.round(art.naturalHeight*.91);
-  ctx.drawImage(art,0,0,art.naturalWidth,cropHeight,x0,0,(x1-x0),high);
+  const wx0=millauBoundaryX(MILLAU_STAGE_LIMITS[i],c),wx1=millauBoundaryX(MILLAU_STAGE_LIMITS[i+1],c);
+  const x0=wx0-camX,x1=wx1-camX;
+  if(x1<-2||x0>W+2)continue;
+  // Clip at the genuine world-space kilometre marker: never stretch the same
+  // background across the camera when the player enters a new section.
+  ctx.save();ctx.beginPath();ctx.rect(Math.max(0,x0),0,Math.min(W,x1)-Math.max(0,x0)+1,high);ctx.clip();
+  const art=millauScenes[i];
+  ctx.drawImage(art,0,0,art.naturalWidth,art.naturalHeight,x0-.5,0,(wx1-wx0)+1,high);
   ctx.restore();
  }
  ctx.restore();return true;
 }
-// Chemin/route toujours sur un calque indépendant, aligné sur la collision.
+// The playable route is entirely separate from the illustrated scenery:
+// trail/gravel/asphalt/bridge deck are tied to the physics and the stage surface.
 function drawMillauPhotoGround(c){
  if(!millauSceneReady())return false;
  ctx.save();ctx.beginPath();ctx.moveTo(0,H);
- for(let x=0;x<=W+6;x+=6)ctx.lineTo(x,groundY(camX+x));
+ for(let sx=0;sx<=W+8;sx+=6)ctx.lineTo(sx,groundY(camX+sx));
  ctx.lineTo(W,H);ctx.closePath();ctx.clip();
  for(let sx=-8;sx<W+8;sx+=8){
-  const wx=camX+sx,gy=groundY(wx),surf=sectionFor(c,wx)?.surface;
-  const tint=surf==='bridge'?'#485c73':surf==='road'?'#5e6973':surf==='gravel'?'#a7784c':'#ae804e';
-  ctx.fillStyle=tint;ctx.fillRect(sx,gy-2,9,H-gy+3);
-  const p=Math.floor(wx/8)%5;
-  ctx.fillStyle=surf==='bridge'||surf==='road'?'#7c8c9d':'#ddc092';
-  ctx.fillRect(sx+1,gy+6+p*3,3+(p+5)%4,2);
+  const wx=camX+sx, gy=groundY(wx), surf=sectionFor(c,wx)?.surface;
+  const color=surf==='bridge'?'#485c73':surf==='road'?'#5e6973':surf==='gravel'?'#a7784c':'#ae804e';
+  ctx.fillStyle=color;ctx.fillRect(sx,gy-2,9,H-gy+3);
+  const tile=Math.floor(wx/8),rock=(tile*17)%5;
+  if(surf==='bridge'||surf==='road'){
+   ctx.fillStyle=rock===0?'#8998a7':'#708094';ctx.fillRect(sx+1,gy+6+(rock%3)*5,3+rock,2);
+  }else{
+   ctx.fillStyle=rock===0?'#ddc092':'#cda36d';ctx.fillRect(sx+2,gy+5+(rock%3)*4,3+rock,2);
+  }
  }
  ctx.restore();
- ctx.save();ctx.strokeStyle='#e7c691';ctx.lineWidth=3;ctx.beginPath();
- for(let sx=0;sx<=W+6;sx+=6){if(sx===0)ctx.moveTo(sx,groundY(camX+sx));else ctx.lineTo(sx,groundY(camX+sx))}ctx.stroke();
- for(let wx=Math.floor(camX/90)*90;wx<camX+W+90;wx+=90){
-  const surf=sectionFor(c,wx)?.surface;if(surf!=='bridge'&&surf!=='road')continue;
-  const x=wx-camX;ctx.strokeStyle='#f2f2ef';ctx.lineWidth=3;ctx.beginPath();
-  ctx.moveTo(x,groundY(wx)+18);ctx.lineTo(x+39,groundY(wx+39)+18);ctx.stroke();
+ // Continuous edge line; every meter of ground uses the same altitude curve.
+ ctx.save();ctx.beginPath();
+ for(let sx=-2;sx<=W+8;sx+=6){const gy=groundY(camX+sx);if(sx===-2)ctx.moveTo(sx,gy);else ctx.lineTo(sx,gy)}
+ ctx.strokeStyle='#e7c691';ctx.lineWidth=3;ctx.stroke();
+ // Dashed lane markers travel with the world only on real road or bridge zones.
+ for(let mark=Math.floor(camX/90)*90;mark<camX+W+90;mark+=90){
+  const surface=sectionFor(c,mark)?.surface;
+  if(surface!=='road'&&surface!=='bridge')continue;
+  const x=mark-camX,y=groundY(mark);
+  ctx.strokeStyle='rgba(244,245,236,.84)';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(x,y+17);ctx.lineTo(x+39,groundY(mark+39)+17);ctx.stroke();
+ }
+ // Solid concrete lip and repeating joints on the bridge deck.
+ const bridgeStart=millauBoundaryX(10,c),bridgeEnd=millauBoundaryX(15.7,c);
+ const x0=Math.max(0,bridgeStart-camX),x1=Math.min(W,bridgeEnd-camX);
+ if(x1>x0){
+  ctx.save();ctx.beginPath();ctx.rect(x0,0,x1-x0,H);ctx.clip();
+  ctx.strokeStyle='#bfcbd6';ctx.lineWidth=4;ctx.beginPath();
+  for(let x=x0;x<=x1+5;x+=5){if(x===x0)ctx.moveTo(x,groundY(camX+x)+35);else ctx.lineTo(x,groundY(camX+x)+35)}ctx.stroke();
+  for(let wx=Math.floor(camX/105)*105;wx<camX+W+105;wx+=105){const x=wx-camX,y=groundY(wx);
+   ctx.fillStyle='#8193a6';ctx.fillRect(x,y+21,2,14);
+  }
+  ctx.restore();
  }
  ctx.restore();return true;
 }
@@ -836,6 +825,14 @@ function drawFinishArch(){
  const wx=c.length-58,x=wx-camX;
  if(x<-120||x>W+120)return;
  const y=groundY(wx),surface=sectionFor(c,wx)?.surface;
+ // On Millau the storyboard already contains the official-looking arrival arch
+ // and spectators: do not superimpose a second competing arch.
+ if(c.mode==='millau'&&millauSceneReady()){
+  ctx.save();ctx.strokeStyle='rgba(250,252,243,.87)';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(x-40,groundY(wx-40)+1);ctx.lineTo(x+40,groundY(wx+40)+1);ctx.stroke();
+  for(let off=-36;off<36;off+=12){ctx.fillStyle=((off+36)/12)%2===0?'#fbfbf0':'#23414d';ctx.fillRect(x+off,groundY(wx+off)-1,12,5)}
+  ctx.restore();return;
+ }
  const pole='#e7efe9',accent=surface==='road'||surface==='bridge'?'#2d3c45':'#21433a';
  ctx.save();
  ctx.fillStyle='rgba(0,0,0,.14)';ctx.beginPath();ctx.ellipse(x,y+4,96,10,0,0,7);ctx.fill();
