@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09282c">
+<title>Atelier du coureur — Trail Chaos</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;--background:#071d21;--card:#14343a;--line:#47645e;--mint:#8ce5cb;--lime:#d5f777;--text:#edf9ed}*{box-sizing:border-box}body{background:radial-gradient(ellipse at top,#215854,var(--background) 55%);color:var(--text);margin:0;padding:18px 14px 72px}main{max-width:940px;margin:auto}header{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:16px}h1{font-size:clamp(26px,6vw,38px);line-height:1;letter-spacing:-.7px;margin:10px 0}h2{font-size:18px;margin:0 0 12px}p{line-height:1.5;color:#c8ded6;font-size:13px}.eyebrow{color:var(--mint);text-transform:uppercase;font-size:11px;font-weight:950;letter-spacing:1.2px}.pill{display:inline-block;border:1px solid #ffffff39;border-radius:8px;padding:5px 8px;font-size:10px;font-weight:850}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px}.card{border:1px solid #ffffff2c;background:#102d33dc;border-radius:19px;padding:18px;box-shadow:0 10px 35px #0003}.preview{background:linear-gradient(#3b7776,#709b86 66%,#705d43 66%,#574936);border-radius:15px;margin:10px 0 13px;overflow:hidden;border:1px solid #ffffff31;min-height:320px;display:flex;align-items:center;justify-content:center}#spritePreview{width:100%;height:320px;display:block;image-rendering:pixelated}.controls{display:flex;gap:8px;flex-wrap:wrap}.mode,.action{border:1px solid #ffffff4c;border-radius:10px;background:#26464a;color:#eaf9ec;padding:11px 12px;font-weight:850;cursor:pointer}.mode.active{background:#d5f777;color:#173028;border-color:transparent}.action{background:#d5f777;color:#183127;border:0}.action.alt{background:#284b4c;color:#e9f8e7;border:1px solid #ffffff34}.action.wide{width:100%;margin-top:12px}label{display:block;font-size:13px;font-weight:800;margin-top:15px}.line{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px}output{font-variant-numeric:tabular-nums;color:var(--lime)}input[type=range]{accent-color:var(--lime);width:100%;height:32px;touch-action:pan-y}input[type=color]{height:48px;width:100%;background:#0b292e;border:1px solid #ffffff4b;border-radius:10px;padding:5px;cursor:pointer}.colors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.colors label{text-align:center;font-size:11px;margin:0;line-height:1.4}.colors input{margin-top:5px}#paintCanvas{display:block;margin:12px auto;max-width:100%;height:auto;border:1px solid #ffffff55;border-radius:5px;touch-action:none;image-rendering:pixelated;background:#17312f}.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tools input{width:53px;height:42px;padding:3px;border-radius:6px;border:1px solid #ffffff4c;background:transparent}.stat{font-size:12px;color:#a7d5c4;margin-left:auto}.hint{color:#b9d5d1;font-size:12px}.divider{height:1px;background:#ffffff24;margin:17px 0}.savelabel{font-weight:800;font-size:12px;color:var(--lime)}a{text-decoration:none}.footer{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.footer>a,.footer>button{flex:1;text-align:center;min-width:130px}.error{color:#ffc3b5}@media(max-width:680px){.grid{grid-template-columns:1fr}.card{padding:16px}.preview{min-height:250px}#spritePreview{height:265px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body><main>
+<header><div><div class="eyebrow">TRAIL CHAOS · V5.2</div><h1>Atelier du <span style="color:var(--lime)">coureur</span></h1></div><span class="pill">ÉDITEUR PERSO</span></header>
+<p>Personnalise réellement le sprite utilisé dans le jeu, directement depuis ton iPhone. Tous les réglages se mettent à jour dans l'aperçu et se conservent sur cet appareil.</p>
+<div class="grid">
+<section class="card"><h2>🏃 Aperçu animé</h2><div class="preview"><canvas id="spritePreview" width="360" height="320" aria-label="Aperçu animé du coureur"></canvas></div><div class="controls" role="group" aria-label="Posture du coureur"><button class="mode active" data-pose="run">🏃 Courir</button><button class="mode" data-pose="jump">⬆️ Sauter</button><button class="mode" data-pose="duck">⬇️ Se baisser</button></div><p class="hint">Les vêtements et accessoires achetés dans la boutique apparaissent ici aussi.</p><div class="divider"></div><h2>📐 Proportions et animation</h2><div id="sliders"></div></section>
+<section class="card"><h2>🎨 Couleurs du personnage</h2><p>Le tee-shirt collector et la casquette spéciale restent prioritaires lorsqu'ils sont équipés.</p><div class="colors" id="colors"></div><button class="action alt wide" id="colorsReset">Couleurs de ma tenue actuelle</button><div class="divider"></div><h2>🖌️ Retouche pixel par pixel</h2><p>Dessine de petits détails sur le corps en position debout : motif de maillot, liserés, patches… Les retouches suivent le coureur pendant la course et les sauts.</p><div class="tools"><input type="color" id="brush" value="#f7e47a" aria-label="Couleur du pinceau"><button class="mode active" id="paint">✏️ Pinceau</button><button class="mode" id="erase">⌫ Gomme</button><button class="action alt" id="undo">↶ Annuler</button><span class="stat" id="pixelCount">0 pixel</span></div><canvas id="paintCanvas" width="330" height="444" aria-label="Grille modifiable du personnage"></canvas><p class="hint">Glisse ton doigt sur la grille pour dessiner. Maximum 300 pixels personnalisés pour garder le jeu fluide.</p><button class="action alt wide" id="clearPixels">Effacer tous les pixels ajoutés</button></section>
+</div>
+<div class="card" style="margin-top:15px"><div class="savelabel" id="saved">✓ Modifications enregistrées automatiquement</div><div class="footer"><button class="action alt" id="reset">Tout réinitialiser</button><button class="action alt" id="export">Exporter ma création (.json)</button><a class="action" href="./index.html?v=52">▶ Jouer avec mon personnage</a></div><p class="hint">Les changements sont personnels à ce navigateur. Pour définir ce personnage pour tous les joueurs sur GitHub, exporte le fichier JSON et partage-le dans cette conversation.</p></div>
+</main>
+<script>
+(()=>{'use strict';
+const KEY='trail-chaos-character-v1',minX=-24,minY=-67,cell=6,GRID_W=55,GRID_H=74;
+const DEFAULT={size:1,head:1,stride:1,arms:1,pack:1,top:'',short:'',cap:'',shoe:'',hair:'#fad25d',skin:'#f1bd95',pixels:[]};
+const skins=[{id:'corail',top:'#fa674b',shadow:'#b63e36',short:'#1c3340',cap:'#c8ed77',sole:'#eefff7',stripe:'#9bead8',vest:'#255764',flask:'#83e8ed'},{id:'alpage',top:'#b9e46f',shadow:'#538e57',short:'#244c57',cap:'#e9f8d0',sole:'#f7fbf8',stripe:'#52d6bf',vest:'#255c52',flask:'#e1f9b2'},{id:'nocturne',top:'#8c86ef',shadow:'#574aa8',short:'#233246',cap:'#ecb768',sole:'#dfe8ff',stripe:'#d1caff',vest:'#354c67',flask:'#a1daf1'}];
+let custom={...DEFAULT};try{const data=JSON.parse(localStorage.getItem(KEY)||'null');if(data&&typeof data==='object')custom={...DEFAULT,...data,pixels:Array.isArray(data.pixels)?data.pixels:[]}}catch(_){}
+let profile={skin:'corail',equipped:{},owned:{},levels:{shoes:0,lamp:0}};try{profile={...profile,...(JSON.parse(localStorage.getItem('trail-chaos-runner-v2')||'null')||{})}}catch(_){}
+const wearing=id=>Object.values(profile.equipped||{}).includes(id)&&!!(profile.owned||{})[id];
+let run={course:{mode:'forest'}},sceneTime=0;
+const canvas=document.querySelector('#spritePreview');let ctx=canvas.getContext('2d');
+const brush=document.querySelector('#brush');let pose='run',tool='paint',drawing=false,lastPixels=[];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(custom));document.querySelector('#saved').textContent='✓ Enregistré · ton personnage est prêt à jouer'}catch(e){document.querySelector('#saved').textContent='⚠️ Stockage indisponible sur cet appareil'}}
+function palette(){const b=skins.find(s=>s.id===profile.skin)||skins[0];return {...b,top:wearing('clemShirt')?'#7650c5':wearing('backyardFinisher')?'#1aaf9e':(custom.top||b.top),short:custom.short||b.short,sole:custom.shoe||b.sole,shadow:wearing('clemShirt')?'#46258a':wearing('backyardFinisher')?'#126e65':b.shadow,cap:wearing('ultraCap')?'#efe3be':(custom.cap||b.cap)}}
+function customPixels(){for(const p of custom.pixels){spriteRect(p.x,p.y,1,1,p.c)}}
+// Les fonctions suivantes sont exactement les mêmes que dans le jeu pour refléter le rendu réel.
+function spriteRect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
+function spriteBlock(x,y,w,h,color,edge='#182432',border=1){
+ spriteRect(x-border,y-border,w+2*border,h+2*border,edge);
+ spriteRect(x,y,w,h,color)
+}
+function spriteSegment(a,b,color,thickness=3,outline='#182432'){
+ const n=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*0.68));
+ for(let i=0;i<=n;i++){
+  const t=i/n,x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t);
+  spriteRect(x-Math.ceil(thickness/2)-1,y-Math.ceil(thickness/2)-1,thickness+2,thickness+2,outline);
+ }
+ for(let i=0;i<=n;i++){
+  const t=i/n,x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t);
+  spriteRect(x-Math.ceil(thickness/2),y-Math.ceil(thickness/2),thickness,thickness,color);
+ }
+}
+function spriteShoe(x,y,pal,back=false){
+ const shade=wearing('raceShoes')?'#ffc46c':back?'#a2b2b9':(custom.shoe||pal.sole);
+ const detail=wearing('raceShoes')?'#ff5e69':pal.stripe;
+ spriteBlock(x-3,y-4,9,4,shade,'#152834');
+ spriteRect(x,y-3,5,2,detail);spriteRect(x-3,y,10,2,'#263d45');
+ spriteRect(x+3,y-2,2,1,'#e9f5e9');
+ if(profile.levels.shoes>0){for(let j=0;j<3;j++)spriteRect(x-2+j*3,y+2,2,1,'#f0c36e')}
+}
+const SPRITE_STRIDES=[
+ {bk:[-13,-12],bf:[-15,-2],fk:[9,-12],ff:[17,-3],arm:-.46},
+ {bk:[-10,-13],bf:[-10,-1],fk:[12,-15],ff:[14,-6],arm:-.22},
+ {bk:[-5,-15],bf:[-1,-3],fk:[10,-17],ff:[7,-9],arm:.03},
+ {bk:[8,-12],bf:[15,-3],fk:[-11,-12],ff:[-16,-2],arm:.45},
+ {bk:[12,-15],bf:[14,-6],fk:[-10,-13],ff:[-10,-1],arm:.22},
+ {bk:[10,-17],bf:[7,-9],fk:[-5,-15],ff:[-1,-3],arm:-.08}
+];
+function spriteLeg(knee,foot,back,pal){
+ const hip=back?[-3,-19]:[3,-19];
+ knee=[Math.round(hip[0]+(knee[0]-hip[0])*custom.stride),knee[1]];
+ foot=[Math.round(hip[0]+(foot[0]-hip[0])*custom.stride),foot[1]];
+ spriteSegment(hip,knee,back?'#263441':pal.short,4);
+ spriteRect(knee[0]-2,knee[1]-1,4,3,back?'#bd8e6e':'#eec09b');
+ spriteSegment(knee,[foot[0]-1,foot[1]-5],back?'#c28f72':'#f0c19a',3);
+ spriteBlock(foot[0]-3,foot[1]-9,4,5,back?'#687f8d':'#f7f4e8','#233441',1);
+ spriteShoe(foot[0],foot[1],pal,back)
+}
+function spriteArm(front,phase,pal,duck=false){
+ const shoulder=front?[8,-38]:[-8,-38],swing=(front?1:-1)*phase;
+ ctx.save();ctx.translate(shoulder[0],shoulder[1]);ctx.rotate((front?-.25:.25)+swing*.52*custom.arms);
+ // Bras + avant-bras rigides : rotation de l'ensemble autour de l'épaule.
+ spriteSegment([0,0],[3,9],front?'#eabb91':'#bf8d6f',4);
+ spriteSegment([3,9],[10,6],front?'#eec19a':'#cba17d',3);
+ spriteRect(9,5,4,4,front?'#f2c5a4':'#c79a7f');
+ if(front&&wearing('mathieuWatch')){spriteBlock(7,5,4,3,'#a4efc9','#1a3443',1)}
+ if(front&&wearing('carbonPoles')){spriteRect(11,8,1,24,'#b8d4d0');spriteRect(9,30,5,2,'#e8c987')}
+ ctx.restore()
+}
+function spriteTorso(pal){
+ // Mini gilet d'hydratation, maillot et short aux silhouettes nettement pixellisées.
+ const bagW=Math.max(3,Math.round(7*custom.pack)),bagH=Math.max(9,Math.round(18*custom.pack));
+ spriteBlock(-4-bagW,-22-bagH,bagW,bagH,pal.vest,'#182e36');
+ spriteRect(-6-bagW,-22-Math.round(bagH*.62),3,Math.max(4,Math.round(8*custom.pack)),pal.flask);
+ spriteBlock(-8,-40,20,20,pal.top,'#142330',1);
+ spriteRect(-8,-40,5,3,pal.stripe);spriteRect(6,-39,5,3,pal.stripe);
+ spriteRect(-8,-27,18,2,pal.shadow);
+ spriteRect(8,-36,2,12,pal.vest);
+ spriteRect(8,-33,3,7,pal.flask);
+ if(wearing('softFlask'))spriteRect(-12,-28,3,8,'#5de3da');
+ if(wearing('clemShirt')){
+  spriteRect(-4,-36,10,2,'#fff6ec');spriteRect(-3,-33,8,2,'#fff6ec');
+  // Motif miniature original, volontairement distinct du dessin commercial.
+  spriteRect(-3,-34,2,1,'#9e66d3');spriteRect(2,-31,2,1,'#9e66d3');
+ }else if(wearing('backyardFinisher')){
+  spriteRect(-3,-36,7,8,'#f4fba6');spriteRect(-1,-34,3,3,'#249c88');
+ }else{
+  spriteRect(-4,-35,8,2,pal.stripe);spriteRect(-4,-31,6,1,pal.shadow);
+ }
+ spriteBlock(-8,-21,19,8,pal.short,'#14232f');
+ spriteRect(-6,-17,15,1,pal.stripe)
+}
+function spriteHead(pal,x=0,y=0){
+ ctx.save();ctx.translate(x,y);
+ ctx.translate(2,-40);ctx.scale(custom.head,custom.head);ctx.translate(-2,40);
+ // Chevelure blonde stylisée, visage très lisible et bandeau de course.
+ spriteRect(-6,-57,19,16,'#192632');
+ spriteRect(-5,-58,18,4,custom.hair);spriteRect(-7,-54,5,12,custom.hair);
+ spriteRect(-5,-60,11,3,custom.hair);spriteRect(5,-59,8,4,custom.hair);
+ spriteRect(-2,-52,15,13,custom.skin);spriteRect(10,-49,5,8,custom.skin);
+ spriteRect(13,-47,4,3,custom.skin);spriteRect(-2,-42,5,3,'#d39c7b');
+ spriteRect(-5,-55,16,3,pal.cap);spriteRect(10,-54,7,2,pal.stripe);
+ // Visor discret, plus grand avec les lunettes achetées.
+ if(wearing('trailGlasses')){
+  spriteBlock(5,-49,11,5,'#273c55','#222234',1);spriteRect(6,-48,7,1,'#a4c6e6');
+ }else {spriteRect(10,-49,3,2,'#293344');spriteRect(11,-48,1,1,'#f9efe8')}
+ spriteRect(10,-42,4,1,'#aa665e');
+ if(wearing('ultraCap')){
+  spriteBlock(-5,-59,18,5,'#eee0b6','#24333e',1);
+  spriteRect(12,-55,10,3,pal.stripe)
+ }
+ if(profile.levels.lamp>0||run?.course?.mode==='night')spriteBlock(10,-57,5,3,'#ffe28e','#33434a',1);
+ ctx.restore()
+}
+function spriteCrouch(pal,frame){
+ // Référence vidéo : glissade basse, corps quasi horizontal, bras en avant.
+ spriteSegment([-4,-11],[-12,-7],pal.short,5);
+ spriteSegment([-12,-7],[-23,-2],'#efbd9b',3);
+ spriteShoe(-22,-1,pal,true);
+ spriteSegment([4,-11],[16,-11],pal.short,5);
+ spriteSegment([16,-11],[22,-3],'#f3c49e',3);
+ spriteShoe(22,-1,pal,false);
+ spriteBlock(-11,-25,22,13,pal.top,'#162a37');
+ spriteRect(-13,-23,5,10,pal.vest);spriteRect(7,-21,3,8,pal.flask);
+ if(wearing('clemShirt'))spriteRect(-4,-20,9,2,'#fff1ff');
+ if(wearing('backyardFinisher'))spriteRect(-3,-20,7,3,'#defba4');
+ spriteSegment([8,-22],[20,-14],'#edbe94',4);
+ spriteSegment([20,-14],[24,-8],'#f0c7a6',3);
+ if(wearing('mathieuWatch'))spriteRect(19,-14,4,3,'#9df7cf');
+ ctx.save();ctx.translate(-15,21);spriteHead(pal);ctx.restore()
+}
+
+function drawSprite(mode,frame){const pal=palette();if(mode==='duck'){spriteCrouch(pal,frame);return}
+ const poses=SPRITE_STRIDES, step=poses[frame%poses.length];
+ const air=mode==='jump';const backK=air?[-10,-16]:step.bk,backF=air?[-15,-9]:step.bf,frontK=air?[8,-14]:step.fk,frontF=air?[16,-7]:step.ff;
+ spriteLeg(backK,backF,true,pal);spriteArm(false,step.arm,pal);spriteLeg(frontK,frontF,false,pal);spriteTorso(pal);spriteArm(true,step.arm,pal);spriteHead(pal);customPixels();}
+function drawPreview(t){sceneTime=t/1000;const w=canvas.width,h=canvas.height;ctx=canvas.getContext('2d');ctx.clearRect(0,0,w,h);
+ const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#3c7774');g.addColorStop(.77,'#8fb4a6');g.addColorStop(.77,'#8a7653');g.addColorStop(1,'#736042');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='#587869';ctx.beginPath();ctx.moveTo(0,h*.76);ctx.lineTo(w*.35,h*.40);ctx.lineTo(w*.72,h*.61);ctx.lineTo(w,h*.50);ctx.lineTo(w,h*.77);ctx.fill();
+ ctx.strokeStyle='#bad8bc';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,h*.77);ctx.lineTo(w,h*.77);ctx.stroke();
+ const frame=pose==='run'?Math.floor(t/1000*12)%6:1;ctx.save();ctx.translate(w*.50,h*.77-(pose==='jump'?36:0)+(pose==='run'?Math.sin(t/110)*1.5:0));const zoom=3.0*custom.size;ctx.scale(zoom,zoom);ctx.imageSmoothingEnabled=false;drawSprite(pose,frame);ctx.restore();
+ requestAnimationFrame(drawPreview)}
+const sliders=[['size','Taille du personnage',.65,1.5,.05],['head','Proportions de la tête',.75,1.4,.05],['stride','Amplitude de foulée',.65,1.55,.05],['arms','Balancement des bras',.5,1.5,.05],['pack','Taille du gilet',.55,1.55,.05]];
+function setupSliders(){const div=document.querySelector('#sliders');sliders.forEach(([key,label,min,max,step])=>{const row=document.createElement('label');row.innerHTML=`<span class="line"><span>${label}</span><output id="val-${key}"></output></span><input data-setting="${key}" type="range" min="${min}" max="${max}" step="${step}">`;div.append(row);const input=row.querySelector('input'),out=row.querySelector('output');input.value=custom[key];out.textContent=Math.round(custom[key]*100)+' %';input.addEventListener('input',()=>{custom[key]=Number(input.value);out.textContent=Math.round(custom[key]*100)+' %';save();drawPainting()})})}
+const colorSpecs=[['top','Maillot','top'],['short','Short','short'],['cap','Casquette','cap'],['shoe','Chaussures','sole'],['hair','Cheveux',null],['skin','Peau',null]];
+function setupColors(){const box=document.querySelector('#colors'),base=skins.find(s=>s.id===profile.skin)||skins[0];for(const [key,label,part] of colorSpecs){const div=document.createElement('label');const picker=document.createElement('input');picker.type='color';picker.dataset.color=key;picker.value=custom[key]||base[part]||DEFAULT[key];picker.addEventListener('input',()=>{custom[key]=picker.value;save();drawPainting()});div.textContent=label;div.append(picker);box.append(div)}}
+const grid=document.querySelector('#paintCanvas');let gridCtx=grid.getContext('2d');
+function drawPainting(){gridCtx=grid.getContext('2d');gridCtx.clearRect(0,0,grid.width,grid.height);const oldCtx=ctx;ctx=gridCtx;ctx.fillStyle='#183c3c';ctx.fillRect(0,0,grid.width,grid.height);
+ for(let row=0;row<GRID_H;row++){for(let col=0;col<GRID_W;col++){if((col+row)%2===0){ctx.fillStyle='rgba(255,255,255,.03)';ctx.fillRect(col*cell,row*cell,cell,cell)}}}
+ ctx.save();ctx.translate(-minX*cell,-minY*cell);ctx.scale(cell,cell);drawSprite('run',0);ctx.restore();
+ ctx.strokeStyle='rgba(255,255,255,.055)';ctx.lineWidth=.6;for(let x=0;x<=grid.width;x+=cell){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,grid.height);ctx.stroke()}for(let y=0;y<=grid.height;y+=cell){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(grid.width,y);ctx.stroke()}
+ ctx=oldCtx;document.querySelector('#pixelCount').textContent=custom.pixels.length+' / 300 pixels'}
+function drawAt(e){const r=grid.getBoundingClientRect();const x=Math.floor((e.clientX-r.left)*grid.width/r.width/cell)+minX,y=Math.floor((e.clientY-r.top)*grid.height/r.height/cell)+minY;if(x<minX||x>=minX+GRID_W||y<minY||y>=minY+GRID_H)return;const key=custom.pixels.findIndex(p=>p.x===x&&p.y===y);if(key>=0)custom.pixels.splice(key,1);if(tool==='paint'){custom.pixels.push({x,y,c:brush.value});if(custom.pixels.length>300)custom.pixels.shift()}drawPainting();save()}
+grid.addEventListener('pointerdown',e=>{e.preventDefault();lastPixels=custom.pixels.map(p=>({...p}));drawing=true;try{grid.setPointerCapture(e.pointerId)}catch(_){}drawAt(e)});grid.addEventListener('pointermove',e=>{if(drawing){e.preventDefault();drawAt(e)}});for(const ev of ['pointercancel','pointerup','lostpointercapture'])grid.addEventListener(ev,()=>drawing=false);
+for(const btn of document.querySelectorAll('[data-pose]'))btn.addEventListener('click',()=>{pose=btn.dataset.pose;document.querySelectorAll('[data-pose]').forEach(el=>el.classList.toggle('active',el===btn))});
+document.querySelector('#paint').addEventListener('click',()=>{tool='paint';setTool()});document.querySelector('#erase').addEventListener('click',()=>{tool='erase';setTool()});function setTool(){document.querySelector('#paint').classList.toggle('active',tool==='paint');document.querySelector('#erase').classList.toggle('active',tool==='erase')}
+document.querySelector('#undo').addEventListener('click',()=>{const tmp=custom.pixels;custom.pixels=lastPixels;lastPixels=tmp;drawPainting();save()});document.querySelector('#clearPixels').addEventListener('click',()=>{if(!confirm('Effacer toutes les retouches de pixels ?'))return;lastPixels=custom.pixels.map(p=>({...p}));custom.pixels=[];drawPainting();save()});
+document.querySelector('#colorsReset').addEventListener('click',()=>{for(const k of ['top','short','cap','shoe'])custom[k]='';custom.hair=DEFAULT.hair;custom.skin=DEFAULT.skin;const base=skins.find(s=>s.id===profile.skin)||skins[0];for(const input of document.querySelectorAll('[data-color]'))input.value=custom[input.dataset.color]||base[({shoe:'sole'})[input.dataset.color]||input.dataset.color]||DEFAULT[input.dataset.color];save();drawPainting()});
+document.querySelector('#reset').addEventListener('click',()=>{if(!confirm('Réinitialiser tout le personnage personnalisé ?'))return;custom={...DEFAULT,pixels:[]};for(const input of document.querySelectorAll('[data-setting]')){input.value=custom[input.dataset.setting];document.querySelector('#val-'+input.dataset.setting).textContent='100 %'}const base=skins.find(s=>s.id===profile.skin)||skins[0];for(const input of document.querySelectorAll('[data-color]'))input.value=custom[input.dataset.color]||base[({shoe:'sole'})[input.dataset.color]||input.dataset.color]||DEFAULT[input.dataset.color];drawPainting();save()});
+document.querySelector('#export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(custom,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='trail-chaos-mon-personnage.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)});
+setupSliders();setupColors();drawPainting();save();requestAnimationFrame(drawPreview);
+})();
+</script></body></html>
