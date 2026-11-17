@@ -1,14 +1,10 @@
-# TRAIL CHAOS — V5.5
+# TRAIL CHAOS — V5.6
 
-## Animations et fluidité
-- Animation du coureur retravaillée avec davantage d'étapes visuelles.
-- Cycle de course enrichi : rebond, inclinaison et rythme plus naturel.
-- Saut plus lisible : impulsion, suspension, réception.
-- Accroupi plus progressif et mieux détaillé.
-- Fluidité améliorée grâce à un atlas allégé et à un cache de frames précalculées.
+## Retour aux animations de la V5.4
+- Restauration exacte du cycle de course, des six poses de saut et des six poses de glissade de la V5.4.
+- Retour à l'atlas original `sprites/coureur-animations.png` (218 × 306 px par pose).
+- Annulation des déformations, rebonds et interpolations ajoutés à la V5.5 et du chargement de l'atlas allégé.
+- Les circuits, la boutique, les objets équipés, les commandes et les sauvegardes restent inchangés.
+- V5.5 archivée dans `side-v55.html`.
 
-## Fichiers
-- index.html
-- atelier-perso.html
-- side-v54.html
-- `sprites/coureur-animations.png` (image V5.4 réutilisée et allégée à la volée en mémoire)
+Site : https://albbris.github.io/Jeu-trail/
