@@ -1,14 +1,14 @@
-# TRAIL CHAOS — V5.4
+# TRAIL CHAOS — V5.5
 
-## Animation image par image du coureur
+## Animations et fluidité
+- Animation du coureur retravaillée avec davantage d'étapes visuelles.
+- Cycle de course enrichi : rebond, inclinaison et rythme plus naturel.
+- Saut plus lisible : impulsion, suspension, réception.
+- Accroupi plus progressif et mieux détaillé.
+- Fluidité améliorée grâce à un atlas allégé et à un cache de frames précalculées.
 
-- **Vraie planche pixel-art de 18 images** extraite et nettoyée de l’illustration masculine validée : 6 poses de course, 6 de saut, 6 d’accroupissement.
-- Visuel : casquette et gilet bleu marine, maillot clair, short noir, chaussures orange, barbe légère.
-- Animation : course en boucle, saut synchronisé sur la parabole physique, glissade avec entrée / maintien / remontée. Les frames sont découpées de la planche transparente `sprites/coureur-animations.png`.
-- Les palettes de tenues/collectors recolorent les parties du sprite par zones ; les accessoires achetés restent superposés ou disponibles en mode édition.
-- **Atelier de personnage** : visualisation des 18 frames officielles. L’édition avancée (proportions, pixel par pixel) garde le mode de dessin paramétrique pour préserver les personnalisations.
-- Sauvegardes conservées. V5.3 archivée dans `side-v53.html`.
-
-Le sprite et les animations sont une création graphique originale pour TRAIL CHAOS.
-
-Site : https://albbris.github.io/Jeu-trail/
+## Fichiers
+- index.html
+- atelier-perso.html
+- side-v54.html
+- `sprites/coureur-animations.png` (image V5.4 réutilisée et allégée à la volée en mémoire)
