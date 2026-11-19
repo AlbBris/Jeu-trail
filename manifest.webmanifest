@@ -1,13 +1,13 @@
 {
   "id": "./",
-  "name": "Trail Chaos Runner",
-  "short_name": "Trail Chaos",
-  "description": "Jeu de trail arcade : saute, glisse, esquive et améliore ton équipement.",
+  "name": "Trail Run",
+  "short_name": "Trail Run",
+  "description": "Trail Run : jeu de course de trail en pixel art, parcours mythiques, équipement et défis.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0b1a1f",
-  "theme_color": "#0b1a1f",
+  "background_color": "#082332",
+  "theme_color": "#0b2b38",
   "orientation": "portrait",
   "icons": [
     {
