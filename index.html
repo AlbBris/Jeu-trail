@@ -10,7 +10,7 @@
 <meta name="description" content="Trail Run : parcours de trail mythiques, pixel art et équipement.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Run — V7.0</title>
+<title>Trail Run — V7.1</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -99,6 +99,62 @@
 .challenge-value{display:block;margin:8px 0;font-size:13px;font-weight:900;color:#ffdb70}
 @media(max-height:735px){.home-brand{margin-top:8px}.home-brand strong{font-size:40px}.home-content{min-height:290px;margin-top:7px}.home-menu{gap:6px}.home-menu button{min-height:50px;padding:5px 7px}.home-menu button.home-primary{min-height:62px}.home-bottom{padding:3px 2px}.home-bottom button{min-height:41px}}
 @media(max-width:345px){.home-content{grid-template-columns:80px minmax(0,1fr)}.home-menu .menu-glyph{flex-basis:20px;font-size:20px}.home-runner-sprite{transform:translateX(-50%) scale(.85)}}
+
+/* TRAIL RUN V7.1 — accueil composition fidèle au concept validé : personnage
+   dans le fond, vraie perspective forestière, menu à droite, logo montagne. */
+#app.menu-home #menuLandscape{
+ background-image:url('./assets/trail-run-home-v71.svg'),url('./assets/trail-run-forest.svg');
+ background-repeat:no-repeat,no-repeat;
+ background-position:50% center,center center;
+ background-size:cover,cover;
+ image-rendering:auto;
+}
+#app.menu-home #veil{background:linear-gradient(180deg,rgba(4,19,31,.38) 0%,rgba(6,27,38,.05) 17%,rgba(6,27,38,0) 45%,rgba(5,23,30,.1) 69%,rgba(5,21,32,.28) 83%,rgba(4,17,25,.58) 100%)}
+#app.menu-home #panel{pointer-events:auto}
+.v71-home{position:relative;padding:0;overflow:hidden;display:block;height:100%;min-height:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.v71-home .home-topbar{position:absolute;top:max(18px,env(safe-area-inset-top));left:12px;right:12px;z-index:3;gap:10px}
+.v71-home .home-profile{gap:6px;padding:4px 9px 4px 4px;border-radius:29px;border:1px solid rgba(250,234,191,.8);background:rgba(5,26,40,.89);box-shadow:0 5px 11px rgba(0,13,29,.55)}
+.v71-home .home-avatar{width:45px;height:45px;background:linear-gradient(#497d88,#153c53);border:2.5px solid #fff1d1;box-shadow:0 0 0 2px #a87945;overflow:hidden;font-size:20px}
+.v71-home .home-profile-info{gap:5px}
+.v71-home .home-profile-info strong{font-size:clamp(11px,3.1vw,15px);text-shadow:0 2px 2px #000}
+.v71-home .home-level{display:flex;gap:5px;align-items:center;min-width:110px}
+.v71-home .home-level b{background:#ffcc3d;color:#142b3c;border-radius:5px;padding:2px 4px;font-size:10px;white-space:nowrap}
+.v71-home .home-profile-meter{width:62px;height:8px;max-width:none;border:1px solid #d5b9738e}
+.v71-home .home-coin{display:flex;align-items:center;gap:6px;font-size:clamp(13px,3.8vw,19px);padding:5px 7px;border-radius:16px;border:1px solid #d6dacf9d;background:rgba(8,36,51,.92);min-height:47px;box-shadow:0 5px 10px #0817249c}
+.v71-home .coin-graphic{color:#ffd941;font-size:21px;text-shadow:0 1px 0 #f4ac09,0 0 4px #e89d09}
+.v71-home .coin-cross{border:2px solid #ffd564;border-radius:7px;min-width:25px;height:25px;display:grid;place-items:center;color:#ffe18e;font-size:20px;line-height:1}
+.v71-home .home-brand{position:absolute;left:12%;right:12%;top:clamp(85px,11.4%,130px);margin:0;z-index:2;pointer-events:none;filter:drop-shadow(3px 5px 2px #001b2c)}
+.v71-home .home-brand:before{display:none}
+.v71-home .home-mountain-mark{display:block;width:55%;height:46px;margin:0 auto -3px;filter:drop-shadow(0 3px 1px #092f43)}
+.v71-home .home-brand strong{display:block;font-size:clamp(43px,11.3vw,73px);letter-spacing:-2.7px;line-height:.95;font-weight:1000;font-style:italic;text-shadow:4px 5px 0 #06334c,0 2px 10px #092639;white-space:nowrap}
+.v71-home .home-brand strong em{color:#ffcd2f;letter-spacing:-2px}
+.v71-home .home-brand-line{display:block;margin:8px auto 0;width:82%;height:5px;background:#ffcb31;border-radius:50% 2px 50% 2px;transform:skewX(-19deg) rotate(-1deg);box-shadow:0 2px #143d45}
+.v71-home .home-content{position:absolute;top:clamp(225px,29%,320px);bottom:max(99px,calc(env(safe-area-inset-bottom) + 83px));left:0;right:12px;margin:0;min-height:0;display:grid;grid-template-columns:43% minmax(0,57%);gap:0;align-items:stretch;z-index:2}
+.v71-home .home-runner-stand{display:block;position:relative;min-height:0;height:100%;pointer-events:none}
+.v71-home .home-runner-stand:before,.v71-home .home-runner-sprite,.v71-home .home-badge{display:none!important}
+.v71-home .home-menu{align-self:center;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);padding:0;justify-content:center}
+.v71-home .home-menu button{position:relative;min-height:clamp(58px,8.4vh,85px);padding:7px 9px;gap:8px;background:linear-gradient(110deg,rgba(7,42,58,.97),rgba(9,35,52,.93));border:1.4px solid #bed4cba3;border-radius:14px;color:#fff7df;box-shadow:0 5px 0 rgba(1,17,26,.29),0 7px 12px #00121f70,inset 0 1px 0 #ffffff36}
+.v71-home .home-menu button:active{transform:translateY(2px);box-shadow:0 2px 1px #061a23}
+.v71-home .menu-glyph{display:flex;align-items:center;justify-content:center;flex:0 0 clamp(24px,6vw,33px);color:#ffd047;text-shadow:none}
+.v71-home .menu-glyph svg{display:block;width:clamp(25px,6.7vw,33px);height:clamp(25px,6.7vw,33px)}
+.v71-home .home-menu button .menu-words{flex:1;min-width:0}
+.v71-home .home-menu strong{font-weight:1000;font-size:clamp(12px,3.3vw,20px);line-height:1.1;letter-spacing:-.25px;white-space:nowrap}
+.v71-home .home-menu small{font-size:clamp(8px,2.5vw,11px);line-height:1.3;opacity:.93;margin-top:5px;white-space:normal}
+.v71-home .home-menu button.home-primary{min-height:clamp(74px,10vh,101px);background:linear-gradient(155deg,#ffe172,#ffbd25);border:2px solid #fff1a4;color:#102c3b;box-shadow:0 4px 0 #9b6b24,0 10px 16px #001c2c95;border-radius:15px}
+.v71-home .home-primary strong{font-size:clamp(22px,6vw,29px)!important;letter-spacing:.2px}
+.v71-home .home-primary .menu-glyph{color:#122c39!important}
+.v71-home .home-primary .menu-glyph svg{width:clamp(29px,7vw,37px);height:clamp(29px,7vw,37px)}
+.v71-home .home-primary small{font-weight:750;opacity:1!important;font-size:clamp(8px,2.4vw,11px)}
+.v71-home .home-bottom{position:absolute;bottom:max(16px,env(safe-area-inset-bottom));left:7px;right:7px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:8px 1px;gap:0;background:linear-gradient(135deg,rgba(7,34,49,.97),rgba(6,26,39,.95));border:1.4px solid #d3dfe0a8;border-radius:18px;box-shadow:0 -4px 15px #08212d4d,0 8px 22px #00141e99;min-height:69px;z-index:5}
+.v71-home .home-bottom button{position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;min-height:54px;font-size:clamp(9px,2.4vw,12px);font-weight:950;border-right:1px solid #b6cfd561;letter-spacing:.05px;color:#fff6e1;padding:0 2px}
+.v71-home .home-bottom button:last-child{border-right:0}
+.v71-home .home-bottom button svg{width:clamp(20px,5.8vw,28px);height:clamp(20px,5.8vw,28px)}
+.v71-home .home-bottom button span{height:26px;display:flex;align-items:center;justify-content:center}
+.v71-home .home-bottom button.active{color:#ffd24f}
+.v71-home .home-bottom button.active:after{content:'';position:absolute;bottom:-9px;height:3px;width:64%;border-radius:8px;background:#ffcb2e}
+@media(max-height:740px){.v71-home .home-brand{top:clamp(65px,10%,90px)}.v71-home .home-mountain-mark{height:31px}.v71-home .home-content{top:26%;bottom:max(79px,calc(env(safe-area-inset-bottom) + 75px))}.v71-home .home-menu{gap:6px}.v71-home .home-menu button{min-height:49px;padding:5px 6px}.v71-home .home-menu button.home-primary{min-height:61px}.v71-home .home-bottom{min-height:56px;padding:4px 1px}.v71-home .home-bottom button{min-height:47px;gap:1px}.v71-home .home-brand strong{font-size:clamp(39px,10vw,57px)}}
+@media(max-width:350px){.v71-home .home-content{grid-template-columns:40% 60%;right:8px}.v71-home .home-menu strong{font-size:11px}.v71-home .home-menu small{font-size:8px}.v71-home .menu-glyph{flex-basis:22px}.v71-home .home-menu button{gap:6px}.v71-home .home-profile-info strong{font-size:10px}.v71-home .home-avatar{width:36px;height:36px}.v71-home .home-coin{font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -106,7 +162,7 @@
 <canvas id="game" aria-label="Trail Run, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
 <div id="menuLandscape" aria-hidden="true"></div>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL <b>RUN <span class="version">V7.0</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL <b>RUN <span class="version">V7.1</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div id="backyardHud" aria-live="polite"><span class="by-num" id="byLap">BOUCLE 01 / 25</span><span class="by-clock" id="byClock">00 / 60 min</span><span class="by-label" id="byDplus">+180 m D+</span></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
@@ -204,29 +260,61 @@ function nav(target){
   default:home();
  }
 }
+
+function homeIcon(name){
+ const common='fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+ const paths={
+ play:'<path fill="currentColor" stroke="none" d="M8 4L22 14 8 24Z"/>',
+ bag:'<rect x="5" y="9" width="18" height="18" rx="3"/><path d="M9 9V6a5 5 0 0 1 10 0v3M9 14v8M19 14v8M5 17H2M23 17h3"/>',
+ trophy:'<path d="M8 4h12v9a6 6 0 0 1-12 0V4ZM8 6H3v4a5 5 0 0 0 5 5M20 6h5v4a5 5 0 0 1-5 5M14 19v5M9 26h10"/>',
+ chart:'<path d="M4 26V17h5v9M13 26V11h5v15M22 26V5h5v21"/>',
+ map:'<path d="M3 7l8-3 8 3 8-3v19l-8 3-8-3-8 3V7ZM11 4v19M19 7v19"/><path d="M23 11a4 4 0 1 0-8 0c0 4 4 8 4 8s4-4 4-8Z" fill="currentColor" stroke="none"/>',
+ home:'<path d="m3 14 11-9 11 9v12h-8v-8h-6v8H3Z"/>',
+ stats:'<path d="M5 25v-8h5v8M13 25V9h5v16M21 25V4h5v21"/>',
+ records:'<path d="M7 5h14v8a7 7 0 0 1-14 0V5ZM7 7H3v4a5 5 0 0 0 4 4M21 7h4v4a5 5 0 0 1-4 4M14 20v6M9 26h10"/>',
+ options:'<circle cx="14" cy="14" r="4"/><path d="M12 2h4l1 4 3 1 4-2 3 4-3 3v4l3 3-3 4-4-2-3 1-1 4h-4l-1-4-3-1-4 2-3-4 3-3v-4l-3-3 3-4 4 2 3-1Z"/>',
+ info:'<circle cx="14" cy="14" r="12"/><path d="M14 13v7M14 8v.5"/>'
+ };
+ return '<svg aria-hidden="true" viewBox="0 0 28 28" '+common+'>'+paths[name]+'</svg>';
+}
 function home(){
- const c=COURSES[selected],level=profile.levels.shoes+1,progress=Math.round((profile.levels.shoes+1)/6*100);
- display(`<div class="home-ui">
+ const c=COURSES[selected];
+ const level=1+Math.floor((profile.wins||0)/3);
+ const levelPct=clamp(((profile.wins||0)%3+1)/4*100,0,100);
+ const ctag=c.mode==='millau'?'VIADUC DE MILLAU':c.name.toUpperCase();
+ display(`<div class="home-ui v71-home">
   <div class="home-topbar">
-   <div class="home-profile"><span class="home-avatar">🏃</span><span class="home-profile-info"><strong>TRAIL RUNNER</strong><small>Équipement niv. ${level}</small><span class="home-profile-meter"><i style="width:${progress}%"></i></span></span></div>
-   <div class="home-coin">🟡 ${fmt(profile.coins)} <span aria-label="pièces">✦</span></div>
+    <div class="home-profile" role="group" aria-label="Profil du coureur">
+      <span class="home-avatar"><span class="avatar-pixel">🏃</span></span>
+      <span class="home-profile-info"><strong>MON COUREUR</strong>
+       <span class="home-level"><b>Niv. ${level}</b><span class="home-profile-meter"><i style="width:${levelPct}%"></i></span></span>
+      </span>
+    </div>
+    <div class="home-coin" aria-label="${fmt(profile.coins)} pièces"><span class="coin-graphic">●</span><strong>${fmt(profile.coins)}</strong><span class="coin-cross" aria-hidden="true">+</span></div>
   </div>
-  <div class="home-brand"><strong>TRAIL <em>RUN</em></strong><small>Sentiers · défis · aventures</small></div>
+  <div class="home-brand">
+    <svg class="home-mountain-mark" viewBox="0 0 320 72" aria-hidden="true"><path d="M5 58 63 35 94 44 159 4 224 43 251 25 311 56" fill="none" stroke="#fff8e1" stroke-width="8" stroke-linejoin="miter"/><path d="m133 25 26-21 25 22m51 21 16-22 20 22" fill="none" stroke="#fff8e1" stroke-width="6"/><path d="M247 14q9-4 13 2l7 12m-11-9-9 10m13-2 13 7" stroke="#fff8e1" fill="none" stroke-width="5" stroke-linecap="round"/></svg>
+    <strong><span>TRAIL</span> <em>RUN</em></strong>
+    <i class="home-brand-line"></i>
+  </div>
   <div class="home-content">
-   <div class="home-runner-stand" aria-hidden="true"><span class="home-runner-sprite"></span><span class="home-badge">▲ À L'AVENTURE</span></div>
+   <div class="home-runner-stand" aria-hidden="true"></div>
    <nav class="home-menu" aria-label="Menu principal">
-    <button class="home-primary" id="homePlay"><span class="menu-glyph">▶</span><span><strong>JOUER</strong><small>${c.name} · ${c.km} km</small></span></button>
-    <button id="homeGear"><span class="menu-glyph">🎒</span><span><strong>ÉQUIPEMENT</strong><small>Améliorer mon coureur</small></span></button>
-    <button id="homeChallenges"><span class="menu-glyph">🏆</span><span><strong>DÉFIS</strong><small>Objectifs et récompenses</small></span></button>
-    <button id="homeStats"><span class="menu-glyph">▥</span><span><strong>PROGRESSION</strong><small>Records et statistiques</small></span></button>
-    <button id="homeCourses"><span class="menu-glyph">🗺️</span><span><strong>COURSES</strong><small>Découvrir les parcours</small></span></button>
+     <button class="home-primary" id="homePlay">
+       <span class="menu-glyph">${homeIcon('play')}</span>
+       <span class="menu-words"><strong>JOUER</strong><small>${ctag} · ${c.km} km</small></span>
+     </button>
+     <button id="homeGear"><span class="menu-glyph">${homeIcon('bag')}</span><span class="menu-words"><strong>ÉQUIPEMENT</strong><small>Améliorer mon coureur</small></span></button>
+     <button id="homeChallenges"><span class="menu-glyph">${homeIcon('trophy')}</span><span class="menu-words"><strong>DÉFIS</strong><small>Objectifs et récompenses</small></span></button>
+     <button id="homeStats"><span class="menu-glyph">${homeIcon('chart')}</span><span class="menu-words"><strong>PROGRESSION</strong><small>Stats, records et parcours</small></span></button>
+     <button id="homeCourses"><span class="menu-glyph">${homeIcon('map')}</span><span class="menu-words"><strong>COURSES</strong><small>Découvrir les parcours</small></span></button>
    </nav>
   </div>
-  <nav class="home-bottom" aria-label="Navigation">
-   <button class="active" id="homeNav"><span>⌂</span>ACCUEIL</button>
-   <button id="statsNav"><span>▥</span>STATS</button>
-   <button id="courseNav"><span>🏔</span>PARCOURS</button>
-   <button id="helpNav"><span>⚙</span>AIDE</button>
+  <nav class="home-bottom" aria-label="Navigation principale">
+    <button class="active" id="homeNav"><span>${homeIcon('home')}</span>ACCUEIL</button>
+    <button id="statsNav"><span>${homeIcon('stats')}</span>STATS</button>
+    <button id="courseNav"><span>${homeIcon('records')}</span>PARCOURS</button>
+    <button id="helpNav"><span>${homeIcon('options')}</span>AIDE</button>
   </nav>
  </div>`,'home');
  $('#homePlay').onclick=()=>begin();
@@ -521,7 +609,7 @@ function drawViaduct(x,y,s=.85,behind=false){ctx.save();ctx.translate(x,y);ctx.g
   for(const px of [-78,-22,48,108]){ctx.fillStyle=behind?'#82909b':'#c7d0d6';ctx.beginPath();ctx.moveTo((px-5)*s,8*s);ctx.lineTo((px+5)*s,8*s);ctx.lineTo((px+2)*s,73*s);ctx.lineTo((px-2)*s,73*s);ctx.closePath();ctx.fill()}
   for(const px of [-72,56]){ctx.fillStyle=behind?'#c4c9ce':'#eff4f5';ctx.beginPath();ctx.moveTo((px-3)*s,-1*s);ctx.lineTo((px-2)*s,-83*s);ctx.lineTo((px+2)*s,-83*s);ctx.lineTo((px+4)*s,-1*s);ctx.closePath();ctx.fill();ctx.strokeStyle=behind?'#a4b4bd':'#f5fbfc';ctx.lineWidth=1.2*s;for(let k=1;k<=5;k++){let off=k*15*s;ctx.beginPath();ctx.moveTo(px*s,-80*s);ctx.lineTo(px*s-off,-2*s);ctx.moveTo(px*s,-80*s);ctx.lineTo(px*s+off,-2*s);ctx.stroke()}}
   ctx.restore();ctx.globalAlpha=1}
-// V7.0 — Aucun pylône ou hauban n'est dessiné par-dessus la photo du viaduc.
+// V7.1 — Aucun pylône ou hauban n'est dessiné par-dessus la photo du viaduc.
 // Les pylônes du panorama HD suffisent ; le garde-corps de la piste est conservé.
 function millauBridge(c=run?.course||COURSES[selected],world=run?.x||0){
  return c.mode==='millau'&&sectionFor(c,world)?.surface==='bridge';
@@ -567,7 +655,7 @@ function drawCourseLandmarks(c,prog,st){
   ctx.fillStyle='rgba(152,98,65,.34)';ctx.fillRect(W*.08,H*.47,W*.16,H*.12);ctx.fillRect(W*.3,H*.41,W*.2,H*.18);ctx.fillStyle='rgba(117,177,188,.28)';ctx.fillRect(W*.58,H*.67,W*.26,6);ctx.fillStyle='rgba(96,72,55,.3)';ctx.fillRect(W*.58,H*.55,W*.18,H*.1)
  }
 }
-// V7.0 — panoramas originaux en pixel-art pour Millau.
+// V7.1 — panoramas originaux en pixel-art pour Millau.
 // Les couches 2D sont précalculées à résolution réduite. Aucun dessin lourd par frame.
 const MILLAU_VISUAL_ZONES=[
  {km:0,name:'Vallée du Tarn',sky:['#3e8cbd','#9bd3dc','#e9e6ca'],far:['#91a99a','#6f8d8b'],mid:['#708f78','#47755f'],land:'#638c64',stone:'#d6c59d',accent:'#71cbd5'},
@@ -728,7 +816,7 @@ function paintMillauArt(zoneIndex,depth){
 }
 function millauArt(zone,depth){const key=zone+':'+depth;if(!millauArtCache.has(key))millauArtCache.set(key,paintMillauArt(zone,depth));return millauArtCache.get(key)}
 
-// V7.0 — Cinq panoramas HD. Les bandes floues `vallee-*.webp` sous la piste
+// V7.1 — Cinq panoramas HD. Les bandes floues `vallee-*.webp` sous la piste
 // ont été supprimées. Le paysage et le sol sont désormais deux plans distincts.
 const MILLAU_STAGE_LIMITS=[0,5,10,15.7,20,23.7];
 const millauScenes=Array.from({length:5},(_,i)=>{
@@ -886,7 +974,7 @@ function drawMillauPixelProps(){
 }
 
 
-// V7.0 — Derniers kilomètres en ville : façades millavoises dessinées en Canvas.
+// V7.1 — Derniers kilomètres en ville : façades millavoises dessinées en Canvas.
 // Aucune image basse résolution : bâtiments et public défilent dans le monde.
 function drawMillauCityBackdrop(c){
  const km=kmOf(run?.x||0,c);
@@ -1071,7 +1159,7 @@ function drawGround(){const c=run?.course||COURSES[selected],st=biomeColors();if
    else if(here.name.includes('PIERRIER')){ctx.fillStyle='#7e786d';for(let p=0;p<110;p+=18){ctx.beginPath();ctx.ellipse(x+p,groundY(wx+p)-3,6,2.4,0,0,7);ctx.fill();}}
  }
 }
-// V7.0 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
+// V7.1 : silhouettes végétales détaillées, sans images externes ni hasard à chaque frame.
 function drawLeafMass(px,py,r,palette,seed){
  ctx.save();
  for(let j=0;j<7;j++){
@@ -1282,7 +1370,7 @@ function runnerRigidArm(shoulderX,shoulderY,swing,front,color){
  if(front&&wearing('carbonPoles')){ctx.strokeStyle='#a9d8d4';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(11.8,6.6);ctx.lineTo(8.2,44);ctx.stroke();ctx.strokeStyle='#f4c878';ctx.beginPath();ctx.moveTo(6.8,44);ctx.lineTo(9.6,44);ctx.stroke()}
  ctx.restore();
 }
-// V7.0 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
+// V7.1 — sprite original en pixel-art, basé sur l'analyse image par image de la vidéo fournie.
 // Silhouette compacte, aplats, contours sombres et poses discrètes à cadence arcade.
 function spriteRect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
 function spriteBlock(x,y,w,h,color,edge='#182432',border=1){
@@ -1398,7 +1486,7 @@ function spriteCrouch(pal,frame){
  ctx.save();ctx.translate(-15,21);spriteHead(pal);ctx.restore()
 }
 
-// V7.0 : véritable planche de 18 images recadrées de l'illustration validée :
+// V7.1 : véritable planche de 18 images recadrées de l'illustration validée :
 // 6 images course, 6 saut et 6 accroupissement. Les poses ne sont pas interpolées.
 const RUNNER_FRAMES={width:218,height:306,count:6};
 const runnerAtlas=new Image();runnerAtlas.decoding='async';
@@ -1512,7 +1600,7 @@ canvas.addEventListener('pointerdown',e=>{if(screen!=='run'||run?.paused)return;
 canvas.addEventListener('pointerup',e=>{if(!swipe.active||e.pointerId!==swipe.id)return;const dy=e.clientY-swipe.y,dx=e.clientX-swipe.x;swipe.active=false;if(Math.abs(dy)>28&&Math.abs(dy)>Math.abs(dx)*.75){if(dy<0)jump();else duck()}else if(Math.abs(dy)<20&&Math.abs(dx)<30)jump()});
 canvas.addEventListener('pointercancel',()=>swipe.active=false);
 $('#jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});$('#duck').addEventListener('pointerdown',e=>{e.preventDefault();duck()});
-// V7.0 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
+// V7.1 : les commandes se comportent comme des boutons natifs iOS, sans sélection ni menu contextuel.
 const controlZone=$('#controls'),boostButton=$('#boost');
 for(const name of ['contextmenu','selectstart','dragstart'])controlZone.addEventListener(name,e=>e.preventDefault());
 const preventTouchDefault=e=>{if(e.cancelable)e.preventDefault()};
