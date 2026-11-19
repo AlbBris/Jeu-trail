@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#102d32">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Trail Chaos">
-<meta name="description" content="Trail Chaos V6.2 : courses mythiques, boutique collector et nouveau défi backyard 25 boucles.">
+<meta name="apple-mobile-web-app-title" content="Trail Run">
+<meta name="description" content="Trail Run : parcours de trail mythiques, pixel art et équipement.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Trail Chaos — Side Trail V6.2</title>
+<title>Trail Run — V7.0</title>
 <style>
 :root{color-scheme:dark;--lime:#d5f777;--teal:#8ce5cb;--text:#f8f8ed;--muted:#b6cfc8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071b1d;color:var(--text);overscroll-behavior:none}button{font:inherit;touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:default}#app{width:100%;max-width:620px;height:100dvh;min-height:540px;margin:auto;position:relative;isolation:isolate;overflow:hidden;background:#244b4d;box-shadow:0 0 80px #0009}canvas{display:block;width:100%;height:100%;touch-action:none}
@@ -28,13 +28,85 @@
 .event-kicker{font-size:10px;letter-spacing:2px;font-weight:950;color:#abf9e3}.event-card h3{margin:6px 0 5px;font-size:24px;letter-spacing:-.6px;line-height:1.03}.event-card p{margin:5px 0 10px;font-size:11px;color:#d6f0e5;max-width:90%}.event-figures{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}.event-figures span{font-size:10px;font-weight:850;border:1px solid #b4ffe057;background:#0003;padding:6px 7px;border-radius:7px}.event-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.event-actions .btn{font-size:11px;min-height:40px;padding:8px 4px}.event-note{color:#b4c9c5;font-size:9px;margin-top:8px}
 #backyardHud{display:none;margin:4px 0 9px;padding:7px 8px;border-radius:10px;background:#052a31c9;border:1px solid #a2ffd466;font-size:10px;align-items:center;justify-content:space-between;gap:9px;backdrop-filter:blur(4px)}#backyardHud.on{display:flex}.by-num{color:#dffc83;font-weight:950;letter-spacing:.3px}.by-clock{font-weight:900;color:#fcf5d5}.by-clock.urgent{color:#ff917b}.by-label{color:#9ed4cf;font-size:9px}
 .backyard-pit{border:1px solid #b5f7d45c;background:#051f2e65;padding:11px;border-radius:12px;margin:12px 0;text-align:left}.backyard-pit .value{color:#e8ff9e;font-weight:950;font-size:21px}.backyard-pit .sub{font-size:11px;color:#cde9de}.backyard-pit .line{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ffffff17}.backyard-pit .line:last-child{border-bottom:0}
+
+/* TRAIL RUN - V7 : redesign inspiré du sentier forestier. */
+:root{--lime:#ffd249;--teal:#87e2bf;--gold:#ffd249;--text:#fff4d9;--muted:#ccdfd5}
+#menuLandscape{display:none;position:absolute;inset:0;z-index:0;background:#16444b url('./assets/trail-run-forest.svg') center/cover no-repeat}
+#app.menu-active #menuLandscape{display:block}#app.menu-active #game{visibility:hidden}
+#app.menu-active #veil{background:linear-gradient(180deg,#061e2c25,#061e2b23 35%,#071a24b9)}
+#app.menu-active:not(.menu-home) #veil{background:linear-gradient(#061725bd,#071c2ce8 54%,#071621f5)}
+#app.menu-home #header{display:none}#app.menu-home #panel{inset:0;padding:0;display:block;z-index:5}
+#app.menu-active:not(.menu-home) #header{z-index:6;top:max(12px,env(safe-area-inset-top));left:18px;right:18px}
+#app.menu-active:not(.menu-home) .logo{font-weight:1000;color:#ffecb7;font-size:16px;font-style:italic;letter-spacing:-.5px}
+#app.menu-active:not(.menu-home) .logo b{font-size:16px;display:inline;color:#ffd249}
+#app.menu-active .bank{border-color:#edcf7ba0;background:#082d3ee9;color:#ffeeba}
+.home-ui{height:100%;width:100%;display:flex;flex-direction:column;overflow-y:auto;padding:max(17px,env(safe-area-inset-top)) 13px max(12px,env(safe-area-inset-bottom));scrollbar-width:none}
+.home-ui::-webkit-scrollbar{display:none}
+.home-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.home-profile{display:flex;gap:7px;align-items:center;background:#051f2fe8;border:1px solid #d9d7b08a;border-radius:26px;padding:5px 9px 5px 5px;box-shadow:0 3px 16px #0009}
+.home-avatar{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:50%;border:2px solid #f9d967;background:#1d5863;font-size:22px}
+.home-profile-info{display:flex;flex-direction:column;min-width:0;gap:4px}
+.home-profile-info strong{font-size:11px;color:#fff8e6;white-space:nowrap}
+.home-profile-info small{font-size:9px;font-weight:850;color:#ffdb7b}
+.home-profile-meter{display:block;width:96px;max-width:24vw;height:6px;background:#215568;border-radius:8px;overflow:hidden}
+.home-profile-meter i{display:block;height:100%;background:linear-gradient(90deg,#ffd15a,#f2e69e)}
+.home-coin{background:#082b3ce8;border:1px solid #f0ca76b3;border-radius:23px;padding:10px 8px;white-space:nowrap;font-size:14px;font-weight:950;color:#fff3ce;box-shadow:0 5px 15px #0009}
+.home-brand{margin:clamp(15px,3vh,36px) auto 0;filter:drop-shadow(2px 5px 3px #032231);text-align:center;position:relative}
+.home-brand:before{content:'▲  ▲  ▲';display:block;color:#f7ecd3;letter-spacing:8px;font-size:15px;line-height:1}
+.home-brand strong{display:block;white-space:nowrap;font-style:italic;letter-spacing:-3px;font-weight:1000;font-size:clamp(39px,12vw,64px);line-height:1.05;color:#fff9e7;text-shadow:3px 3px #0c3b52}
+.home-brand em{font-style:italic;color:#ffd042}.home-brand small{font-size:9px;letter-spacing:3px;color:#ffedc0;font-weight:950}
+.home-content{display:grid;grid-template-columns:minmax(82px,31%) minmax(0,1fr);gap:7px;align-items:center;flex:1;min-height:335px;margin-top:12px}
+.home-runner-stand{position:relative;align-self:end;height:210px;pointer-events:none}
+.home-runner-stand:before{content:'';position:absolute;bottom:25px;left:0;width:100%;height:30px;border-radius:50%;background:#081a2c70;filter:blur(10px)}
+.home-runner-sprite{position:absolute;bottom:40px;left:50%;transform:translateX(-50%) rotate(-3deg);width:94px;height:132px;background:url('./sprites/coureur-animations.png') 0 0/564px 396px no-repeat;image-rendering:pixelated;filter:drop-shadow(3px 4px 1px #0d292d)}
+.home-badge{position:absolute;bottom:15px;left:0;right:0;color:#ffedb3;font-size:9px;text-align:center;font-weight:900;text-shadow:0 2px 5px #000}
+.home-menu{display:flex;flex-direction:column;gap:8px}
+.home-menu button{width:100%;display:flex;align-items:center;gap:9px;padding:7px 9px;min-height:56px;text-align:left;border-radius:15px;border:1px solid #f4ebc389;background:linear-gradient(125deg,#0d3044f5,#082739f2);color:#fff6dc;box-shadow:0 4px 15px #0009,inset 0 1px #ffffff21}
+.home-menu button:active{transform:translateY(2px)}
+.home-menu .menu-glyph{font-size:23px;flex:0 0 27px;text-align:center;color:#ffd450}
+.home-menu strong{display:block;font-size:clamp(12px,3.7vw,18px);font-weight:1000;line-height:1.1}
+.home-menu small{display:block;font-size:9px;line-height:1.2;margin-top:3px;opacity:.84}
+.home-menu button.home-primary{background:linear-gradient(150deg,#ffe36b,#ffba2a);border:2px solid #fff4a2;min-height:76px;color:#112b39;box-shadow:0 4px 0 #866429,0 10px 20px #0009}
+.home-primary .menu-glyph{font-size:30px!important;color:#163244!important}
+.home-primary strong{font-size:clamp(20px,6vw,27px)}.home-primary small{font-weight:850;opacity:1!important}
+.home-bottom{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;border:1px solid #d8e3c87f;background:#061f2eee;border-radius:17px;padding:7px 2px;box-shadow:0 9px 22px #0009}
+.home-bottom button{border:0;background:transparent;color:#f9f5e9;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:47px;font-size:9px;font-weight:950}
+.home-bottom button span{font-size:19px}.home-bottom button.active{color:#ffdf65}
+#app.menu-active:not(.menu-home) #panel{padding:max(72px,calc(env(safe-area-inset-top) + 63px)) 11px max(12px,env(safe-area-inset-bottom));align-items:stretch}
+#app.menu-active:not(.menu-home) .sheet{max-height:100%;height:100%;border-radius:22px;padding:18px 15px 22px;background:linear-gradient(150deg,#082b3cf4,#091d2af5);border:1px solid #f0d58795;box-shadow:0 15px 45px #0009;scrollbar-width:thin}
+#app.menu-active .sheet h2{font-style:italic;text-transform:uppercase;color:#ffedc7;font-weight:1000}
+#app.menu-active .eyebrow{color:#ffd46c}
+#app.menu-active .accent{color:#ffd961}
+#app.menu-active .sheet .btn{background:linear-gradient(#ffe580,#ffc33c);border:1px solid #ffeca8;box-shadow:0 3px 0 #96702d;color:#19323c}
+#app.menu-active .sheet .btn.alt{background:#123d4be8;color:#fff5da;border:1px solid #e4d9a081;box-shadow:none}
+#app.menu-active .course{border:1px solid #bed7b78c;background:#124052e8;border-radius:15px}
+#app.menu-active .course.active{border:2px solid #ffd352;background:#215456ed;box-shadow:0 0 14px #e9c55259}
+#app.menu-active .course .right{color:#ffdc6b}
+#app.menu-active .gear,#app.menu-active .collector{background:#103847e8;border-color:#8ab3ad9b}
+#app.menu-active .gear button,#app.menu-active .collector-action{background:#ffd149;color:#17313e}
+#app.menu-active .skin-card.selected{border-color:#ffda58}
+#app.menu-active .collector-bonus{color:#ffd972}
+#app.menu-active .stat{border-color:#cbbf85aa;background:#123b49bd}
+#app.menu-active .tip{border-color:#d8c17d9e;background:#123744bc}
+#app .pause,#app .control{border-color:#ffe6a39e}
+#app .control.boost{background:linear-gradient(135deg,#d99636,#b15c31)}
+.course-picker-card .pic{font-size:29px;min-width:46px;height:50px;display:grid;place-items:center;background:#285a62;border:1px solid #d2ddbc70;border-radius:10px}
+.course-picker-card .course-meta{color:#ffdf7e!important;font-weight:900}
+.progress-line{height:12px;border-radius:8px;background:#09293a;border:1px solid #d6dcb583;overflow:hidden}
+.progress-line b{height:100%;display:block;background:linear-gradient(90deg,#ffbf37,#ffe688)}
+.challenge-tile{border:1px solid #b9d2b48a;background:linear-gradient(135deg,#194655,#0c3041);padding:13px;border-radius:14px;margin:10px 0}
+.challenge-tile strong{color:#fff3cd;font-size:13px}.challenge-tile p{font-size:11px!important;margin:5px 0!important}
+.challenge-value{display:block;margin:8px 0;font-size:13px;font-weight:900;color:#ffdb70}
+@media(max-height:735px){.home-brand{margin-top:8px}.home-brand strong{font-size:40px}.home-content{min-height:290px;margin-top:7px}.home-menu{gap:6px}.home-menu button{min-height:50px;padding:5px 7px}.home-menu button.home-primary{min-height:62px}.home-bottom{padding:3px 2px}.home-bottom button{min-height:41px}}
+@media(max-width:345px){.home-content{grid-template-columns:80px minmax(0,1fr)}.home-menu .menu-glyph{flex-basis:20px;font-size:20px}.home-runner-sprite{transform:translateX(-50%) scale(.85)}}
 </style>
 </head>
 <body>
 <div id="app">
-<canvas id="game" aria-label="Trail Chaos, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
+<canvas id="game" aria-label="Trail Run, course en vue latérale. Glissez vers le haut pour sauter et vers le bas pour vous baisser."></canvas>
+<div id="menuLandscape" aria-hidden="true"></div>
 <div id="veil"></div>
-<div id="header"><div class="logo">TRAIL CHAOS <b>SIDE TRAIL <span class="version">V6.2</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
+<div id="header"><div class="logo">TRAIL <b>RUN <span class="version">V7.0</span></b></div><div class="bank">🟡 <span id="bank">0</span></div></div>
 <div id="hud"><div class="hudtitle"><span id="courseName">FORÊT DES RACINES</span><span id="distance">0 / 8 km</span></div><div class="track"><b id="progress"></b></div><div class="routeinfo"><span id="sectionLabel">Départ</span><span id="altLabel">Profil arcade</span></div><canvas id="routeProfile" width=340 height=38 aria-label="Profil altimétrique simplifié et progression"></canvas><div id="backyardHud" aria-live="polite"><span class="by-num" id="byLap">BOUCLE 01 / 25</span><span class="by-clock" id="byClock">00 / 60 min</span><span class="by-label" id="byDplus">+180 m D+</span></div><div class="hudrow"><span id="hearts">❤️❤️❤️</span><span>⚡ <span class="energy"><b id="energy"></b></span></span><span id="wallet">🟡 0</span><button id="pause" class="pause" aria-label="Pause">Ⅱ</button></div></div>
 <main id="panel"></main>
 <div id="controls"><div class="buttons"><button id="duck" class="control" aria-label="Se baisser">↓<small>SE BAISSER</small></button><button id="jump" class="control" aria-label="Sauter">↑<small>SAUTER</small></button></div><div class="buttons"><button id="boost" class="control boost" aria-label="Accélérer">⚡<small>SPRINT</small></button></div></div>
