@@ -1,22 +1,18 @@
-# TRAIL RUN V7.0 — interface forestière et menus modernisés
+# Trail Run V7.1 — accueil fidèle au concept
 
-La version 7 adopte le nouveau nom **Trail Run** et une interface inspirée du concept validé : un **sentier boisé en montée** sans viaduc à l'accueil, avec un coureur pixel et des boutons jaune/or sur fond bleu nuit.
+La page d’accueil a été repensée sur la base du visuel validé : un coureur gravissant un **sentier en forêt**, un ciel lumineux, des reliefs et falaises au loin, des boutons bleu nuit et un grand bouton **JOUER** jaune.
 
-## Nouveautés principales
+## Modifications V7.1
 
-- Accueil plein écran, logo Trail Run, affichage du solde de pièces, prévisualisation du personnage et raccourcis.
-- Nouvelle illustration originale vectorielle `assets/trail-run-forest.svg`, montagne forestière et chemin montant ; image indépendante des décors des courses.
-- Boutons fonctionnels : JOUER (course sélectionnée), ÉQUIPEMENT, DÉFIS, PROGRESSION, COURSES et AIDE.
-- Choix des parcours revu en cartes avec distance, niveau et informations des parcours réels ou fictifs.
-- Onglet PROGRESSION : arrivées, meilleurs temps enregistrés, équipement et parcours terminés.
-- Onglet DÉFIS : première arrivée, cinq arrivées, défi des 25 boucles (essai 5 boucles ou défi complet).
-- Écrans existants (boutique, aide, pause, résultats et commandes) harmonisés avec la nouvelle palette bleu nuit, or et vert.
-- Manifest iOS et cache de service worker actualisés.
+- **Nouveau fond illustré** : `assets/trail-run-home-v71.svg` utilise une illustration bitmap pixel art intégrée (autonome, utilisable hors ligne), sans viaduc. Il remplace le décor vectoriel simple de la V7.0, conservé comme solution de secours dans `assets/trail-run-forest.svg`.
+- **Compositions proportionnées** : coureur de dos intégré à l’illustration, logo « TRAIL RUN » avec emblème montagne blanc et trait jaune, menu vertical à droite, profil et pièces au-dessus, navigation en bas.
+- **Icônes homogènes** : pictogrammes vectoriels de jeu, sac, trophée, progression et carte, sans emoji disparate dans les boutons.
+- **Boutons réellement interactifs** : Jouer, Équipement, Défis, Progression et Courses, plus les raccourcis Accueil, Stats, Parcours et Aide.
+- **Adaptation iPhone** avec tailles révisées pour petits écrans, safe areas et paysage cadré en cover.
+- **Cache de l’application actualisé** pour télécharger le nouveau décor.
 
-La sauvegarde utilise toujours la clé existante `trail-chaos-runner-v2` et **ne remet pas à zéro** les pièces, équipements ou records. Les anciens parcours, notamment Millau V6.2 (village, viaduc et arrivée urbaine), restent inchangés.
+### Données et parcours préservés
 
-## Contrôle
+Les fonctionnalités et sauvegardes restent inchangées : même stockage `trail-chaos-runner-v2`, mêmes pièces, équipements et records. Le parcours de Millau avec ses dernières corrections est conservé.
 
-La syntaxe JavaScript a été validée automatiquement. Le rendu graphique sur iPhone reste à contrôler dans l'app après rafraîchissement.
-
-Les panoramas Millau restent dans `assets/millau/`. L'atelier de personnalisation est dans `atelier-perso.html`.
+Les détails graphiques sont une interprétation jouable du concept, pas une copie statique de l’interface : tous les textes et boutons restent du vrai HTML/CSS et leurs actions fonctionnent.
