@@ -1,23 +1,22 @@
-# TRAIL CHAOS V6.2 — Arrivée urbaine de Millau
+# TRAIL RUN V7.0 — interface forestière et menus modernisés
 
-La fin du parcours du Viaduc de Millau arrive maintenant au centre-ville, après la descente et la traversée du causse. Le reste des courses et les mécaniques existantes sont conservés.
+La version 7 adopte le nouveau nom **Trail Run** et une interface inspirée du concept validé : un **sentier boisé en montée** sans viaduc à l'accueil, avec un coureur pixel et des boutons jaune/or sur fond bleu nuit.
 
-## Modifications V6.2
+## Nouveautés principales
 
-- À partir d'environ **21,1 km** : arrivée progressive du décor urbain avec les panoramas du Tarn derrière les immeubles, sans coupure brutale.
-- À partir de **21,8 km** : sol de route et section « Faubourgs de Millau ».
-- À partir de **22,4 km** : rues du centre avec façades ocres et rosées, toits en tuiles, boutiques, volets, une silhouette stylisée du beffroi et fanions festifs.
-- À partir de **22,55 km** : spectateurs sur le bord de la route derrière des barrières **purement décoratives** (sans collision), densité croissante à l'approche de l'arrivée.
-- Après **23,25 km** : confettis et animation visuelle légère.
-- À **23,7 km** : arche d'arrivée « MILLAU / ARRIVÉE » visible et ligne à damiers alignée sur le sol du jeu.
+- Accueil plein écran, logo Trail Run, affichage du solde de pièces, prévisualisation du personnage et raccourcis.
+- Nouvelle illustration originale vectorielle `assets/trail-run-forest.svg`, montagne forestière et chemin montant ; image indépendante des décors des courses.
+- Boutons fonctionnels : JOUER (course sélectionnée), ÉQUIPEMENT, DÉFIS, PROGRESSION, COURSES et AIDE.
+- Choix des parcours revu en cartes avec distance, niveau et informations des parcours réels ou fictifs.
+- Onglet PROGRESSION : arrivées, meilleurs temps enregistrés, équipement et parcours terminés.
+- Onglet DÉFIS : première arrivée, cinq arrivées, défi des 25 boucles (essai 5 boucles ou défi complet).
+- Écrans existants (boutique, aide, pause, résultats et commandes) harmonisés avec la nouvelle palette bleu nuit, or et vert.
+- Manifest iOS et cache de service worker actualisés.
 
-Le décor et les foules sont dessinés par le moteur Canvas (positions liées au monde), sans télécharger d'images basse résolution. La direction artistique est inspirée des rues et façades traditionnelles de Millau, sans prétendre reproduire précisément un itinéraire réel. Les sections et altitudes restent des approximations de jeu.
+La sauvegarde utilise toujours la clé existante `trail-chaos-runner-v2` et **ne remet pas à zéro** les pièces, équipements ou records. Les anciens parcours, notamment Millau V6.2 (village, viaduc et arrivée urbaine), restent inchangés.
 
-## Corrections conservées depuis V6.1
+## Contrôle
 
-- Panoramas Millau détaillés en 941 × 556 px.
-- Pas de bande d'image floue sous le sentier : sol continu distinct du fond.
-- Aucun pylône ni hauban supplémentaire dessiné sur le viaduc.
-- Garde-corps, joueur, contrôles, équipements et sauvegardes conservés.
+La syntaxe JavaScript a été validée automatiquement. Le rendu graphique sur iPhone reste à contrôler dans l'app après rafraîchissement.
 
-Le cache PWA est versionné pour que les iPhone récupèrent la V6.2 au prochain chargement.
+Les panoramas Millau restent dans `assets/millau/`. L'atelier de personnalisation est dans `atelier-perso.html`.
