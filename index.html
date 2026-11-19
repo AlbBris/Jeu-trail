@@ -105,7 +105,7 @@
 #app.menu-home #menuLandscape{
  background-image:url('./assets/trail-run-home-v71.svg'),url('./assets/trail-run-forest.svg');
  background-repeat:no-repeat,no-repeat;
- background-position:50% center,center center;
+ background-position:22% center,center center;
  background-size:cover,cover;
  image-rendering:auto;
 }
@@ -155,6 +155,13 @@
 @media(max-height:740px){.v71-home .home-brand{top:clamp(65px,10%,90px)}.v71-home .home-mountain-mark{height:31px}.v71-home .home-content{top:26%;bottom:max(79px,calc(env(safe-area-inset-bottom) + 75px))}.v71-home .home-menu{gap:6px}.v71-home .home-menu button{min-height:49px;padding:5px 6px}.v71-home .home-menu button.home-primary{min-height:61px}.v71-home .home-bottom{min-height:56px;padding:4px 1px}.v71-home .home-bottom button{min-height:47px;gap:1px}.v71-home .home-brand strong{font-size:clamp(39px,10vw,57px)}}
 @media(max-width:350px){.v71-home .home-content{grid-template-columns:40% 60%;right:8px}.v71-home .home-menu strong{font-size:11px}.v71-home .home-menu small{font-size:8px}.v71-home .menu-glyph{flex-basis:22px}.v71-home .home-menu button{gap:6px}.v71-home .home-profile-info strong{font-size:10px}.v71-home .home-avatar{width:36px;height:36px}.v71-home .home-coin{font-size:12px}}
 
+
+/* V7.1 fine tuning after mobile mockup validation */
+.v71-home .home-avatar{padding:0;display:flex;align-items:center;justify-content:center}
+.v71-home .avatar-pixel{display:block;width:100%;height:100%;line-height:0}
+.v71-home .avatar-pixel svg{width:100%;height:100%;display:block;image-rendering:pixelated}
+.v71-home .home-menu button:not(.home-primary)::before{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:.08;background:repeating-radial-gradient(ellipse at 104% 135%,transparent 0,transparent 12px,#a7eadc 13px,#a7eadc 14px,transparent 15px,transparent 28px)}
+.v71-home .home-menu button:focus-visible,.v71-home .home-bottom button:focus-visible{outline:3px solid #fdd448;outline-offset:3px}
 </style>
 </head>
 <body>
@@ -285,7 +292,7 @@ function home(){
  display(`<div class="home-ui v71-home">
   <div class="home-topbar">
     <div class="home-profile" role="group" aria-label="Profil du coureur">
-      <span class="home-avatar"><span class="avatar-pixel">🏃</span></span>
+      <span class="home-avatar"><span class="avatar-pixel"><svg viewBox="0 0 40 40" aria-hidden="true" shape-rendering="crispEdges"><path fill="#173f65" d="M4 31h31v9H4z"/><path fill="#1f2837" d="M10 15h18v15H10z"/><path fill="#c68c64" d="M11 19h18v11H11z"/><path fill="#f0bd8e" d="M14 17h13v12H14z"/><path fill="#3d2b27" d="M9 17h5v12H9zM16 29h12v4H16z"/><path fill="#112640" d="M20 21h3v3h-3z"/><path fill="#182d4e" d="M5 10h28v7H5zM10 6h20v5H10zM25 14h12v4H25z"/><path fill="#466d93" d="M12 8h12v2H12z"/><path fill="#eff5ee" d="M17 12h7v2h-7z"/><path fill="#db8e53" d="M27 25h4v3h-4z"/></svg></span></span>
       <span class="home-profile-info"><strong>MON COUREUR</strong>
        <span class="home-level"><b>Niv. ${level}</b><span class="home-profile-meter"><i style="width:${levelPct}%"></i></span></span>
       </span>
