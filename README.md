@@ -1,21 +1,16 @@
-# Trail Run V7.2 — nouvel accueil net et fidèle au concept
+# Trail Run V7.3 — retour au paysage illustré validé
 
-La V7.2 refait le rendu de l'accueil à partir de la capture iPhone. On conserve la composition et les boutons validés en V7.1, mais on corrige le flou du paysage et du personnage.
+Après la V7.2, la capture iPhone montrait un fond vectoriel à aplats, trop éloigné du visuel choisi initialement. La V7.3 remet l'**illustration forestière de V7.1** : grand arbre, lumière, reliefs lointains, chemin de montée et coureur tourné vers la montagne.
 
-## Améliorations
+## Changements
 
-- **Décor forestier net** : `assets/trail-run-home-v71.svg` est désormais une illustration **100 % vectorielle**, construite avec reliefs, montagnes, falaises, plusieurs plans de forêt, sentier en montée, rochers, sous-bois, fleurs et feuillage. Plus de mini WebP basse qualité intégré dans un SVG.
-- **Personnage séparé** : sprite original `sprites/coureur-animations.png`, affiché avec `image-rendering:pixelated` et une animation de course en 6 poses. Il ne fait plus partie du fond compressé et reste net quel que soit l'écran.
-- **Logo TRAIL RUN** : montagne, lettrage et soulignement or mieux définis, ombres raccourcies.
-- **Menu** : boutons bleu nuit plus contrastés, bordures et textes secondaires lisibles, bouton « JOUER » jaune mieux équilibré.
-- **Navigation du bas** : plus compacte, séparateurs allégés, onglet actif mis en évidence.
-- **Profil et pièces** : contraste et positionnement affinés.
-- **Responsive iPhone** : tailles adaptées sur écran compact et prise en compte des marges de sécurité.
-- **Accessibilité** : respecte `prefers-reduced-motion` pour désactiver l'animation de course.
-- **Mise en cache PWA** : changement du nom du cache `trail-run-v72-sharp-forest-runner-20261120` afin de forcer le rechargement des ressources.
+- Nouvel actif `assets/trail-run-home-v73-illustre.svg` créé à partir de la **composition originale V7.1** (copie conservée dans l'historique Git).
+- Le décor vectoriel alternatif V7.2 reste archivé dans `assets/trail-run-home-v71.svg` mais **n'est plus utilisé** sur l'accueil.
+- Suppression du second coureur animé V7.2 qui se superposait au personnage illustré ; le coureur du fond fait partie de la composition.
+- Conservation du logo, des panneaux du menu, des icônes et de la navigation de la V7.2, avec une palette cohérente et sans filtre de flou ajouté.
+- Fond restauré derrière les zones de sécurité en haut et en bas sur iPhone.
+- Nouveau cache service worker `trail-run-v73-original-art-20261120`.
 
-Les pages existantes, la boutique, les commandes, les parcours (dont Millau) et les sauvegardes restent en place : aucune clé de données n'a été renommée.
+**Note qualité :** l'actif V7.1 retrouvé dans l'historique du dépôt contient une version WebP très compressée de l'illustration initiale. La composition est fidèle à la référence, mais cette compression peut encore limiter la finesse du décor sur des écrans Retina. Il faudra intégrer la source haute résolution directement au dépôt pour obtenir à la fois la fidélité complète du dessin et sa netteté d'origine.
 
-## Validation
-
-La syntaxe du script JavaScript a été validée et la structure des fichiers GitHub a été contrôlée. Le rendu en situation sur un iPhone réel doit encore être confirmé à l'écran ; la capture de l'utilisateur reste la référence pour les ajustements suivants.
+Les courses, les contrôles, l'atelier, les pièces, l'équipement, les records et les sauvegardes restent inchangés.
