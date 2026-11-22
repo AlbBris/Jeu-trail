@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#073443">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Trail Run · Prototype Forêt des Racines</title>
+<style>
+:root{color-scheme:dark;--ink:#071f2b;--light:#f8f6dd;--gold:#ffce3d;--mint:#70e7ad}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#031820;color:var(--light);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Arial",sans-serif;touch-action:none;user-select:none}
+button{font:inherit;cursor:pointer;color:inherit;touch-action:manipulation}
+.game{position:relative;isolation:isolate;width:100%;max-width:550px;height:100svh;min-height:480px;margin:auto;overflow:hidden;background:#0f5064;box-shadow:0 0 80px #000a}
+canvas{display:block;position:absolute;inset:0;width:100%;height:100%;image-rendering:auto}
+.scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#041728a6 0%,transparent 25%,transparent 64%,#031825b9 100%);z-index:1}
+.hud{position:absolute;z-index:3;left:10px;right:10px;top:max(12px,env(safe-area-inset-top));pointer-events:none}
+.hud-header{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.brand{background:#042437d9;border:1px solid #eed99aaf;padding:7px 9px;border-radius:13px;box-shadow:0 3px 13px #001a29a5;min-width:0}
+.brand b{display:block;letter-spacing:.8px;font-size:clamp(12px,4.2vw,18px);font-weight:1000;font-style:italic;line-height:1}
+.brand span{font-size:9px;color:#ffd76d;letter-spacing:1.2px;font-weight:900}
+.stats{display:flex;align-items:center;gap:5px}
+.chip,.pause{border:1px solid #d9eec7ad;background:#05273add;box-shadow:0 3px 10px #001b2b9a;border-radius:12px;padding:8px;color:#fff4dc;white-space:nowrap;font-size:12px;font-weight:950}
+.pause{pointer-events:auto;min-width:42px;height:39px;font-size:21px;padding:0}
+.titlebar{margin-top:9px;background:#052c3edb;border:1px solid #cfdec3a0;border-radius:12px;padding:8px 9px}
+.titlebar strong{font-size:12px;font-weight:950;display:block;white-space:nowrap}
+.titlebar small{font-size:10px;opacity:.92}
+.progressbar{height:8px;border-radius:10px;background:#061824;overflow:hidden;border:1px solid #e8f0d384;margin-top:7px}
+.progressbar i{display:block;background:linear-gradient(90deg,#ffad30,#fff06c);height:100%;width:0%;transition:width .2s linear}
+.infos{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:7px}
+.infos .chip{padding:6px 5px;font-size:11px;text-align:center}
+.meters{position:absolute;top:clamp(158px,22vh,205px);left:10px;z-index:3;pointer-events:none;display:grid;gap:5px;width:112px}
+.meter{background:#082b3cd9;border:1px solid #e0dfbc91;border-radius:9px;padding:5px 7px;box-shadow:0 3px 8px #0028}
+.meter .label{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:10px;font-weight:900}
+.meter .bar{margin-top:4px;height:6px;border-radius:6px;background:#071c25;overflow:hidden;border:1px solid #c6d9bb65}
+.meter .bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ffca42,#75efb3)}
+.meter.water .bar i{background:#3fd9ff}
+.meter.life .bar i{background:#ff695c}
+.toast{position:absolute;top:38%;left:50%;z-index:7;transform:translate(-50%,-50%);border:1px solid #ffe99d;background:#082936ef;border-radius:15px;padding:10px 17px;font-size:13px;font-weight:900;text-align:center;max-width:85%;opacity:0;transition:opacity .14s;pointer-events:none;box-shadow:0 5px 15px #0008}
+.toast.show{opacity:1}
+.controls{position:absolute;left:10px;right:10px;bottom:max(14px,env(safe-area-inset-bottom));z-index:4;display:grid;grid-template-columns:1fr 1fr 1.15fr;align-items:end;gap:9px}
+.controls button{border-radius:18px;min-width:0;height:80px;background:linear-gradient(155deg,#0a3745f2,#09212ded);border:2px solid #d8e9d6d2;box-shadow:0 6px 0 #061727c9,0 12px 23px #0008;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:13px;gap:3px;font-weight:1000}
+.controls button strong{font-size:24px;line-height:1.05}
+.controls button:active,.controls button.held{transform:translateY(3px);filter:brightness(1.2)}
+.controls button.sprint{background:linear-gradient(155deg,#163c39f8,#07343be9);border-color:#ffd763;box-shadow:0 6px 0 #70551cc9,0 12px 25px #0008;color:#ffe16c}
+.quick{position:absolute;bottom:max(109px,calc(env(safe-area-inset-bottom) + 107px));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:7px;z-index:4}
+.quick button,.quick .tip{border-radius:11px;border:1px solid #dbe1c89b;background:#052e3dea;padding:8px 10px;box-shadow:0 4px 12px #0008;font-size:11px;font-weight:900}
+.quick button{min-height:40px;flex:none}
+.quick .tip{min-width:0;flex:1;font-size:10px}
+.quick .tip b{color:#ffd86a}
+.overlay{position:absolute;z-index:10;inset:0;background:linear-gradient(180deg,#051b2c78,#071e2de8 68%);display:flex;align-items:center;justify-content:center;padding:17px;text-align:center}
+.overlay[hidden]{display:none}
+.panel{width:min(100%,410px);max-height:90%;overflow:auto;border-radius:22px;border:2px solid #e5d393;background:linear-gradient(155deg,#093342f1,#071e2af8);box-shadow:0 13px 40px #000b;padding:23px 20px}
+.panel .icon{font-size:38px}
+.panel h1{margin:6px 0 0;font-size:clamp(28px,8vw,40px);font-weight:1000;font-style:italic;letter-spacing:-1.5px}
+.panel h1 em{color:#ffcc3e}
+.panel h2{margin:9px 0 6px;color:#ffe5aa;font-size:23px}
+.panel p{font-size:13px;line-height:1.55;color:#dfefe9;margin:9px 0 13px}
+.panel .pill{display:inline-block;padding:4px 9px;border-radius:20px;font-size:10px;letter-spacing:1px;font-weight:900;color:#081d2a;background:#ffdc6b}
+.btn{display:block;width:100%;min-height:49px;border:2px solid #ffec9a;border-radius:14px;background:linear-gradient(160deg,#ffe477,#ffc42b);font-weight:1000;color:#142e38;box-shadow:0 4px 0 #88632d;margin-top:12px}
+.btn.alt{background:#153c48;color:#fff3cf;border:1px solid #d8dcb9;box-shadow:none}
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:13px 0;color:#f1e8d5;text-align:left;font-size:11px}
+.legend span{background:#153b46b5;border:1px solid #b6d8b07c;border-radius:9px;padding:7px 8px}
+#view{font-weight:750;opacity:.75;font-size:10px;text-align:center;margin-top:9px}
+@media(max-height:675px){.meters{top:145px}.quick{bottom:max(86px,calc(env(safe-area-inset-bottom) + 82px))}.controls button{height:64px}.controls{gap:5px}.meter{padding:3px 6px}}
+</style>
+</head>
+<body><main class="game" aria-label="Prototype de Trail Run, Forêt des Racines">
+<canvas id="scene" aria-label="Sentier forestier et coureur en défilement"></canvas><div class="scrim"></div>
+<header class="hud" id="hud">
+<div class="hud-header"><div class="brand"><b>TRAIL <span style="color:#ffd64b;font-size:inherit;letter-spacing:0">RUN</span></b><span>FORÊT DES RACINES · PROTOTYPE</span></div>
+<div class="stats"><div class="chip" id="wallet">🟡 0</div><button class="pause" id="pause" aria-label="Mettre en pause">Ⅱ</button></div></div>
+<div class="titlebar"><strong>🌲 FORÊT DES RACINES</strong><small>Chaîne des Puys · Portion test 1,2 km · Terrain continu</small><div class="progressbar"><i id="progress"></i></div></div>
+<div class="infos"><div class="chip">🏃 <span id="km">0,00 km</span> <span id="pct">0 %</span></div><div class="chip">⏱ <span id="timer">0:00</span></div><div class="chip">🏁 <span id="remaining">1,20 km</span></div></div></header>
+<section class="meters"><div class="meter life"><div class="label"><span>❤ VIE</span><span id="hp">❤ ❤ ❤ ❤</span></div></div>
+<div class="meter"><div class="label"><span>⚡ ÉNERGIE</span><span id="energyVal">100 %</span></div><div class="bar"><i id="energyBar"></i></div></div>
+<div class="meter water"><div class="label"><span>💧 EAU</span><span id="waterVal">100 %</span></div><div class="bar"><i id="waterBar"></i></div></div></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<section class="quick" id="quick" hidden><div class="tip"><b>TEST :</b> saut / passage bas / boue / pièces</div><button id="waterBtn" title="Boire">💧 BOIRE</button><button id="gelBtn" title="Consommer un gel">⚡ GEL × <span id="gelCount">2</span></button></section>
+<nav class="controls" id="controlPanel" aria-label="Commandes de course" hidden>
+<button id="duck"><strong>⬇</strong>SE BAISSER</button><button id="jump"><strong>⬆</strong>SAUTER</button><button class="sprint" id="sprint"><strong>⚡</strong>SPRINTER</button></nav>
+<section class="overlay" id="intro"><div class="panel"><span class="pill">PROTOTYPE JOUABLE · PRIVÉ</span><div class="icon">🌲</div><h1>TRAIL <em>RUN</em></h1><h2>Forêt des Racines</h2><p>Un premier sentier continu en montée et descente, avec obstacles, pièces, énergie, hydratation et défilement des paysages.</p>
+<div class="legend"><span>⬆ Sauter rochers et racines</span><span>⬇ Se baisser sous les branches</span><span>⚡ Sprinter au bon moment</span><span>💧 Boire / utiliser un gel</span></div><button class="btn alt" id="gender">🏃 Coureur</button><button class="btn" id="start">▶ COMMENCER LE TEST</button><div id="view">Mode portrait · iPhone / Android · clavier ordinateur compatible</div></div></section>
+<section class="overlay" id="pausePanel" hidden><div class="panel"><div class="icon">⏸</div><h2>En pause</h2><p>Ta progression reste en place tant que cet écran est ouvert.</p><button class="btn" id="resume">▶ REPRENDRE</button><button class="btn alt" id="quit">↩ MENU DU TEST</button></div></section>
+<section class="overlay" id="finish" hidden><div class="panel"><div class="icon">🏅</div><h2 id="endTitle">Course terminée</h2><p id="endText"></p><button class="btn" id="restart">↻ RECOMMENCER</button></div></section>
+</main><script>
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id),canvas=$("scene"),ctx=canvas.getContext("2d",{alpha:false});
+const V={w:390,h:844},LENGTH=5600,DEMO_KM=1.2,ANCHORS=[0,-6,-36,-24,29,-5,-52,-38,18,-9,-34,21,-5,-56,0,-18];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const hash=(n)=>{let a=Math.sin(n*127.1+78.233)*43758.5453;return a-Math.floor(a)};
+const mix=(a,b,t)=>a+(b-a)*t;
+const ground=(x)=>{let v=clamp(x/LENGTH*(ANCHORS.length-1),0,ANCHORS.length-1.00001),i=Math.floor(v),t=v-i;t=t*t*(3-2*t);return 529+mix(ANCHORS[i],ANCHORS[i+1],t)};
+const obstacles=[
+ [510,"roots"],[925,"rock"],[1390,"branch"],[1760,"mud"],[2140,"log"],
+ [2500,"rock"],[2900,"roots"],[3210,"branch"],[3540,"stream"],
+ [3900,"rock"],[4210,"log"],[4610,"branch"],[5020,"roots"]
+].map(([x,type],i)=>({x,type,done:false,id:i}));
+const coins=Array.from({length:28},(_,i)=>({x:320+i*184+(hash(i+70)-.5)*58,hit:false}));
+const runner=new Image();runner.src="../sprites/coureur-animations.png";runner.decoding="async";
+let sceneScaleX=1,sceneScaleY=1,last=0,game,held={duck:false,sprint:false},gender="homme",toastTimer=0;
+const mkGame=()=>({phase:"menu",x:105,jump:0,jv:0,duckUntil:0,t:0,health:4,energy:100,water:100,gels:2,coins:0,falls:0,inv:0,mud:0,shake:0,score:0,finished:false});
+game=mkGame();
+function resize(){
+ const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+ canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));
+ sceneScaleX=canvas.width/V.w;sceneScaleY=canvas.height/V.h;
+ ctx.setTransform(sceneScaleX,0,0,sceneScaleY,0,0);
+}
+window.addEventListener("resize",resize,{passive:true});resize();
+const text=(s,x,y,size=12,color="#fff9df",align="left")=>{ctx.font="900 "+size+"px system-ui, sans-serif";ctx.textAlign=align;ctx.lineWidth=3;ctx.strokeStyle="#0c2b31";ctx.strokeText(s,x,y);ctx.fillStyle=color;ctx.fillText(s,x,y);ctx.textAlign="left"};
+function start(){
+ game=mkGame();game.phase="running";held={duck:false,sprint:false};last=0;
+ obstacles.forEach(o=>o.done=false);coins.forEach(o=>o.hit=false);
+ $("intro").hidden=true;$("finish").hidden=true;$("pausePanel").hidden=true;
+ $("hud").hidden=false;$("controlPanel").hidden=false;$("quick").hidden=false;updateHud();
+}
+function pause(){
+ if(game.phase!=="running")return;
+ game.phase="paused";held.duck=false;held.sprint=false;$("pausePanel").hidden=false;
+}
+function resume(){if(game.phase!=="paused")return;game.phase="running";last=0;$("pausePanel").hidden=true;}
+function end(win){
+ game.phase=win?"won":"lost";game.finished=win;
+ $("finish").hidden=false;
+ $("endTitle").textContent=win?"🏁 Portion terminée !":"💔 Course interrompue";
+ $("endText").textContent=(game.x/LENGTH*DEMO_KM).toFixed(2).replace(".",",")+" km parcouru · "+game.coins+" pièces · "+game.falls+" heurts.";
+}
+function toast(message){
+ $("toast").textContent=message;$("toast").classList.add("show");toastTimer=1.6;
+}
+function jump(){
+ if(game.phase!=="running")return;
+ if(game.jump<=0.5&&!held.duck&&game.duckUntil<=0){game.jv=395;game.jump=1;game.duckUntil=0;}
+}
+function duckTap(){if(game.phase==="running"){game.duckUntil=.9;held.duck=true;setTimeout(()=>{held.duck=false},270)}}
+function useWater(){
+ if(game.phase!=="running")return;
+ if(game.water>=100){toast("Hydratation déjà pleine");return;}
+ if(game.coins<0)return;
+ game.water=clamp(game.water+24,0,100);game.energy=clamp(game.energy+8,0,100);toast("💧 Eau : +24 %");
+}
+function useGel(){
+ if(game.phase!=="running")return;
+ if(game.gels<=0){toast("Plus de gels !");return;}
+ game.gels--;game.energy=clamp(game.energy+32,0,100);toast("⚡ Gel : +32 % énergie");
+}
+const activeDuck=()=>held.duck||game.duckUntil>0;
+const objectHeight={roots:19,rock:39,log:33,branch:70,mud:0,stream:0};
+function collide(o){
+ if(o.done)return;o.done=true;
+ const safe=o.type==="branch"?(activeDuck()&&game.jump<2)
+ :o.type==="mud"||o.type==="stream"?game.jump>8
+ :game.jump>objectHeight[o.type]+8;
+ if(safe){game.score+=30;toast("Bien joué ! +30 XP");return;}
+ if(o.type==="mud"||o.type==="stream"){
+   game.mud=1.6;game.energy=clamp(game.energy-7,0,100);toast(o.type==="mud"?"Boue : ralentissement":"Ruisseau : ralentissement");return;
+ }
+ if(game.inv<=0){game.health--;game.falls++;game.inv=1.5;game.energy=clamp(game.energy-11,0,100);game.shake=.35;toast(o.type==="branch"?"Baisse-toi sous les branches !":"Il fallait sauter !");if(game.health<=0)end(false);}
+}
+function tick(dt){
+ if(game.phase!=="running")return;
+ game.t+=dt;game.inv=Math.max(0,game.inv-dt);
+ game.mud=Math.max(0,game.mud-dt);game.shake=Math.max(0,game.shake-dt);
+ game.duckUntil=Math.max(0,game.duckUntil-dt);toastTimer=Math.max(0,toastTimer-dt);
+ if(toastTimer===0)$("toast").classList.remove("show");
+ if(game.jump>0){game.jump+=game.jv*dt;game.jv-=1050*dt;if(game.jump<=0){game.jump=0;game.jv=0;}}
+ const sprint=held.sprint&&game.energy>8&&!activeDuck()&&game.jump<5;
+ const vx=(activeDuck()?53:sprint?156:105)*(game.mud>0?.58:1)*(game.energy<=6?.67:1);
+ game.x=clamp(game.x+vx*dt,0,LENGTH);
+ game.energy=clamp(game.energy+(sprint?-19:activeDuck()?-3:4.1)*dt,0,100);
+ game.water=clamp(game.water-(sprint?.31:.13)*dt,0,100);
+ if(game.water<=5)game.energy=clamp(game.energy-7*dt,0,100);
+ for(const o of obstacles){if(!o.done&&Math.abs(o.x-game.x)<24)collide(o);}
+ for(const c of coins){if(!c.hit&&Math.abs(c.x-game.x)<31){c.hit=true;game.coins++;game.score+=10;}}
+ if(game.x>=LENGTH-2)end(true);
+ updateHud();
+}
+function updateHud(){
+ $("km").textContent=(game.x/LENGTH*DEMO_KM).toFixed(2).replace(".",",")+" km";
+ $("pct").textContent=Math.round(game.x/LENGTH*100)+" %";
+ $("progress").style.width=Math.round(game.x/LENGTH*100)+"%";
+ $("timer").textContent=Math.floor(game.t/60)+":"+String(Math.floor(game.t%60)).padStart(2,"0");
+ $("wallet").textContent="🟡 "+game.coins;
+ $("hp").textContent="❤ ".repeat(Math.max(0,game.health)).trim()||"0";
+ $("energyVal").textContent=Math.round(game.energy)+" %";$("energyBar").style.width=game.energy+"%";
+ $("waterVal").textContent=Math.round(game.water)+" %";$("waterBar").style.width=game.water+"%";
+ $("gelCount").textContent=game.gels;
+ $("remaining").textContent=((LENGTH-game.x)/LENGTH*DEMO_KM).toFixed(2).replace(".",",")+" km";
+}
+function poly(points,fill,stroke="",lw=1){
+ ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();
+ ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke();}
+}
+function clouds(camera){
+ ctx.fillStyle="#f9f0d7aa";
+ for(let i=0;i<9;i++){const x=((i*131-camera*.07)%720+720)%720-140,y=154+(i%3)*35;
+ ctx.fillRect(x,y,35,5);ctx.fillRect(x+8,y-7,39,7);ctx.fillRect(x+23,y+5,52,4);}
+}
+function mountains(camera){
+ for(let layer=0;layer<3;layer++){
+   let base=344+layer*38,amp=64-layer*12,speed=.04+layer*.06;
+   let pts=[[-30,600]];for(let x=-30;x<=420;x+=8){
+     let world=x+camera*speed;
+     let wave=Math.sin(world*.009+layer)*amp+Math.sin(world*.026+layer*8)*(amp*.21);
+     pts.push([x,base+wave]);}
+   pts.push([420,600]);
+   poly(pts,["#559ba5","#317a7a","#175f64"][layer]);
+ }
+}
+function pine(x,y,h,tone){
+ ctx.fillStyle="#304a3b";ctx.fillRect(x-2,y-h*.38,4,h*.38);
+ for(let j=0;j<3;j++){
+  const yy=y-h*(.82-j*.22),width=h*(.18+j*.035);
+  poly([[x,yy-h*.15],[x-width,yy+h*.19],[x+width,yy+h*.19]],tone);
+ }
+}
+function forest(camera){
+ for(let layer=0;layer<3;layer++){
+  let speed=[.13,.29,.53][layer],base=[405,441,479][layer],gap=[44,63,93][layer],count=Math.ceil(390/gap)+6;
+  let offs=(camera*speed)%gap;
+  for(let i=-2;i<count;i++){
+   const xx=(i*gap-offs)+hash(i+layer*71)*17;
+   const hh=(layer+1)*18+30+hash(i+layer*43)*34;
+   pine(xx,base+Math.sin((xx+camera*speed)*.016)*14,hh,["#194f56","#1a5950","#136046"][layer]);
+  }
+ }
+}
+function oak(x,y,s,seed){
+ ctx.fillStyle="#3b2b29";ctx.fillRect(x-8*s,y-135*s,16*s,145*s);
+ ctx.fillStyle="#7b4a32";ctx.fillRect(x+1*s,y-130*s,4*s,132*s);
+ for(let j=0;j<5;j++){
+  const side=j%2?-1:1,yy=y-(64+j*20)*s;
+  ctx.strokeStyle="#3a2b29";ctx.lineWidth=7*s;
+  ctx.beginPath();ctx.moveTo(x,yy);ctx.lineTo(x+side*(26+j*8)*s,yy-(19+j*5)*s);ctx.stroke();
+ }
+ for(let j=0;j<25;j++){
+   const ang=j*2.4+hash(seed+j)*2,rr=hash(seed+j*3+7)*76*s;
+   const cx=x+Math.cos(ang)*rr,cy=y-(158+Math.sin(ang)*53)*s;
+   ctx.fillStyle=["#1d694c","#368450","#75a44e","#a9b758","#c8c36d"][Math.floor(hash(seed+j*3+11)*5)];
+   ctx.fillRect(cx-11*s,cy-8*s,20*s,13*s);
+ }
+}
+function foregroundTrees(camera){
+ for(let i=0;i<15;i++){
+   const xx=i*410-((camera*.7)%410)-240;
+   const yy=484+Math.sin(i*2.3)*12;
+   oak(xx,yy,.52+hash(i+234)*.27,i+30);
+ }
+}
+function rays(){
+ const g=ctx.createLinearGradient(80,150,240,540);g.addColorStop(0,"#ffebbd4d");g.addColorStop(1,"#ffebbd00");
+ poly([[65,75],[144,75],[325,510],[280,545]],g);
+ poly([[100,62],[144,62],[354,508],[334,521]],"#fff4ae12");
+}
+function terrain(camera){
+ const grad=ctx.createLinearGradient(0,480,0,844);grad.addColorStop(0,"#75492f");grad.addColorStop(.47,"#55422f");grad.addColorStop(1,"#173d37");
+ ctx.beginPath();ctx.moveTo(-8,844);
+ for(let px=-8;px<=399;px+=5)ctx.lineTo(px,ground(camera+px));
+ ctx.lineTo(400,844);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+ ctx.beginPath();for(let px=-8;px<=399;px+=4){const y=ground(camera+px);px===-8?ctx.moveTo(px,y):ctx.lineTo(px,y);}
+ ctx.strokeStyle="#264e32";ctx.lineWidth=15;ctx.stroke();ctx.strokeStyle="#7bae49";ctx.lineWidth=8;ctx.stroke();ctx.strokeStyle="#e7ad67";ctx.lineWidth=3;ctx.stroke();
+ for(let i=Math.floor(camera/22)-2;i<(camera+410)/22+2;i++){
+  let wx=i*22,x=wx-camera,y=ground(wx);
+  ctx.fillStyle=i%3===0?"#b18052":"#4b392a";ctx.fillRect(x+hash(i+1)*12,y+17+hash(i+2)*46,3+hash(i)*7,2+hash(i+10)*4);
+  if(i%3===0){
+    ctx.fillStyle="#60ad50";ctx.fillRect(x+2,y-8,2,6);ctx.fillRect(x+8,y-5,2,4);
+    if(i%11===0){ctx.fillStyle="#f4c56e";ctx.fillRect(x+4,y-11,3,3);}
+  }
+ }
+}
+function nearPlants(camera){
+ for(let i=Math.floor(camera/75)-2;i<(camera+410)/75+2;i++){
+  const wx=i*75+hash(i+4)*25,x=wx-camera,y=ground(wx);
+  const s=hash(i+123);
+  if(s>.5){
+   ctx.strokeStyle="#1d6c4b";ctx.lineWidth=2;
+   for(let j=0;j<6;j++){ctx.beginPath();ctx.moveTo(x,y+2);ctx.quadraticCurveTo(x+(j-3)*11,y-26,x+(j-3)*8,y-30+hash(i+j)*16);ctx.stroke();}
+  }else{
+   ctx.fillStyle="#869e70";poly([[x-16,y+2],[x-10,y-13],[x+5,y-16],[x+17,y+1]],"#657975");
+   poly([[x-10,y-11],[x+4,y-16],[x+2,y-7]],"#d5d0ae");
+  }
+ }
+}
+function drawObstacle(o,camera){
+ const x=o.x-camera,y=ground(o.x);if(x< -140||x>530)return;
+ ctx.save();ctx.translate(x,y);
+ if(o.type==="rock"){
+   poly([[-26,0],[-17,-31],[-4,-44],[21,-36],[34,-3],[22,2]],"#607278","#243d46",3);
+   poly([[-15,-29],[-4,-41],[9,-31],[-3,-18]],"#b0bbb0");
+   poly([[5,-25],[22,-32],[29,-6]],"#425b60");
+ }else if(o.type==="roots"){
+   ctx.lineWidth=7;ctx.strokeStyle="#5d3228";
+   for(let j=-2;j<=2;j++){ctx.beginPath();ctx.moveTo(j*15-9,2);ctx.bezierCurveTo(j*12,-9,j*12+10,-17,j*15+21,-5);ctx.stroke();}
+   ctx.strokeStyle="#a66a39";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-25,-3);ctx.lineTo(25,-6);ctx.stroke();
+ }else if(o.type==="log"){
+   ctx.fillStyle="#583326";ctx.fillRect(-33,-32,66,31);ctx.fillStyle="#9b5e31";ctx.fillRect(-32,-28,61,8);
+   ctx.fillStyle="#c88b54";ctx.beginPath();ctx.ellipse(31,-18,6,16,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#4b2a28";ctx.stroke();
+ }else if(o.type==="branch"){
+   ctx.strokeStyle="#5a3728";ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(-42,0);ctx.lineTo(-35,-79);ctx.lineTo(37,-84);ctx.lineTo(42,-1);ctx.stroke();
+   ctx.strokeStyle="#8e5b31";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-35,-72);ctx.lineTo(33,-78);ctx.stroke();
+   for(let j=0;j<7;j++){ctx.fillStyle=j%2?"#448a44":"#8aab4b";ctx.fillRect(-37+j*12,-92+(j%3)*4,14,12);}
+ }else if(o.type==="mud"||o.type==="stream"){
+   ctx.fillStyle=o.type==="mud"?"#4c382c":"#376d87";
+   ctx.beginPath();ctx.ellipse(0,0,55,6,0,0,Math.PI*2);ctx.fill();
+   ctx.strokeStyle=o.type==="mud"?"#8d6946":"#8acfe4";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-40,-1);ctx.quadraticCurveTo(-22,-8,-2,-2);ctx.quadraticCurveTo(22,1,42,-3);ctx.stroke();
+ }
+ ctx.restore();
+}
+function drawCoin(o,camera){
+ const x=o.x-camera;if(x<-30||x>420||o.hit)return;
+ const y=ground(o.x)-76+Math.sin(game.t*5+o.x)*4;
+ ctx.beginPath();ctx.fillStyle="#f5c53d";ctx.arc(x,y,9,0,Math.PI*2);ctx.fill();ctx.lineWidth=2;ctx.strokeStyle="#fff5a4";ctx.stroke();
+ text("★",x,y+3,9,"#885413","center");
+}
+function fallbackRunner(x,y,duck){
+ ctx.save();ctx.translate(x,y);
+ ctx.fillStyle="#103d4d";ctx.fillRect(-17,-80+(duck?35:0),28,42);
+ ctx.fillStyle="#3b6d94";ctx.fillRect(-15,-75+(duck?35:0),21,31);
+ ctx.fillStyle="#ffb86d";ctx.fillRect(0,-96+(duck?32:0),20,18);
+ ctx.fillStyle="#2365a7";ctx.fillRect(-3,-105+(duck?32:0),29,9);
+ ctx.fillStyle="#de5536";ctx.fillRect(-26,-68+(duck?35:0),15,26);
+ ctx.strokeStyle="#f7ab62";ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(-5,-28);ctx.lineTo(-20,0);ctx.moveTo(5,-28);ctx.lineTo(17,0);ctx.stroke();
+ ctx.restore();
+}
+function drawRunner(camera){
+ const x=game.x-camera,y=ground(game.x)-game.jump;
+ const duck=activeDuck()&&game.jump<=0;
+ ctx.save();
+ if(game.inv>0&&Math.sin(game.t*35)>0){ctx.globalAlpha=.43;}
+ if(runner.complete&&runner.naturalWidth>=564){
+  const row=duck?2:game.jump>3?1:0,f=duck?Math.min(5,Math.floor(game.t*9)%6):Math.floor(game.t*(held.sprint?16:11))%6;
+  const sy=row*132,sx=f*94;
+  const hh=duck?72:98,ww=duck?70:75;
+  if(gender==="femme")ctx.filter="hue-rotate(115deg) saturate(1.1)";
+  ctx.drawImage(runner,sx,sy,94,132,x-ww*.5,y-hh+5,ww,hh);
+  ctx.filter="none";
+  if(gender==="femme"){ctx.fillStyle="#493028";ctx.fillRect(x-35,y-hh+18,13,16);}
+ }else fallbackRunner(x,y,duck);
+ ctx.restore();
+}
+function foreground(camera){
+ ctx.fillStyle="#19553e";
+ for(let i=Math.floor(camera/55)-3;i<(camera+450)/55;i++){
+  let wx=i*55+hash(i)*12,x=wx-camera,y=ground(wx);
+  ctx.fillRect(x,y+23,8,18);
+  if(i%3===0){ctx.fillStyle="#e7a5be";ctx.fillRect(x+4,y+17,4,4);ctx.fillStyle="#1c674b";}
+ }
+}
+function draw(){
+ ctx.setTransform(sceneScaleX,0,0,sceneScaleY,0,0);
+ const camera=clamp(game.x-116,0,LENGTH-390);
+ ctx.save();
+ if(game.shake>0){ctx.translate((hash(game.t*100)-.5)*6,(hash(game.t*200)-.5)*4);}
+ const sky=ctx.createLinearGradient(0,0,0,600);sky.addColorStop(0,"#157ab2");sky.addColorStop(.42,"#65b4c8");sky.addColorStop(1,"#e5dca7");ctx.fillStyle=sky;ctx.fillRect(0,0,390,844);
+ clouds(camera);mountains(camera);forest(camera);rays();foregroundTrees(camera);
+ terrain(camera);nearPlants(camera);
+ for(const o of obstacles)drawObstacle(o,camera);
+ for(const o of coins)drawCoin(o,camera);
+ drawRunner(camera);foreground(camera);
+ ctx.restore();
+}
+function frame(ts){
+ let dt=last?Math.min(.032,(ts-last)/1000):0;last=ts;
+ if(game.phase==="running")tick(dt);
+ draw();requestAnimationFrame(frame);
+}
+function bindPress(id,type,fn){
+ const el=$(id);
+ el.addEventListener("pointerdown",ev=>{
+  ev.preventDefault();el.setPointerCapture(ev.pointerId);
+  if(type==="hold"){held[id==="duck"?"duck":"sprint"]=true;el.classList.add("held");if(id==="duck")game.duckUntil=.35;}
+  else fn();
+ });
+ const release=()=>{if(type==="hold"){held[id==="duck"?"duck":"sprint"]=false;el.classList.remove("held");if(id==="duck")game.duckUntil=Math.max(game.duckUntil,.24);}};
+ el.addEventListener("pointerup",release);el.addEventListener("pointercancel",release);el.addEventListener("lostpointercapture",release);
+}
+bindPress("jump","tap",jump);bindPress("duck","hold",duckTap);bindPress("sprint","hold",()=>{});
+$("pause").onclick=pause;$("resume").onclick=resume;$("quit").onclick=()=>{game.phase="menu";$("pausePanel").hidden=true;$("intro").hidden=false};
+$("restart").onclick=start;$("start").onclick=start;
+$("waterBtn").onclick=useWater;$("gelBtn").onclick=useGel;
+$("gender").onclick=()=>{gender=gender==="homme"?"femme":"homme";$("gender").textContent=gender==="homme"?"🏃 Coureur":"🏃‍♀️ Coureuse";};
+document.addEventListener("keydown",ev=>{
+ if(["ArrowUp","ArrowDown"," ","Shift"].includes(ev.key))ev.preventDefault();
+ if(ev.repeat&&["ArrowUp"," "].includes(ev.key))return;
+ if(ev.key==="ArrowUp"||ev.key===" ")jump();
+ if(ev.key==="ArrowDown"){held.duck=true;game.duckUntil=.4;}
+ if(ev.key==="Shift")held.sprint=true;
+ if(ev.key.toLowerCase()==="p")game.phase==="running"?pause():resume();
+ if(ev.key==="Enter"&&game.phase==="menu")start();
+});
+document.addEventListener("keyup",ev=>{if(ev.key==="ArrowDown")held.duck=false;if(ev.key==="Shift")held.sprint=false;});
+document.addEventListener("visibilitychange",()=>{if(document.hidden)pause();});
+window.addEventListener("blur",()=>{if(game.phase==="running")pause()});
+updateHud();requestAnimationFrame(frame);
+window.__trailRunPrototype={start,pause,resume,jump,state:()=>({x:game.x,energy:game.energy,hearts:game.health,phase:game.phase,coins:game.coins}),ground};
+})();
+</script></body></html>
