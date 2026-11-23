@@ -23,10 +23,17 @@ Tester le cœur du gameplay **en portrait sur iPhone** avant de construire les c
 ### Limites importantes
 
 - La coureuse est provisoirement représentée avec une variante recolorée du sprite existant : **les sprites définitifs de la coureuse validés pendant la conception devront remplacer cette variante**.
-- Le décor du prototype est généré en Canvas pour tester la mécanique, **pas encore une intégration fidèle du panorama illustré validé**. Les assets et décors définitifs seront intégrés après validation du fonctionnement.
-- Les obstacles sont dessinés par le moteur pour l'instant ; les PNG approuvés seront intégrés ensuite et reliés à leurs boîtes de collision.
+- **V2 :** le décor intègre le panorama forestier illustré approuvé (`assets/forest_back.webp`), un sol continu enrichi avec une vraie texture pixel art (`assets/forest_dirt.png`) et un atlas de six obstacles (`assets/forest_obstacles.webp`). Leur disposition et les transitions restent à valider sur iPhone. Le rendu ne doit pas être considéré comme une reproduction pixel par pixel de la maquette.
+- Les obstacles naturels visibles sont désormais rendus avec l'atlas illustré ; leurs collisions restent calculées par le moteur de jeu, indépendamment des sprites. Des réglages visuels d'échelle, de contact avec le sol et de hitboxes restent à effectuer après retour utilisateur.
 - Les distances, obstacles et paramètres d'énergie sont fictifs et destinés aux tests. Aucun temps de course réel n'est représenté.
 - Aucune progression n'est enregistrée pour le moment (prototype indépendant des sauvegardes du jeu public).
+
+## Interface V2 (23 novembre 2026)
+
+- HUD et contrôles recolorés bleu nuit / doré, plus proches de la maquette de référence.
+- Les éléments vie, temps et distance sont regroupés sous le panneau de progression ; énergie/eau s'affichent à part sans chevauchement.
+- Trois nouveaux assets présents **uniquement sur la branche de test** sous `prototype-foret/assets/`.
+- Le prototype ne modifie aucune page du jeu publié ; ne pas fusionner sans vérification du rendu mobile.
 
 ## Comment tester
 
