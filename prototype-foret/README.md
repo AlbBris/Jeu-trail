@@ -50,3 +50,16 @@ Tester le cœur du gameplay **en portrait sur iPhone** avant de construire les c
 Canvas en résolution logique 390 × 844, mise à l'échelle selon le mobile ; boucle via `requestAnimationFrame`, delta temporel plafonné, courbe de terrain continue par interpolation lissée, collisions gérées en coordonnées monde et par l'altitude instantanée du saut.
 
 Les fonctions de diagnostic peuvent être consultées en console avec `window.__trailRunPrototype.state()`.
+
+## V3 — sensations de course et animation du coureur
+
+- **Posture adaptée aux pentes** : dérivée locale du profil du sol, inclinaison du sprite lissée, limitée à ±13° pour conserver la lisibilité.
+- **Vitesse avec inertie** : accélération/décélération progressives ; montée un peu plus lente, descente un peu plus rapide ; sprint toujours contrôlable par maintien.
+- **Cadence synchronisée** : les images de course avancent selon la distance réellement parcourue plutôt qu'avec une fréquence fixe, pour limiter la sensation de glissement des pieds.
+- **Sauts** : phases distinctes (impulsion, montée, sommet, descente, réception), ombre de hauteur variable et poussière discrète au sol.
+- **Caméra** : suivi horizontal amorti ; le coureur reste proche d'une position stable à l'écran, sans cassure lors des variations de vitesse.
+- **Collisions** : conservation des coordonnées monde indépendantes de l'orientation dessinée du personnage. Les réactions après un obstacle sont temporairement ralenties.
+
+### Tests V3
+
+La boucle d'animation a été exécutée en simulation JavaScript avec une séquence d'actions pour franchir 13 obstacles. Le moteur a atteint la fin du parcours avec 6 vies, 28 pièces et sans erreur d'exécution. **Ce test automatisé ne remplace pas un test visuel et tactile sur iPhone** : restent à confirmer le confort du saut, l'inclinaison du corps, la réactivité du bouton « se baisser » et le rendu sur appareil réel.
