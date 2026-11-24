@@ -129,6 +129,7 @@ canvas{image-rendering:auto}
 </style>
 <!-- TRAIL RUN MOTION V3: slope, stride and momentum -->
 <!-- TRAIL RUN V4: true character atlases, full obstacle collision, aspect-correct sprites -->
+<!-- TRAIL RUN V4.1: compact 1.02s jump arc, reduced height and synchronised poses -->
 </head>
 <body><!-- TRAIL RUN FORET V2 — RELOOK 2026-11-23 --><main class="game" aria-label="Prototype de Trail Run, Forêt des Racines">
 <canvas id="scene" aria-label="Sentier forestier et coureur en défilement"></canvas><div class="scrim"></div>
@@ -209,9 +210,11 @@ function end(win){
 function toast(message){
  $("toast").textContent=message;$("toast").classList.add("show");toastTimer=1.6;
 }
+// V4.1: a compact, natural trail hop. Duration and height independent of screen shape.
+const JUMP={duration:1.02,height:66,minSpeed:110,clearanceSpeed:132};
 function jump(){
  if(game.phase!=="running")return;
- if(game.jump<=0.5&&!held.duck&&game.duckUntil<=0){game.jv=390;game.jump=1;game.airtime=0;game.land=0;game.duckUntil=0;game.jumpSpeed=Math.max(110,game.speed);}
+ if(game.jump<=0.5&&!held.duck&&game.duckUntil<=0){game.jv=4*JUMP.height/JUMP.duration;game.jump=1;game.airtime=0;game.land=0;game.duckUntil=0;game.jumpSpeed=Math.max(JUMP.minSpeed,JUMP.clearanceSpeed*aspect,game.speed);}
 }
 function duckTap(){if(game.phase==="running"){game.duckUntil=.9;held.duck=true;setTimeout(()=>{held.duck=false},270)}}
 function useWater(){
@@ -240,7 +243,7 @@ const RUN_HEIGHTS={homme:[[172,171,163,157,166,170,169,169],[134,147,154,130,123
 function runnerPose(){
  const air=game.jump>0,duck=activeDuck()&&!air;
  let row=0,frame=Math.floor(game.footCycle)%8;
- if(air){row=1;frame=game.jv>245?0:game.jv>100?1:game.jv>-100?2:game.jv>-245?3:4;}
+ if(air){row=1;const u=game.airtime/JUMP.duration;frame=u<.16?0:u<.34?1:u<.65?2:u<.84?3:4;}
  else if(duck||game.duckPose>.12){row=2;frame=duck?(game.duckPose>.74?3:game.duckPose>.44?2:game.duckPose>.20?1:0):(game.duckPose>.74?3:game.duckPose>.36?4:5);}
  else if(game.land>0){row=1;frame=5;}
  return {row,frame,height:RUN_HEIGHTS[gender][row][frame]*SPRITE_SCALE,duck,air};
@@ -305,8 +308,11 @@ function tick(dt){
  game.duckPose=eased(game.duckPose,duck?1:0,duck?12:10,dt);
  // Physics is independent of the picture frame and of changes in terrain elevation.
  if(game.jump>0){
-   game.airtime+=dt;game.jump+=game.jv*dt;game.jv-=560*dt;
-   if(game.jump<=0){game.jump=0;game.jv=0;game.land=.12;}
+   game.airtime=Math.min(JUMP.duration,game.airtime+dt);
+   const u=game.airtime/JUMP.duration;
+   game.jump=4*JUMP.height*u*(1-u);
+   game.jv=4*JUMP.height/JUMP.duration*(1-2*u);
+   if(u>=1){game.jump=0;game.jv=0;game.land=.10;}
  }
  game.grade=groundSlope(game.x);
  const slopeFactor=clamp(1+game.grade*1.1,.76,1.17);
