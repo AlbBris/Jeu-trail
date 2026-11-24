@@ -63,3 +63,16 @@ Les fonctions de diagnostic peuvent être consultées en console avec `window.__
 ### Tests V3
 
 La boucle d'animation a été exécutée en simulation JavaScript avec une séquence d'actions pour franchir 13 obstacles. Le moteur a atteint la fin du parcours avec 6 vies, 28 pièces et sans erreur d'exécution. **Ce test automatisé ne remplace pas un test visuel et tactile sur iPhone** : restent à confirmer le confort du saut, l'inclinaison du corps, la réactivité du bouton « se baisser » et le rendu sur appareil réel.
+
+## V4 — collisions et personnages validés
+
+- Les deux atlas originaux (8 images de course, 6 de saut et 6 d'accroupissement par personnage) sont intégrés en WebP transparent, avec un pivot de pied commun. Aucun filtre de recoloration n'est appliqué.
+- Proportions préservées : cases carrées, même échelle physique sur les axes horizontal et vertical, y compris si le Canvas est affiché dans un navigateur moins haut.
+- Les six sprites d'obstacle sont recadrés selon leurs limites alpha. Les zones actives sont définies par type, adaptées au relief, et contrôlées pendant tout le franchissement. Le bonus XP ne tombe qu'une fois les pieds hors de la zone. Les bordures végétales décoratives sont exclues des collisions.
+- Saut allongé pour permettre de franchir toute la largeur des obstacles, avec vitesse horizontale conservée pendant le vol. Branches adaptées à la hauteur réelle de la pose accroupie.
+- Mode diagnostic : ajouter `?debug=1` à l'URL du prototype ou appuyer sur H au clavier. Vert = joueur, jaune = obstacle, rouge = collision, gris = obstacle franchi.
+- Jauges d'énergie et d'hydratation placées dans le flux du HUD pour supprimer les superpositions.
+
+### Régression automatisée
+
+Trois parties simulées : homme et femme en 390 × 844, femme en 550 × 650. Toutes terminées avec 6 vies, 28 pièces et 13 obstacles franchis, sans attribution anticipée de l'XP. Une partie sans commandes et une partie avec saut volontairement trop précoce confirment les collisions. Test réalisé avec environnement Canvas/DOM simulé, sans validation visuelle sur iPhone.
